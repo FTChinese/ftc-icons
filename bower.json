@@ -1,7 +1,7 @@
 {
   "name": "ftc-icons",
   "description": "Icons used on FTC site",
-  "main": "ftc-dist/_icons.scss",
+  "main": "main.scss",
   "authors": [
     "weiguo.ni"
   ],
