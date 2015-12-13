@@ -1,0 +1,9 @@
+.no-svg .icon {
+	background-size: auto auto;
+}
+{{#sprites}}
+.no-svg .icon-{{name}} {
+  background-image: url(../icons/{{{escaped_image}}});
+  background-position: {{px.offset_x}} {{px.offset_y}};
+}
+{{/sprites}}

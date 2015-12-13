@@ -1,0 +1,28 @@
+{
+  "name": "ftc-icons",
+  "description": "Icons used on FTC site",
+  "main": "ftc-dist/_icons.scss",
+  "authors": [
+    "weiguo.ni"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "FTC",
+    "icons"
+  ],
+  "homepage": "https://github.com/FTChinese/ftc-icons",
+  "moduleType": [
+    "es6"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~3.2.0",
+    "svg4everybody": "~2.0.0"
+  }
+}

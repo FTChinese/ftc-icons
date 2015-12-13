@@ -1,0 +1,131 @@
+/* Some color variables */
+$ftpink:#FFCC99;
+$wechat:#609700;
+$weibo: #FFD12B;
+$linkedin:#0977b6;
+
+/* FTC icons are simply turned into sass variables */
+@import "../sass/ftc/sass-var";
+
+/* FT icons are turned into sass functions and mixins */
+@import "../sass/ft/sassvg";
+
+.header {
+	a {
+		display: inline-block;
+		text-decoration: none;
+	}
+}
+.brand-ftc {
+	background-color: $ftpink;
+}
+h2 {
+	border-bottom: 1px solid #999;
+}
+.share-link {
+	i {
+		padding-left: 1.5em;
+		background-position: left center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+	.icon-social-wechat {
+		background-image: $social-wechat;
+	}
+	.icon-social-weibo {
+		background-image: $social-weibo;
+	}
+	.icon-social-linkedin {
+		background-image: $social-linkedin;
+	}
+}
+
+
+.datauri {
+	li {
+		margin-bottom: 10px;
+		list-style: none;
+	}
+	i {
+		display: inline-block;
+		width: 100px;
+		height: 100px;
+		background-position: left center;
+		background-repeat: no-repeat;
+	}
+	pre {
+		display: inline-block;
+		min-width: 30em;
+		background-color: black;
+		color: white;
+		padding: 0 1em;
+	}
+	.social-linkedin-bg {
+		background-image: $social-linkedin-bg;
+	}
+	.social-linkedin {
+		background-image: $social-linkedin;
+		border: 1px solid;
+		border-radius: 10px;
+	}
+	.social-wechat-bg {
+		background-image: $social-wechat-bg;
+	}
+	.social-wechat {
+		background-image: $social-wechat;
+		border: 1px solid;
+		border-radius: 10px;
+	}
+	.social-weibo-bg {
+		background-image: $social-weibo-bg;
+	}
+	.social-weibo {
+		background-image: $social-weibo;
+		border: 1px solid;
+		border-radius: 10px;
+	}
+}
+
+/* .hamburger {
+	background-image: sassvg("hamburger", $fillcolor: #FFCC99, $extrastyles: "background-color:#333");
+} */
+
+
+
+$icon-list: sassvg-list("svg");
+.ft-icons {
+	list-style-type: none;
+	li {
+		display: inline-block;
+		margin-bottom: 1em;
+		margin-right: 1em;
+	}
+	span {
+		display: block;
+		text-align: center;
+	}
+	.icon {
+		background-position: left top;
+		background-repeat: no-repeat;
+		background-size: contain;
+		display: inline-block;
+		margin: 1em;
+		width: 100px;
+		height: 100px;
+	}
+	@each $icon in $icon-list {
+		$c1: random(256) - 1;
+		$c2: random(256) - 1;
+		$c3: random(256) - 1;
+		.#{$icon} {
+			background-image: sassvg($icon, $fillcolor:rgb($c1, $c2, $c3));
+		}
+		.#{$icon}:hover {
+			background-image: sassvg($icon, $fillcolor:rgb($c2, $c3, $c1));
+		}
+	}	
+}
+
+
+
+

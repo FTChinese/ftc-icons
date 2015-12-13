@@ -1,0 +1,9 @@
+.sass-cache/
+.idea/
+bower_components/
+node_modules/
+origami-templates/
+demos/local
+dist
+.tmp
+.DS_Store
