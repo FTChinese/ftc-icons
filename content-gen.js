@@ -3,7 +3,7 @@ const fs = require('fs');
 const Mustache = require('mustache');
 
 let template = '{{#svg}}<li><i class="icon {{.}}"></i><span>{{.}}</span></li>{{/svg}}';
-let folder = 'svg';
+let folder = 'o-ft-icons/svg';
 
 fs.readdir(folder, function(err, files) {
 	let filenames = [];
@@ -21,7 +21,7 @@ fs.readdir(folder, function(err, files) {
 	}
 	let output = Mustache.render(template, view);
 	console.log(output);
-	fs.writeFile('svglist.html', output, function(err) {
+	fs.writeFile('demo/svglist.html', output, function(err) {
 		if (err) throw err;
 		console.log('SVG List saved');
 	});
