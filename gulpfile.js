@@ -55,6 +55,7 @@ gulp.task('svgmin', function() {
   return gulp.src(svgsrc)
     .pipe(svgmin())
     .pipe(gulp.dest('svg'))
+    .pipe(browserSync.stream());
 });
 
 //Generate png files from svg.
@@ -100,7 +101,7 @@ gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
 //PNG sprite.
 //It seems inlined `svg` is in confict with png `sprite` because you could not set different `background-position` on the same element.
 //For fallback you should not use the png sprite. Just link the individual png files separately.
-gulp.task('sprite:png', function() {
+gulp.task('spritesmith', function() {
   return gulp.src('.tmp/png/*.png')
     .pipe(spritesmith({
       imgName: 'icons.sprite.png',
@@ -131,7 +132,7 @@ gulp.task('sass', function() {
 gulp.task('serve', ['build'], function() {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', 'demo', '.'],
+      baseDir: ['.tmp', 'demo', 'svg', 'png', 'sprite'],
       routes: {
         '/bower_components': 'bower_components'
       }
