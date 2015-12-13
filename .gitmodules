@@ -1,0 +1,3 @@
+[submodule "o-ft-icons"]
+	path = o-ft-icons
+	url = https://github.com/Financial-Times/o-ft-icons.git

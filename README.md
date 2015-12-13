@@ -1,5 +1,3 @@
-This is a fork of [o-ft-icons](https://github.com/Financial-Times/o-ft-icons), with icons adapted for FT Chinese. To use webfont, refer to the original repository.
-
 #Install
 `bower install ftc-icons`
 
