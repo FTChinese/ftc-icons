@@ -70,7 +70,7 @@ gulp.task('svg2png:brand', function() {
 gulp.task('svg2png:icons', function() {
   return gulp.src([svgsrc, '!src/brand-*.svg'])
     .pipe(svg2png(0.32))
-    .pipe(gulp.dest('.tmp/png'))
+    .pipe(gulp.dest('.tmp'))
     .pipe(gulp.dest('png'));
 });
 
@@ -102,7 +102,7 @@ gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
 //It seems inlined `svg` is in confict with png `sprite` because you could not set different `background-position` on the same element.
 //For fallback you should not use the png sprite. Just link the individual png files separately.
 gulp.task('spritesmith', function() {
-  return gulp.src('.tmp/png/*.png')
+  return gulp.src('.tmp/*.png')
     .pipe(spritesmith({
       imgName: 'icons.sprite.png',
       cssName: 'icons.sprite.png.css',
@@ -120,19 +120,21 @@ gulp.task('clean', function() {
 });
 
 //Combine all tasks together
-gulp.task('build', sequence('clean', ['svg2css', 'svgmin', 'svg2png', 'svgsymbol'], 'sprite:png'));
+gulp.task('build', sequence('clean', ['svg2css', 'svgmin', 'svg2png', 'svgsymbol'], 'spritesmith'));
 
 gulp.task('sass', function() {
-  return gulp.src('ftc/styles/*.scss')
+  return gulp.src('demo/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('.tmp/styles'))
+    .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream());
 });
 
-gulp.task('serve', ['build'], function() {
+gulp.task('demo', sequence('clean', ['svg2css', 'svgmin', 'svg2png', 'svgsymbol'], 'spritesmith', 'sass'));
+
+gulp.task('serve', ['demo'], function() {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', 'demo', 'svg', 'png', 'sprite'],
+      baseDir: ['.tmp', 'demo', '.'],
       routes: {
         '/bower_components': 'bower_components'
       }
