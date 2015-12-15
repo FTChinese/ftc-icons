@@ -5,10 +5,10 @@ $weibo: #FFD12B;
 $linkedin:#0977b6;
 
 /* FTC icons are simply turned into sass variables */
-@import "../../scss/ftc-var";
+@import "../../sass/ftc-var";
 
 /* FT icons are turned into sass functions and mixins */
-@import "../../scss/sassvg";
+@import "../../sass/sassvg";
 
 .header {
 	a {

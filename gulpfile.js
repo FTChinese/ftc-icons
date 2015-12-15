@@ -28,14 +28,14 @@ gulp.task('svg2css', function() {
       prefix: '$',
       template: '{{prefix}}{{filename}}:url("{{{dataurl}}}");'
     }))
-    .pipe(gulp.dest('scss'));
+    .pipe(gulp.dest('sass'));
 });
 
 gulp.task('sassvg', function() {
   return gulp.src('o-ft-icons/svg/*.svg')
     .pipe(svgmin())
     .pipe(sassvg({
-      outputFolder: 'scss',
+      outputFolder: 'sass',
       optimizeSvg: true
     }));
 });
@@ -129,9 +129,7 @@ gulp.task('sass', function() {
     .pipe(browserSync.stream());
 });
 
-gulp.task('demo', sequence('clean', ['svg2css', 'svgmin', 'svg2png', 'svgsymbol'], 'spritesmith', 'sass'));
-
-gulp.task('serve', ['demo'], function() {
+gulp.task('serve', ['sass'], function() {
   browserSync.init({
     server: {
       baseDir: ['.tmp', 'demo', '.'],
