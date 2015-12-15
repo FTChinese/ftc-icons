@@ -25,6 +25,7 @@
     "gulp-mustache": "^2.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.1.1",
+    "gulp-sassvg": "^1.4.2",
     "gulp-sequence": "^0.4.1",
     "gulp-svg-sprite": "^1.2.13",
     "gulp-svg-to-css": "^1.1.15",
