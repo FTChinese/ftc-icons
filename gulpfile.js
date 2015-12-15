@@ -10,7 +10,7 @@ const sassvg = require('gulp-sassvg');
 const svgToCss = require('gulp-svg-to-css');
 const svgstore = require('gulp-svgstore');
 
-const rsvg = require('gulp-rsvg');
+/*const rsvg = require('gulp-rsvg');*/
 const svg2png = require('gulp-svg2png');
 const spritesmith = require('gulp.spritesmith');
 
@@ -78,25 +78,25 @@ gulp.task('svg2png', ['svg2png:brand', 'svg2png:icons']);
 
 //Just an alternative to `svg2png` in case `phantomjs` failed to work.
 //This plugin is dependent of `librsvg`. You have to have it installed on your system. On Mac `brew install librsvg`.
-gulp.task('rsvg:brand', function() {
-  return gulp.src('src/brand-*.svg')
-    .pipe(rsvg({
-      format: 'png'
-    }))
-    .pipe(gulp.dest('png'));
-});
+// gulp.task('rsvg:brand', function() {
+//   return gulp.src('src/brand-*.svg')
+//     .pipe(rsvg({
+//       format: 'png'
+//     }))
+//     .pipe(gulp.dest('png'));
+// });
 
-gulp.task('rsvg:icons', function() {
-  return gulp.src([svgsrc, '!src/brand-*.svg'])
-    .pipe(rsvg({
-      format: 'png',
-      scale: 0.32
-    }))
-    .pipe(gulp.dest('.tmp/png'))
-    .pipe(gulp.dest('png'));
-});
+// gulp.task('rsvg:icons', function() {
+//   return gulp.src([svgsrc, '!src/brand-*.svg'])
+//     .pipe(rsvg({
+//       format: 'png',
+//       scale: 0.32
+//     }))
+//     .pipe(gulp.dest('.tmp/png'))
+//     .pipe(gulp.dest('png'));
+// });
 
-gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
+// gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
 
 //PNG sprite.
 //It seems inlined `svg` is in confict with png `sprite` because you could not set different `background-position` on the same element.
