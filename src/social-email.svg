@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,13 +11,13 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="100"
    height="100"
-   viewBox="0 0 100 100"
-   id="social-linkedin-bg"
+   viewBox="0 0 99.999997 99.999997"
+   id="svg4143"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="social-linkedin-bg.svg">
+   sodipodi:docname="email.svg">
   <defs
-     id="defs4" />
+     id="defs4145" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -27,10 +29,10 @@
      inkscape:cx="50"
      inkscape:cy="50"
      inkscape:document-units="px"
-     inkscape:current-layer="social-linkedin-bg"
+     inkscape:current-layer="layer1"
      showgrid="true"
-     units="px"
      inkscape:showpageshadow="false"
+     units="px"
      inkscape:window-width="1920"
      inkscape:window-height="955"
      inkscape:window-x="0"
@@ -38,22 +40,19 @@
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
-       id="grid4138" />
+       id="grid4691" />
   </sodipodi:namedview>
   <metadata
-     id="metadata7">
+     id="metadata4148">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path
-     d="M 10 0 C 4.46 0 0 4.46 0 10 L 0 90 C 0 95.54 4.46 100 10 100 L 90 100 C 95.54 100 100 95.54 100 90 L 100 10 C 100 4.46 95.54 0 90 0 L 10 0 z M 27.210938 20 L 27.212891 20 C 31.187463 20 34.417969 23.237572 34.417969 27.220703 C 34.417969 31.208132 31.186367 34.443359 27.210938 34.443359 C 23.226091 34.443359 20 31.208131 20 27.220703 C 20 23.237559 23.225223 20 27.210938 20 z M 65.083984 38.925781 C 77.677127 38.925781 80 47.225922 80 58.015625 L 80 80 L 67.574219 80 L 67.574219 60.509766 C 67.574219 55.862338 67.488471 49.884766 61.111328 49.884766 C 54.641611 49.884766 53.650391 54.946959 53.650391 60.173828 L 53.650391 80 L 41.224609 80 L 41.224609 39.921875 L 53.150391 39.921875 L 53.150391 45.398438 L 53.316406 45.398438 C 54.97756 42.24758 59.035127 38.925781 65.083984 38.925781 z M 20.990234 39.921875 L 33.425781 39.921875 L 33.425781 80 L 20.990234 80 L 20.990234 39.921875 z "
-     id="rect7"
-     style="fill:#0977b6;" />
+  <path d="M 20.097959 27.744898 L 80 27.744898 L 50 52.54898 L 20.097959 27.744898 Z M 19.95102,35.735714 L 50,60.637755 L 80.04898,35.783673 L 80.04898,72.255102 L 19.95102,72.255102 Z" style="stroke:none; fill:#000;" />
 </svg>

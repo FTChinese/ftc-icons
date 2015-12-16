@@ -5,10 +5,9 @@ $weibo: #FFD12B;
 $linkedin:#0977b6;
 
 /* FTC icons are simply turned into sass variables */
-@import "../../sass/ftc-var";
+@import "../../.tmp/sass/ftc-var";
+@import "../../.tmp/sass/sassvg";
 
-/* FT icons are turned into sass functions and mixins */
-@import "../../sass/sassvg";
 
 .header {
 	a {
@@ -22,26 +21,15 @@ $linkedin:#0977b6;
 h2 {
 	border-bottom: 1px solid #999;
 }
-.share-link {
-	i {
-		padding-left: 1.5em;
-		background-position: left center;
-		background-repeat: no-repeat;
-		background-size: contain;
+.ftc-imgsrc {
+	.a {
+		border-radius: 50%;
 	}
-	.icon-social-wechat {
-		background-image: $social-wechat;
-	}
-	.icon-social-weibo {
-		background-image: $social-weibo;
-	}
-	.icon-social-linkedin {
-		background-image: $social-linkedin;
+	.b {
+		border: 1px solid;
 	}
 }
-
-
-.datauri {
+.ftc-bkg {
 	li {
 		margin-bottom: 10px;
 		list-style: none;
@@ -61,30 +49,43 @@ h2 {
 		padding: 0 1em;
 	}
 	.social-linkedin-bg {
-		background-image: $social-linkedin-bg;
+		background-image: sassvg(social-linkedin-bg);
+		&:hover {
+			background-image: $social-linkedin-bg;
+		}
 	}
 	.social-linkedin {
-		background-image: $social-linkedin;
-		border: 1px solid;
-		border-radius: 10px;
+		background-image: sassvg(social-linkedin);
+		&:hover {
+			background-image: $social-linkedin;
+		}
 	}
 	.social-wechat-bg {
-		background-image: $social-wechat-bg;
+		background-image: sassvg(social-wechat-bg);
+		&:hover {
+			background-image: $social-wechat-bg;
+		}
 	}
 	.social-wechat {
-		background-image: $social-wechat;
-		border: 1px solid;
-		border-radius: 10px;
+		background-image: sassvg(social-wechat);
+		&:hover {
+			background-image: $social-wechat;
+		}
 	}
 	.social-weibo-bg {
-		background-image: $social-weibo-bg;
+		background-image: sassvg(social-weibo-bg);
+		&:hover {
+			background-image: $social-weibo-bg;
+		}
 	}
 	.social-weibo {
-		background-image: $social-weibo;
-		border: 1px solid;
-		border-radius: 10px;
+		background-image: sassvg(social-weibo);
+		&:hover {
+			background-image: $social-weibo;
+		}
 	}
 }
+
 
 /* .hamburger {
 	background-image: sassvg("hamburger", $fillcolor: #FFCC99, $extrastyles: "background-color:#333");
@@ -123,6 +124,10 @@ $icon-list: sassvg-list("svg");
 		.#{$icon}:hover {
 			background-image: sassvg($icon, $fillcolor:rgb($c2, $c3, $c1));
 		}
+	}
+
+	.social-linkedin {
+		background-color: #fff;
 	}	
 }
 

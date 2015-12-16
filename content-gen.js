@@ -3,6 +3,7 @@ const fs = require('fs');
 const Mustache = require('mustache');
 
 let template = '{{#svg}}<li><i class="icon {{.}}"></i><span>{{.}}</span></li>{{/svg}}';
+let imgTpl = '{{#svg}}<li><img src="../o-ft-icons/svg/{{.}}.svg" /></i><span>{{.}}</span></li>{{/svg}}';
 let folder = 'o-ft-icons/svg';
 
 fs.readdir(folder, function(err, files) {
@@ -20,10 +21,19 @@ fs.readdir(folder, function(err, files) {
 		svg: filenames
 	}
 	let output = Mustache.render(template, view);
-	console.log(output);
-	fs.writeFile('demo/svglist.html', output, function(err) {
+	
+	fs.writeFile('demo/partials/svg4bkg.html', output, function(err) {
 		if (err) throw err;
 		console.log('SVG List saved');
 	});
+
+	let imgOutput = Mustache.render(imgTpl, view);
+	console.log(imgOutput);
+	fs.writeFile('demo/partials/svg4img.html', imgOutput, function(err) {
+		if (err) throw err;
+		console.log('SVG as IMG source');
+	});
 });
+
+
 

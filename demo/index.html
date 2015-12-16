@@ -28,17 +28,36 @@
       </h1>
 
     </header>
+    <h2>FTC icons used as image src</h2>
+    <div class="ftc-imgsrc">
+      <img class="a" src="svg/social-linkedin-bg.svg">
+      <img class="a" src="svg/social-wechat-bg.svg">
+      <img class="a" src="svg/social-weibo-bg.svg">
+      <img class="a" src="svg/social-facebook-bg.svg">
+      
+      <img class="a" src="svg/social-twitter-bg.svg">
+      <img class="a" src="svg/social-email-bg.svg">
+      <img class="b" src="svg/social-linkedin.svg">
+      <img class="b" src="svg/social-wechat.svg">
+      <img class="b" src="svg/social-weibo.svg">
+      <img class="b" src="svg/social-facebook.svg">
+      <img class="b" src="svg/social-twitter.svg">
+      <img class="b" src="svg/social-email.svg">
+    </div>
 
     <h2>FTC Icons Used as Background with SVG Datauri</h2>
-    <ul class="datauri">
+    <ul class="ftc-bkg">
       <li><i class="social-linkedin-bg"></i>
-        <pre>
+<pre>
 <code>
 .social-linkedin-bg {
-  background-image: $social-linkedin-bg;
-}          
+  background-image: sassvg(social-linkedin-bg);
+  &:hover {
+    background-image: $social-linkedin-bg;
+  }
+}        
 </code>          
-        </pre>
+</pre>
       </li>
       <li><i class="social-linkedin"></i>
         <pre>
@@ -86,20 +105,15 @@
         </pre>
       </li>
     </ul>
-    <h2>SVG Files Used as image src</h2>
-    <div class="icon-list">
-      <img src="svg/social-linkedin-bg.svg">
-      <img src="svg/social-linkedin.svg">
-      <img src="svg/social-wechat-bg.svg">
-      <img src="svg/social-wechat.svg">
-      <img src="svg/social-weibo-bg.svg">
-      <img src="svg/social-weibo.svg">
-    </div>
-    <h2>FT Icon List</h2>
+
+    <h2>FT Icons as backgrounds</h2>
     <ul class="ft-icons">
-
 <li><i class="icon arrow-down"></i><span>arrow-down</span></li><li><i class="icon arrow-downwards"></i><span>arrow-downwards</span></li><li><i class="icon arrow-left"></i><span>arrow-left</span></li><li><i class="icon arrow-right"></i><span>arrow-right</span></li><li><i class="icon arrow-up-down"></i><span>arrow-up-down</span></li><li><i class="icon arrow-up"></i><span>arrow-up</span></li><li><i class="icon arrow-upwards"></i><span>arrow-upwards</span></li><li><i class="icon brand-always-learning"></i><span>brand-always-learning</span></li><li><i class="icon brand-fast-ft"></i><span>brand-fast-ft</span></li><li><i class="icon brand-fast"></i><span>brand-fast</span></li><li><i class="icon brand-ft-logo-square"></i><span>brand-ft-logo-square</span></li><li><i class="icon brand-ft-masthead"></i><span>brand-ft-masthead</span></li><li><i class="icon brand-ft"></i><span>brand-ft</span></li><li><i class="icon brand-pearson"></i><span>brand-pearson</span></li><li><i class="icon clippings"></i><span>clippings</span></li><li><i class="icon comment"></i><span>comment</span></li><li><i class="icon cross"></i><span>cross</span></li><li><i class="icon email"></i><span>email</span></li><li><i class="icon eye"></i><span>eye</span></li><li><i class="icon font-size"></i><span>font-size</span></li><li><i class="icon gift"></i><span>gift</span></li><li><i class="icon hamburger"></i><span>hamburger</span></li><li><i class="icon more"></i><span>more</span></li><li><i class="icon pinterest"></i><span>pinterest</span></li><li><i class="icon printer"></i><span>printer</span></li><li><i class="icon profile"></i><span>profile</span></li><li><i class="icon refresh"></i><span>refresh</span></li><li><i class="icon search"></i><span>search</span></li><li><i class="icon section-arts"></i><span>section-arts</span></li><li><i class="icon section-blogs"></i><span>section-blogs</span></li><li><i class="icon section-business-education"></i><span>section-business-education</span></li><li><i class="icon section-business-life"></i><span>section-business-life</span></li><li><i class="icon section-columnists"></i><span>section-columnists</span></li><li><i class="icon section-companies"></i><span>section-companies</span></li><li><i class="icon section-ftfm"></i><span>section-ftfm</span></li><li><i class="icon section-house-and-home"></i><span>section-house-and-home</span></li><li><i class="icon section-leader-and-letters"></i><span>section-leader-and-letters</span></li><li><i class="icon section-lex"></i><span>section-lex</span></li><li><i class="icon section-magazine"></i><span>section-magazine</span></li><li><i class="icon section-markets-data"></i><span>section-markets-data</span></li><li><i class="icon section-markets"></i><span>section-markets</span></li><li><i class="icon section-money"></i><span>section-money</span></li><li><i class="icon section-special-report"></i><span>section-special-report</span></li><li><i class="icon section-uk"></i><span>section-uk</span></li><li><i class="icon section-world"></i><span>section-world</span></li><li><i class="icon settings"></i><span>settings</span></li><li><i class="icon share"></i><span>share</span></li><li><i class="icon sign-in"></i><span>sign-in</span></li><li><i class="icon sign-out"></i><span>sign-out</span></li><li><i class="icon social-email"></i><span>social-email</span></li><li><i class="icon social-facebook"></i><span>social-facebook</span></li><li><i class="icon social-linkedin"></i><span>social-linkedin</span></li><li><i class="icon social-twitter"></i><span>social-twitter</span></li><li><i class="icon speechbubble"></i><span>speechbubble</span></li><li><i class="icon subscribe"></i><span>subscribe</span></li><li><i class="icon thumb-up"></i><span>thumb-up</span></li><li><i class="icon tick"></i><span>tick</span></li><li><i class="icon warning"></i><span>warning</span></li>
+    </ul>
 
+    <h2>FT Icons as img src</h2>
+    <ul>
+<li><img src="../o-ft-icons/svg/arrow-down.svg" /></i><span>arrow-down</span></li><li><img src="../o-ft-icons/svg/arrow-downwards.svg" /></i><span>arrow-downwards</span></li><li><img src="../o-ft-icons/svg/arrow-left.svg" /></i><span>arrow-left</span></li><li><img src="../o-ft-icons/svg/arrow-right.svg" /></i><span>arrow-right</span></li><li><img src="../o-ft-icons/svg/arrow-up-down.svg" /></i><span>arrow-up-down</span></li><li><img src="../o-ft-icons/svg/arrow-up.svg" /></i><span>arrow-up</span></li><li><img src="../o-ft-icons/svg/arrow-upwards.svg" /></i><span>arrow-upwards</span></li><li><img src="../o-ft-icons/svg/brand-always-learning.svg" /></i><span>brand-always-learning</span></li><li><img src="../o-ft-icons/svg/brand-fast-ft.svg" /></i><span>brand-fast-ft</span></li><li><img src="../o-ft-icons/svg/brand-fast.svg" /></i><span>brand-fast</span></li><li><img src="../o-ft-icons/svg/brand-ft-logo-square.svg" /></i><span>brand-ft-logo-square</span></li><li><img src="../o-ft-icons/svg/brand-ft-masthead.svg" /></i><span>brand-ft-masthead</span></li><li><img src="../o-ft-icons/svg/brand-ft.svg" /></i><span>brand-ft</span></li><li><img src="../o-ft-icons/svg/brand-pearson.svg" /></i><span>brand-pearson</span></li><li><img src="../o-ft-icons/svg/clippings.svg" /></i><span>clippings</span></li><li><img src="../o-ft-icons/svg/comment.svg" /></i><span>comment</span></li><li><img src="../o-ft-icons/svg/cross.svg" /></i><span>cross</span></li><li><img src="../o-ft-icons/svg/email.svg" /></i><span>email</span></li><li><img src="../o-ft-icons/svg/eye.svg" /></i><span>eye</span></li><li><img src="../o-ft-icons/svg/font-size.svg" /></i><span>font-size</span></li><li><img src="../o-ft-icons/svg/gift.svg" /></i><span>gift</span></li><li><img src="../o-ft-icons/svg/hamburger.svg" /></i><span>hamburger</span></li><li><img src="../o-ft-icons/svg/more.svg" /></i><span>more</span></li><li><img src="../o-ft-icons/svg/pinterest.svg" /></i><span>pinterest</span></li><li><img src="../o-ft-icons/svg/printer.svg" /></i><span>printer</span></li><li><img src="../o-ft-icons/svg/profile.svg" /></i><span>profile</span></li><li><img src="../o-ft-icons/svg/refresh.svg" /></i><span>refresh</span></li><li><img src="../o-ft-icons/svg/search.svg" /></i><span>search</span></li><li><img src="../o-ft-icons/svg/section-arts.svg" /></i><span>section-arts</span></li><li><img src="../o-ft-icons/svg/section-blogs.svg" /></i><span>section-blogs</span></li><li><img src="../o-ft-icons/svg/section-business-education.svg" /></i><span>section-business-education</span></li><li><img src="../o-ft-icons/svg/section-business-life.svg" /></i><span>section-business-life</span></li><li><img src="../o-ft-icons/svg/section-columnists.svg" /></i><span>section-columnists</span></li><li><img src="../o-ft-icons/svg/section-companies.svg" /></i><span>section-companies</span></li><li><img src="../o-ft-icons/svg/section-ftfm.svg" /></i><span>section-ftfm</span></li><li><img src="../o-ft-icons/svg/section-house-and-home.svg" /></i><span>section-house-and-home</span></li><li><img src="../o-ft-icons/svg/section-leader-and-letters.svg" /></i><span>section-leader-and-letters</span></li><li><img src="../o-ft-icons/svg/section-lex.svg" /></i><span>section-lex</span></li><li><img src="../o-ft-icons/svg/section-magazine.svg" /></i><span>section-magazine</span></li><li><img src="../o-ft-icons/svg/section-markets-data.svg" /></i><span>section-markets-data</span></li><li><img src="../o-ft-icons/svg/section-markets.svg" /></i><span>section-markets</span></li><li><img src="../o-ft-icons/svg/section-money.svg" /></i><span>section-money</span></li><li><img src="../o-ft-icons/svg/section-special-report.svg" /></i><span>section-special-report</span></li><li><img src="../o-ft-icons/svg/section-uk.svg" /></i><span>section-uk</span></li><li><img src="../o-ft-icons/svg/section-world.svg" /></i><span>section-world</span></li><li><img src="../o-ft-icons/svg/settings.svg" /></i><span>settings</span></li><li><img src="../o-ft-icons/svg/share.svg" /></i><span>share</span></li><li><img src="../o-ft-icons/svg/sign-in.svg" /></i><span>sign-in</span></li><li><img src="../o-ft-icons/svg/sign-out.svg" /></i><span>sign-out</span></li><li><img src="../o-ft-icons/svg/social-email.svg" /></i><span>social-email</span></li><li><img src="../o-ft-icons/svg/social-facebook.svg" /></i><span>social-facebook</span></li><li><img src="../o-ft-icons/svg/social-linkedin.svg" /></i><span>social-linkedin</span></li><li><img src="../o-ft-icons/svg/social-twitter.svg" /></i><span>social-twitter</span></li><li><img src="../o-ft-icons/svg/speechbubble.svg" /></i><span>speechbubble</span></li><li><img src="../o-ft-icons/svg/subscribe.svg" /></i><span>subscribe</span></li><li><img src="../o-ft-icons/svg/thumb-up.svg" /></i><span>thumb-up</span></li><li><img src="../o-ft-icons/svg/tick.svg" /></i><span>tick</span></li><li><img src="../o-ft-icons/svg/warning.svg" /></i><span>warning</span></li>
     </ul>
 </section>
 
