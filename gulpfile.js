@@ -1,5 +1,7 @@
 'use strict'
 const fs = require('fs');
+const Mustache = require('mustache');
+
 const gulp = require('gulp');
 const del = require('del');
 const sass = require('gulp-sass');
@@ -13,20 +15,45 @@ const svgstore = require('gulp-svgstore');
 /*const rsvg = require('gulp-rsvg');*/
 const svg2png = require('gulp-svg2png');
 /*const spritesmith = require('gulp.spritesmith');*/
-const fileInclude = require('gulp-file-include');
+const mustache = require('gulp-mustache');
 const useref = require('gulp-useref');
 const sequence = require('gulp-sequence');
 const browserSync = require('browser-sync').create();
 
+
+
 const svgsrc = 'src/*.svg';
 
-gulp.task('fileinclude', function() {
-  gulp.src('demo/index.html')
-    .pipe(fileInclude({
-      prefix: '@@',
-      basepath: 'demo'
-    }))
-    .pipe(gulp.dest('demo/'));
+//This task actually has nothing to do with gulp.
+//It first reads the file names under a directory.
+//If the filenames are resolve, then render template.
+gulp.task('demopage', function() {
+  var folder = 'o-ft-icons/svg';
+  var template = 'demo/index.mustache';
+  var filenames = [];
+
+  var p = new Promise(function(resolve, reject) {
+    fs.readdir(folder, function(err, files) {
+      if (err) throw err;
+      filenames = files.map(function(filename) {
+        return filename.slice(0, -4);
+      });
+      resolve(filenames);
+    });
+  });
+
+  p.then(function(val) {
+    gulp.src(template)
+      .pipe(mustache({
+        fticons: val
+      }, {
+        extension: '.html'
+      }))
+      .pipe(gulp.dest('.tmp'));
+  })
+  .catch(function(reason) {
+    console.log('Failed because: ' + reason);
+  });
 });
 
 //Generate sass variables from svg.
@@ -146,7 +173,7 @@ gulp.task('sass:dev', function() {
 });
 
 //Combine all tasks together
-gulp.task('dev', sequence('clean', 'svg2css', 'sassvg', 'sass:dev', ['svgmin', 'svg2png', 'copy:ftsvg']));
+gulp.task('dev', sequence('clean', 'svg2css', 'sassvg', ['demopage', 'sass:dev','svgmin', 'svg2png', 'copy:ftsvg']));
 
 gulp.task('serve', ['dev'], function() {
   browserSync.init({
@@ -159,11 +186,12 @@ gulp.task('serve', ['dev'], function() {
   });
 
   gulp.watch([
-    'demo/*.html'
+    '.tmp/*.html'
   ]).on('change', browserSync.reload);
 
   gulp.watch(['src/*.svg'], sequence('svg2css', 'sassvg', ['sass', 'svgmin', 'svg2png'/*, 'svgsymbol'*/]));
-  gulp.watch(['demo/styles/*.scss'], ['sass']);
+  gulp.watch('demo/*.mustache', ['demopage']);
+  gulp.watch(['demo/styles/*.scss'], ['sass:dev']);
   //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
 });
 
@@ -175,7 +203,7 @@ gulp.task('clean:build', function() {
 });
 
 gulp.task('copy:build', function() {
-  gulp.src(['.tmp/**/*', '!.tmp/styles'])
+  gulp.src(['.tmp/**/*', '!.tmp/styles', '!*.html'])
     .pipe(gulp.dest('build'));
 });
 
@@ -192,7 +220,7 @@ gulp.task('sass:view', function() {
     .pipe(gulp.dest('.tmp'))
 });
 
-gulp.task('view', sequence('clean', 'sass:view'));
+gulp.task('view', sequence('clean', ['demopage', 'sass:view']));
 
 gulp.task('preview', ['view'], function() {
   browserSync.init({

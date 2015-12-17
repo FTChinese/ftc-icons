@@ -7,32 +7,42 @@ $linkedin:#0977b6;
 /* FTC icons are simply turned into sass variables */
 @import 'sass/ftc-var';
 @import 'sass/sassvg';
-
-
+body {
+	font-family: "Times New Roman";
+}
+p {
+	font-size: 1.5em;
+}
+pre {
+	background-color: black;
+	color: white;
+	padding: 0 1em;
+	font-size: 1.5em;
+}
 .header {
 	a {
 		display: inline-block;
 		text-decoration: none;
 	}
 }
+
 .brand-ftc {
 	background-color: $ftpink;
 }
 h2 {
 	border-bottom: 1px solid #999;
 }
-.ftc-imgsrc {
+.ftc-icons {
 	.a {
 		border-radius: 50%;
 	}
 	.b {
 		border: 1px solid;
 	}
-}
-.ftc-bkg {
 	li {
 		margin-bottom: 10px;
 		list-style: none;
+		display: inline-block;
 	}
 	i {
 		display: inline-block;
@@ -41,13 +51,7 @@ h2 {
 		background-position: left center;
 		background-repeat: no-repeat;
 	}
-	pre {
-		display: inline-block;
-		min-width: 30em;
-		background-color: black;
-		color: white;
-		padding: 0 1em;
-	}
+
 	.social-linkedin-bg {
 		background-image: sassvg(social-linkedin-bg);
 		&:hover {
@@ -84,13 +88,34 @@ h2 {
 			background-image: $social-weibo;
 		}
 	}
+	.social-facebook-bg {
+		background-image: sassvg(social-facebook-bg);
+		&:hover {
+			background-image: $social-facebook-bg;
+		}		
+	}
+	.social-facebook {
+		background-image: sassvg(social-facebook);
+		&:hover {
+			background-image: $social-facebook;
+		}		
+	}
+	.social-twitter-bg {
+		background-image: sassvg(social-twitter-bg);
+		&:hover {
+			background-image: $social-twitter-bg;
+		}		
+	}
+	.social-twitter {
+		background-image: sassvg(social-twitter);
+		&:hover {
+			background-image: $social-twitter;
+		}		
+	}
 }
-
-
 /* .hamburger {
 	background-image: sassvg("hamburger", $fillcolor: #FFCC99, $extrastyles: "background-color:#333");
 } */
-
 
 
 $icon-list: sassvg-list("svg");
