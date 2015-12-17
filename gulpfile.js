@@ -20,8 +20,6 @@ const useref = require('gulp-useref');
 const sequence = require('gulp-sequence');
 const browserSync = require('browser-sync').create();
 
-
-
 const svgsrc = 'src/*.svg';
 
 //This task actually has nothing to do with gulp.
