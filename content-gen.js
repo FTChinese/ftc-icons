@@ -3,7 +3,7 @@ const fs = require('fs');
 const Mustache = require('mustache');
 
 let template = '{{#svg}}<li><i class="icon {{.}}"></i><span>{{.}}</span></li>{{/svg}}';
-let imgTpl = '{{#svg}}<li><img src="../o-ft-icons/svg/{{.}}.svg" /></i><span>{{.}}</span></li>{{/svg}}';
+let imgTpl = '{{#svg}}<li><img src="ftsvg/{{.}}.svg" /></i><span>{{.}}</span></li>{{/svg}}';
 let folder = 'o-ft-icons/svg';
 
 fs.readdir(folder, function(err, files) {

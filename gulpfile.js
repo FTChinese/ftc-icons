@@ -12,7 +12,7 @@ const svgstore = require('gulp-svgstore');
 
 /*const rsvg = require('gulp-rsvg');*/
 const svg2png = require('gulp-svg2png');
-const spritesmith = require('gulp.spritesmith');
+/*const spritesmith = require('gulp.spritesmith');*/
 const fileInclude = require('gulp-file-include');
 const useref = require('gulp-useref');
 const sequence = require('gulp-sequence');
@@ -125,23 +125,30 @@ gulp.task('svg2png', function() {
     .pipe(gulp.dest('sprite'));
 });*/
 
+gulp.task('copy:ftsvg', function() {
+  gulp.src('o-ft-icons/svg/*.svg')
+    .pipe(gulp.dest('.tmp/ftsvg'))
+});
+
 gulp.task('clean', function() {
   return del(['.tmp/**']).then(()=>{
     console.log('Old files deleted');
   });
 });
 
-gulp.task('sass', function() {
+gulp.task('sass:dev', function() {
   return gulp.src('demo/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+      includePaths: ['.tmp']
+    }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream());
 });
 
 //Combine all tasks together
-gulp.task('build', sequence('clean', 'svg2css', 'sassvg', 'sass', ['svgmin', 'svg2png']));
+gulp.task('dev', sequence('clean', 'svg2css', 'sassvg', 'sass:dev', ['svgmin', 'svg2png', 'copy:ftsvg']));
 
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', ['dev'], function() {
   browserSync.init({
     server: {
       baseDir: ['.tmp', 'demo'],
@@ -160,15 +167,40 @@ gulp.task('serve', ['build'], function() {
   //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
 });
 
-gulp.task('clean:dist', function() {
-  return del(['sass/*', 'svg/*', 'png/*']).then(()=>{
+// This will build the final file for release. Use with caution as it will overwrite all your previous efforts.
+gulp.task('clean:build', function() {
+  return del('build/**').then(()=>{
     console.log('Clean before distribution');
   });
 });
 
-gulp.task('copy', function() {
-  gulp.src(['tmp/**/*', '!.tmp/styles'])
-    .pipe(gulp.dest('.'));
+gulp.task('copy:build', function() {
+  gulp.src(['.tmp/**/*', '!.tmp/styles'])
+    .pipe(gulp.dest('build'));
 });
 
-gulp.task('dist', sequence(['clean', 'clean:dist'], 'svg2css', 'sassvg', ['svgmin', 'svg2png'], 'copy'));
+gulp.task('build', sequence('clean:build', 'dev', 'copy:build'));
+
+/* =========== End of tasks for developers ===================== */
+
+// Just for view. No file modification.
+gulp.task('sass:view', function() {
+  return gulp.src('demo/**/*.scss')
+    .pipe(sass({
+      includePaths: ['build']
+    }).on('error', sass.logError))
+    .pipe(gulp.dest('.tmp'))
+});
+
+gulp.task('view', sequence('clean', 'sass:view'));
+
+gulp.task('preview', ['view'], function() {
+  browserSync.init({
+    server: {
+      baseDir: ['.tmp', 'demo', 'build'],
+      routes: {
+        '/bower_components': 'bower_components'
+      }
+    }
+  });
+});

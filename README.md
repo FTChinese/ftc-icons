@@ -1,24 +1,55 @@
 #Install
 `bower install ftc-icons`
 
-Use you scss file `@import "ftc-icons/main"`
+If you specify `inludePaths: 'bower_components'` in `node-sass`, just import the `main.scss` file below:
 
-`gulp serve` for live preview.
+    @import "ftc-icons/main.scss"
+
+To see the icons list and effects, run:
+
+    gulp preview
 
 #Usage
-FTC-ICONS uses `ftc/*.svg` files as source to build datauri, png and sprite.
 
-## Use SVG Datauri
+FTC-ICONS uses `src/*.svg` files as source to build datauri, png and sprite.
 
-SVG files are turned into datauri as sass variables in the partial file `acss/_ftc-var.scss`. In your scss file and write scss rules like `background-image: $social-wechat`.
+## Use Sass Variables
+
+SVG files under `src` are turned into datauri as sass variables in the partial file `build/sass/_ftc-var.scss`. In your scss file and write scss rules like `background-image: $social-wechat`.
+
+## Use Sass Functions and Mixins
+
+FTC icons, together with icons produced is turned into sass functions and mixins with `gulp-sassvg` and under `scss`. You can import `scss/_sassvg.scss` and use its function `sassvg()` or mixin `@include sassvg` in you sass file.
+
+### `sassvg()` function
+Currently you could not use `gulp-sassvg` on svg icons with more than one color since `gulp-sassvg` will turn every occurrence of `fill:color` in your svg into its own template `fill:#{$fillcolor}`. This means when you pass in an argument to `$color` or `$fillcolor`, every path in the gernerated svg datauri have this color. As long as you svg has only one color, this works quite good. By default all fillcolors you added to the src svg will be erased when turn into `_sassvg-data.css`.
+
+    sassvg($icon, 
+        $color: $sassvg--color, 
+        $fillcolor: $color,
+        $strokecolor: $color, 
+        $opacity: 1,
+        $extrastyles: "",
+        $url: $sassvg--url
+    )
+
+Let's say you want to use the `svg/hamburger.svg`, you can do it this way:
+
+    background-image: sassvg(hamburger);
+
+If your icons are drawn on a transparent canvas with the path filled. You can change it for compiled results:
+
+    background-image: sassvg(hamburger, $fillcolor: #fff, $extrastyles: "background-color:" + #FFCC99);
+
+`$extrastyles` will be set on the `<svg>` element, thus the style will be applied to the entire canvas. `$fillcolor` will be set on `<svg>` and every occurrence of `fill` on the `<path>` element (See why it doesn't work when you used more than one color on the icon?). 
 
 ## Use SVG files directly
 
-Minified SVG icons is under the folder `svg`.
+Minified SVG icons is under the folder `build/svg`.
 
 ## Use PNG files directly
 
-PNG files are generated from SVGs, put into `png`.
+PNG files are generated from SVGs, put into `build/png`.
 
 ## Use PNG sprite
 
@@ -35,35 +66,15 @@ You can use a sprited svg file `sprite/sprite.symbol.svg`. This file combines al
 ## SVG Polyfill
 If you want to use SVGs while support old browsers without using png as fallback, [SVG for Everybody](https://github.com/jonathantneal/svg4everybody) is recommended.
 
-# Use FT Icons
-Icons produced by FT is turned into sass functions and mixins with `gulp-sassvg` and under `scss`. You can import `scss/_sassvg.scss` and use its function `sassvg()` or mixin `@include sassvg` in you sass file.
+# Develop
 
-## `sassvg()`
-Currently you could not use `gulp-sassvg` on svg icons with more than one color since `gulp-sassvg` will turn every occurrence of `fill:color` in your svg into its own template `fill:#{$fillcolor}`. This means when you pass in an argument to `$color` or `$fillcolor`, every path in the gernerated svg datauri have this color. As long as you svg has only one color, this works quite good. Therefore we did not use it on FTC icons due to the multiple colors used by Sina Weibo.
+The project has a submodule `o-ft-icons`. You need to recursively clone:
 
-    sassvg($icon, 
-        $color: $sassvg--color, 
-        $fillcolor: $color,
-        $strokecolor: $color, 
-        $opacity: 1,
-        $extrastyles: "",
-        $url: $sassvg--url
-    )
+    git clone --recursive https://github.com/FTChinese/ftc-icons.git
 
-Let's say you want to use the `svg/hamburger.svg`, you can do it this way:
+To build your own icons, put you svg icons in `src` directory, run `gulp serve` for live view. Generated files are put into `.tmp` directory. Run `gulp build` for release.
 
-    background-image: sassvg(hamburger);
-
-By default most FT icons are drawn on a transparent canvas with a black fill color. You can change it for compiled results:
-
-    background-image: sassvg(hamburger, $fillcolor: #fff, $extrastyles: "background-color:" + #FFCC99);
-
-`$extrastyles` will be set on the `<svg>` element, thus the style will be applied to the entire canvas. `$fillcolor` will be set on `<svg>` and every occurrence of `fill` on the `<path>` element (See why it doesn't work when you used more than one color on the icon?). 
-
-# Custom
-To build your own icons, put you svg icons in `src/svg`, run `gulp build`. All individual svgs, scss file of datauri, svg sprite, png fallback, and png sprite will be generated.
-
-#Gulp Commands
+# Gulp Commands
 
 `gulp sassvg` will generate sass mixins and function under the folder `ftc/sassvg`. You can customize icons' color.
 
