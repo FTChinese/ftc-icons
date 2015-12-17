@@ -139,7 +139,7 @@ gulp.task('sass', function() {
 });
 
 //Combine all tasks together
-gulp.task('build', sequence('clean', 'svg2css', 'sassvg', ['svgmin', 'svg2png'], 'sass'));
+gulp.task('build', sequence('clean', 'svg2css', 'sassvg', 'sass', ['svgmin', 'svg2png']));
 
 gulp.task('serve', ['build'], function() {
   browserSync.init({
@@ -155,7 +155,7 @@ gulp.task('serve', ['build'], function() {
     'demo/*.html'
   ]).on('change', browserSync.reload);
 
-  gulp.watch(['src/*.svg'], ['svg2css', 'sassvg', 'svgmin', 'sass'/*, 'svg2png', 'svgsymbol'*/]);
+  gulp.watch(['src/*.svg'], sequence('svg2css', 'sassvg', ['sass', 'svgmin', 'svg2png'/*, 'svgsymbol'*/]));
   gulp.watch(['demo/styles/*.scss'], ['sass']);
   //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
 });
