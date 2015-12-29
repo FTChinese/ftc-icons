@@ -21,8 +21,5 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "modernizr": "~3.2.0",
-    "svg4everybody": "~2.0.0"
-  }
+  "dependencies": {}
 }
