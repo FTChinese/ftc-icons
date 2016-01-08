@@ -3,7 +3,7 @@
   "description": "Icons used on FTC site",
   "main": "main.scss",
   "authors": [
-    "weiguo.ni"
+    "weiguo.ni <neefrankie@outlook.com>"
   ],
   "license": "MIT",
   "keywords": [
@@ -12,14 +12,16 @@
   ],
   "homepage": "https://github.com/FTChinese/ftc-icons",
   "moduleType": [
-    "es6"
+    "es6",
+    "node"
   ],
   "ignore": [
-    "**/.*",
+    "o-ft-icons",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "demo"
   ],
   "dependencies": {}
 }
