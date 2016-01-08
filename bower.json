@@ -21,7 +21,9 @@
     "bower_components",
     "test",
     "tests",
-    "demo"
+    "demo",
+    "src",
+    "templates"
   ],
   "dependencies": {}
 }
