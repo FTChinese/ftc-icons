@@ -162,7 +162,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('sass:dev', function() {
-  return gulp.src('demo/**/*.scss')
+  return gulp.src('demo/main.scss')
     .pipe(sass({
       includePaths: ['.tmp']
     }).on('error', sass.logError))
@@ -173,7 +173,7 @@ gulp.task('sass:dev', function() {
 //Combine all tasks together
 gulp.task('dev', sequence('clean', 'svg2css', 'sassvg', ['demopage', 'sass:dev','svgmin', 'svg2png', 'copy:ftsvg']));
 
-gulp.task('serve', ['dev'], function() {
+gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
     server: {
       baseDir: ['.tmp', 'demo'],
@@ -220,7 +220,7 @@ gulp.task('sass:view', function() {
 
 gulp.task('view', sequence('clean', ['demopage', 'sass:view']));
 
-gulp.task('preview', ['view'], function() {
+gulp.task('serve', ['view'], function() {
   browserSync.init({
     server: {
       baseDir: ['.tmp', 'demo', 'build'],
