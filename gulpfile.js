@@ -189,7 +189,7 @@ gulp.task('serve:test', ['dev'], function() {
 
   gulp.watch(['src/*.svg'], sequence('svg2css', 'sassvg', ['sass', 'svgmin', 'svg2png'/*, 'svgsymbol'*/]));
   gulp.watch('demo/*.mustache', ['demopage']);
-  gulp.watch(['demo/styles/*.scss'], ['sass:dev']);
+  gulp.watch(['demo/*.scss'], ['sass:dev']);
   //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
 });
 
