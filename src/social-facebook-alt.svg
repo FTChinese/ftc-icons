@@ -19,7 +19,7 @@
    sodipodi:docname="social-facebook-alt.svg"><metadata
      id="metadata8"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs6"><clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath42"><path
@@ -44,7 +44,7 @@
      id="namedview4"
      showgrid="true"
      inkscape:zoom="7.89"
-     inkscape:cx="28.073511"
+     inkscape:cx="50"
      inkscape:cy="50"
      inkscape:window-x="0"
      inkscape:window-y="1"
@@ -59,7 +59,7 @@
      height="100"
      id="rect11"
      style="fill:none;fill-opacity:0" /><path
-     d="M 56.998175,100 56.998175,61.275034 69.997017,61.275034 71.943115,46.182956 56.998175,46.182956 56.998175,36.547332 C 56.998175,32.177824 58.211395,29.200249 64.477576,29.200249 L 72.469544,29.196501 72.469544,15.69831 C 71.086967,15.514717 66.343119,15.103694 60.824052,15.103694 49.301457,15.103694 41.413277,22.136796 41.413277,35.053112 L 41.413277,46.182956 28.381464,46.182956 28.381464,61.275034 41.413277,61.275034 41.413277,100 56.998175,100 Z"
-     style="fill:#3c5a99"
+     d="M 56.185611,89.9485 56.185611,53.504254 68.418883,53.504254 70.250361,39.301031 56.185611,39.301031 56.185611,30.232902 C 56.185611,26.120739 57.327376,23.318529 63.224512,23.318529 L 70.74579,23.315001 70.74579,10.61179 C 69.444638,10.43901 64.98018,10.052194 59.786163,10.052194 48.942193,10.052194 41.518593,16.671081 41.518593,28.826682 L 41.518593,39.301031 29.25429,39.301031 29.25429,53.504254 41.518593,53.504254 41.518593,89.9485 56.185611,89.9485 Z"
+     style="fill:#3c5a99;fill-opacity:1"
      id="path64"
      inkscape:connector-curvature="0" /></svg>

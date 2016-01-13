@@ -161,17 +161,20 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('sass:dev', function() {
+gulp.task('sass:watch',function() {
   return gulp.src('demo/main.scss')
     .pipe(sass({
       includePaths: ['.tmp']
     }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.stream({once: true}));
 });
 
+gulp.task('svg:watch', sequence(['svg2css',  'svgmin', 'svg2png'], 'sassvg', 'sass:watch'));
+
 //Combine all tasks together
-gulp.task('dev', sequence('clean', 'svg2css', 'sassvg', ['demopage', 'sass:dev','svgmin', 'svg2png', 'copy:ftsvg']));
+//Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
+gulp.task('dev', sequence('clean', ['svg2css',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
 
 gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
@@ -187,9 +190,9 @@ gulp.task('serve:test', ['dev'], function() {
     '.tmp/*.html'
   ]).on('change', browserSync.reload);
 
-  gulp.watch(['src/*.svg'], sequence('svg2css', 'sassvg', ['sass', 'svgmin', 'svg2png'/*, 'svgsymbol'*/]));
+  gulp.watch(['src/*.svg'], ['svg:watch']);
   gulp.watch('demo/*.mustache', ['demopage']);
-  gulp.watch(['demo/*.scss'], ['sass:dev']);
+  gulp.watch(['demo/*.scss'], ['sass:watch']);
   //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
 });
 
@@ -205,12 +208,12 @@ gulp.task('copy:build', function() {
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('build', sequence('clean:build', 'dev', 'copy:build'));
+gulp.task('build', sequence(['clean', 'clean:build'], ['svg2css',  'svgmin', 'svg2png',  'copy:ftsvg'], 'sassvg', 'copy:build'));
 
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
-gulp.task('sass:view', function() {
+gulp.task('sass', function() {
   return gulp.src('demo/**/*.scss')
     .pipe(sass({
       includePaths: ['build']
@@ -218,7 +221,7 @@ gulp.task('sass:view', function() {
     .pipe(gulp.dest('.tmp'))
 });
 
-gulp.task('view', sequence('clean', ['demopage', 'sass:view']));
+gulp.task('view', sequence('clean', ['demopage', 'sass']));
 
 gulp.task('serve', ['view'], function() {
   browserSync.init({
