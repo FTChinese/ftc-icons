@@ -201,7 +201,7 @@ gulp.task('clean:build', function() {
 });
 
 gulp.task('copy:build', function() {
-  gulp.src(['.tmp/**/*', '!.tmp/styles', '!*.html'])
+  gulp.src(['.tmp/**/*', '!.tmp/*.*'])
     .pipe(gulp.dest('build'));
 });
 
