@@ -1,7 +1,5 @@
 'use strict'
 const fs = require('fs');
-const Mustache = require('mustache');
-
 const gulp = require('gulp');
 const del = require('del');
 const sass = require('gulp-sass');
@@ -134,21 +132,6 @@ gulp.task('svg2png', function() {
 // });
 
 // gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
-
-//PNG sprite.
-//It seems inlined `svg` is in confict with png `sprite` because you could not set different `background-position` on the same element.
-//For fallback you should not use the png sprite. Just link the individual png files separately.
-/*gulp.task('spritesmith', function() {
-  return gulp.src('.tmp/*.png')
-    .pipe(spritesmith({
-      imgName: 'icons.sprite.png',
-      cssName: 'icons.sprite.png.css',
-      algorithm: 'top-down',
-      padding: 4,
-      cssTemplate: 'templates/png.spritecss.handlebars'
-    }))
-    .pipe(gulp.dest('sprite'));
-});*/
 
 gulp.task('copy:ftsvg', function() {
   gulp.src('o-ft-icons/svg/*.svg')
