@@ -95,43 +95,10 @@ gulp.task('svgmin', function() {
 
 //Generate png files from svg.
 gulp.task('svg2png', function() {
-  return gulp.src([svgsrc/*, 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'*/])
+  return gulp.src([svgsrc])
     .pipe(svg2png()) //`1` is scale factor. You can change it.
     .pipe(gulp.dest('.tmp/png'));
 });
-
-//Tasks `svg2png` and `rsvg` are identical functionally. 
-//They only differ in the packages used. It seems `svg2png` is much slower than rsvg but it could be easily scaled while you have to explicitly specify the `height` and `width` for `rsvg`, and you have to have `librsvg` installed on your system.
-/*gulp.task('svg2png:icons', function() {
-  return gulp.src([svgsrc, '!src/brand-*.svg'])
-    .pipe(svg2png(0.32))
-    .pipe(gulp.dest('.tmp'))
-    .pipe(gulp.dest('png'));
-});*/
-
-/*gulp.task('svg2png', ['svg2png:brand', 'svg2png:icons']);*/
-
-//Just an alternative to `svg2png` in case `phantomjs` failed to work.
-//This plugin is dependent of `librsvg`. You have to have it installed on your system. On Mac `brew install librsvg`.
-// gulp.task('rsvg:brand', function() {
-//   return gulp.src('src/brand-*.svg')
-//     .pipe(rsvg({
-//       format: 'png'
-//     }))
-//     .pipe(gulp.dest('png'));
-// });
-
-// gulp.task('rsvg:icons', function() {
-//   return gulp.src([svgsrc, '!src/brand-*.svg'])
-//     .pipe(rsvg({
-//       format: 'png',
-//       scale: 0.32
-//     }))
-//     .pipe(gulp.dest('.tmp/png'))
-//     .pipe(gulp.dest('png'));
-// });
-
-// gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
 
 gulp.task('copy:ftsvg', function() {
   gulp.src('o-ft-icons/svg/*.svg')
@@ -216,3 +183,36 @@ gulp.task('serve', ['view'], function() {
     }
   });
 });
+
+//Tasks `svg2png` and `rsvg` are identical functionally. 
+//They only differ in the packages used. It seems `svg2png` is much slower than rsvg but it could be easily scaled while you have to explicitly specify the `height` and `width` for `rsvg`, and you have to have `librsvg` installed on your system.
+/*gulp.task('svg2png:icons', function() {
+  return gulp.src([svgsrc, '!src/brand-*.svg'])
+    .pipe(svg2png(0.32))
+    .pipe(gulp.dest('.tmp'))
+    .pipe(gulp.dest('png'));
+});*/
+
+/*gulp.task('svg2png', ['svg2png:brand', 'svg2png:icons']);*/
+
+//Just an alternative to `svg2png` in case `phantomjs` failed to work.
+//This plugin is dependent of `librsvg`. You have to have it installed on your system. On Mac `brew install librsvg`.
+// gulp.task('rsvg:brand', function() {
+//   return gulp.src('src/brand-*.svg')
+//     .pipe(rsvg({
+//       format: 'png'
+//     }))
+//     .pipe(gulp.dest('png'));
+// });
+
+// gulp.task('rsvg:icons', function() {
+//   return gulp.src([svgsrc, '!src/brand-*.svg'])
+//     .pipe(rsvg({
+//       format: 'png',
+//       scale: 0.32
+//     }))
+//     .pipe(gulp.dest('.tmp/png'))
+//     .pipe(gulp.dest('png'));
+// });
+
+// gulp.task('rsvg', ['rsvg:brand', 'rsvg:icons']);
