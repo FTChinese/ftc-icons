@@ -1,8 +1,13 @@
 /* Some color variables */
-$ftpink:#FFCC99;
-$wechat:#609700;
-$weibo: #FFD12B;
-$linkedin:#0977b6;
+$icon-color-ftpink:#FFCC99;
+
+$ftc-share-icon-list: (
+	wechat: #609700, 
+	weibo: #FFD12B, 
+	linedin: #0977b6, 
+	facebook: #3c5a99, 
+	twitter:#6aa9e0
+);
 
 /* FTC icons are simply turned into sass variables */
 @import 'sass/ftc-var';
@@ -53,10 +58,11 @@ h2 {
 	}
 
 	.social-linkedin {
-		background-image: sassvg(social-linkedin);
+		background-image: sassvg(social-linkedin-alt, $fillcolor: $linkedin);
 		&:hover {
 			background-image: $social-linkedin;
 		}
+		border-radius: 10%;
 	}
 	.social-linkedin-alt {
 		background-image: sassvg(social-linkedin-alt);
@@ -83,7 +89,7 @@ h2 {
 		}
 	}
 	.social-weibo-alt {
-		background-image: sassvg(social-weibo-alt);
+		background-image: sassvg(social-weibo-alt, $fillcolor: $weibo);
 		&:hover {
 			background-image: $social-weibo-alt;
 		}

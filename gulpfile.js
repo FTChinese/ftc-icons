@@ -53,19 +53,19 @@ gulp.task('demopage', function() {
 });
 
 //Generate sass variables from svg.
-gulp.task('svg2css', function() {
+gulp.task('svgtocss', function() {
   return gulp.src(svgsrc)
     .pipe(svgmin())
     .pipe(svgToCss({
       name: '_ftc-var.scss',
-      prefix: '$',
-      template: '{{prefix}}{{filename}}:url("{{{dataurl}}}");'
+      prefix: '@function ftc-icon-',
+      template: '{{prefix}}{{filename}}(){@return "{{{dataurl}}}"; }'
     }))
     .pipe(gulp.dest('.tmp/sass'));
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src([svgsrc, 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'])
+  return gulp.src([svgsrc, '!src/*-bg.svg', 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'])
     .pipe(useref())
     .pipe(svgmin())
     .pipe(sassvg({
@@ -120,11 +120,11 @@ gulp.task('sass:watch',function() {
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('svg:watch', sequence(['svg2css',  'svgmin', 'svg2png'], 'sassvg', 'sass:watch'));
+gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 'sass:watch'));
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svg2css',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
+gulp.task('dev', sequence('clean', ['svg2css',  'svgmin', 'svgtopng', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
 
 gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
@@ -158,7 +158,7 @@ gulp.task('copy:build', function() {
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('build', sequence(['clean', 'clean:build'], ['svg2css',  'svgmin', 'svg2png',  'copy:ftsvg'], 'sassvg', 'copy:build'));
+gulp.task('build', sequence(['clean', 'clean:build'], ['svgtocss',  'svgmin', 'svg2png',  'copy:ftsvg'], 'sassvg', 'copy:build'));
 
 /* =========== End of tasks for developers ===================== */
 

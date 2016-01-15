@@ -15,7 +15,7 @@
    id="svg4143"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="email.svg">
+   sodipodi:docname="social-email.svg">
   <defs
      id="defs4145" />
   <sodipodi:namedview
@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.89"
-     inkscape:cx="50"
+     inkscape:cx="6.1470218"
      inkscape:cy="50"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg4143"
      showgrid="true"
      inkscape:showpageshadow="false"
      units="px"
@@ -50,9 +50,12 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path d="M 20.097959 27.744898 L 80 27.744898 L 50 52.54898 L 20.097959 27.744898 Z M 19.95102,35.735714 L 50,60.637755 L 80.04898,35.783673 L 80.04898,72.255102 L 19.95102,72.255102 Z" style="stroke:none; fill:#000;" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
+     d="M 0 0 L 0 100 L 100 100 L 100 0 L 0 0 z M 20.097656 27.744141 L 80 27.744141 L 50 52.548828 L 20.097656 27.744141 z M 19.951172 35.736328 L 50 60.638672 L 80.048828 35.783203 L 80.048828 72.255859 L 19.951172 72.255859 L 19.951172 35.736328 z "
+     id="rect4154" />
 </svg>
