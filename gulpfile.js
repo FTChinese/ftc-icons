@@ -22,7 +22,7 @@ const svgsrc = 'src/*.svg';
 //This task actually has nothing to do with gulp.
 //It first reads the file names under a directory.
 //If the filenames are resolve, then render template.
-gulp.task('demopage', function() {
+gulp.task('html', function() {
   var folders = [
     'src',
     'o-ft-icons/svg'
@@ -139,7 +139,7 @@ gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 's
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','style:dev'));
+gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'html',  'copy:ftsvg'], 'sassvg','style:dev'));
 
 gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
@@ -177,20 +177,20 @@ gulp.task('build', sequence(['clean', 'clean:build'], ['svgtocss',  'svgmin', 's
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
-gulp.task('sass', function() {
-  return gulp.src('demo/**/*.scss')
+gulp.task('style', function() {
+  return gulp.src('demo/*.scss')
     .pipe(sass({
-      includePaths: ['build']
+      includePaths: ['build', 'bower_components']
     }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
 });
 
-gulp.task('view', sequence('clean', ['demopage', 'sass']));
+gulp.task('assets', sequence('clean', ['html', 'style']));
 
-gulp.task('serve', ['view'], function() {
+gulp.task('serve', ['assets'], function() {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', 'demo', 'build'],
+      baseDir: ['.tmp', 'build'],
       routes: {
         '/bower_components': 'bower_components'
       }
