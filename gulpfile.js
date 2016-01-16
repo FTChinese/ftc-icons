@@ -126,7 +126,7 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('sass:watch',function() {
+gulp.task('style:dev',function() {
   return gulp.src('demo/main.scss')
     .pipe(sass({
       includePaths: ['.tmp', 'bower_components']
@@ -135,11 +135,11 @@ gulp.task('sass:watch',function() {
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 'sass:watch'));
+gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 'style:dev'));
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
+gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','style:dev'));
 
 gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
@@ -157,8 +157,7 @@ gulp.task('serve:test', ['dev'], function() {
 
   gulp.watch(['src/*.svg'], ['svg:watch']);
   gulp.watch('demo/*.mustache', ['demopage']);
-  gulp.watch(['demo/*.scss'], ['sass:watch']);
-  //gulp.watch(['templates/*', '.tmp/png'], ['sprite:png']);
+  gulp.watch(['demo/*.scss'], ['style:watch']);
 });
 
 // This will build the final file for release. Use with caution as it will overwrite all your previous efforts.
