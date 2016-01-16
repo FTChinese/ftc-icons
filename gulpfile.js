@@ -3,7 +3,6 @@ let fs = require('fs');
 let gulp = require('gulp');
 let del = require('del');
 let sass = require('gulp-sass');
-let rename = require('gulp-rename');
 
 let svgmin = require('gulp-svgmin');
 let sassvg = require('gulp-sassvg');
@@ -93,13 +92,13 @@ gulp.task('sassvg', function() {
 
 
 //Generate a svg sprite with `symbol` elements
-/*gulp.task('svgsymbol', function() {
+gulp.task('svgsymbol', function() {
   var svgs = gulp.src(svgsrc)
     .pipe(svgmin())
     .pipe(svgstore())
     .pipe(rename('icons.sprite.symbol.svg'))
-    .pipe(gulp.dest('sprite'));
-});*/
+    .pipe(gulp.dest('.tmp/sprite'));
+});
 
 //Minify and copy svg
 gulp.task('svgmin', function() {
