@@ -22,6 +22,7 @@ const svgsrc = 'src/*.svg';
 //This task actually has nothing to do with gulp.
 //It first reads the file names under a directory.
 //If the filenames are resolve, then render template.
+
 gulp.task('html', function() {
   var folders = [
     'src',
@@ -45,7 +46,6 @@ gulp.task('html', function() {
         .map(function(file) {
           return file.slice(0, -4);
         });
-
         resolve(filenames);
       });
     });
@@ -62,7 +62,8 @@ gulp.task('html', function() {
       }, {
         extension: '.html'
       }))
-      .pipe(gulp.dest('.tmp'));    
+      .pipe(gulp.dest('demo'))
+      .pipe(browserSync.stream({once: true}));    
   })
   .catch(function(reason) {
     console.log('Failed because: ' + reason);
@@ -139,9 +140,9 @@ gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 's
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'html',  'copy:ftsvg'], 'sassvg','style:dev'));
+gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'copy:ftsvg'], 'sassvg','style:dev'));
 
-gulp.task('serve:test', ['dev'], function() {
+gulp.task('serve:test', ['html', 'dev'], function() {
   browserSync.init({
     server: {
       baseDir: ['.tmp', 'demo'],
@@ -156,7 +157,7 @@ gulp.task('serve:test', ['dev'], function() {
   ]).on('change', browserSync.reload);
 
   gulp.watch(['src/*.svg'], ['svg:watch']);
-  gulp.watch('demo/*.mustache', ['demopage']);
+  gulp.watch('demo/*.mustache', ['html']);
   gulp.watch(['demo/*.scss'], ['style:watch']);
 });
 
@@ -185,12 +186,12 @@ gulp.task('style', function() {
     .pipe(gulp.dest('.tmp'))
 });
 
-gulp.task('assets', sequence('clean', ['html', 'style']));
+gulp.task('assets', sequence('clean', 'style'));
 
 gulp.task('serve', ['assets'], function() {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', 'build'],
+      baseDir: ['demo', '.tmp', 'build'],
       routes: {
         '/bower_components': 'bower_components'
       }
