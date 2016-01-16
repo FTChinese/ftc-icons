@@ -17,22 +17,22 @@
     <link rel="stylesheet" type="text/css" href="main.css">
   </head>
   <body>
-<section>
+
   <header class="header">
     <h1>
       <a class="header-logo" href="http://www.ftchinese.com/" alt="FT中文网" title="FT中文网">
-        <img src="svg/brand-ftc.svg" class="brand-ftc">
+        <img src="svg/brand-ftc-masthead.svg" class="brand-ftc-masthead">
       </a>
-      <img src="svg/brand-ftc-masthead.svg" class="brand-ftc-masthead">
     </h1>
   </header>
 
+<section>
   <h2>FTC Icons Used as Background</h2>
 
   <ul class="ftc-icons">
   {{#ftcicons}}
     <li>
-      <i class={{.}}></i>
+      <i class="{{.}}"></i>
     </li>
   {{/ftcicons}}
   </ul>
@@ -70,8 +70,5 @@
 </section>
 
 
-<script type="text/javascript">
-  svg4everybody();
-</script>
   </body>
 </html>

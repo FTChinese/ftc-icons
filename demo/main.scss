@@ -9,21 +9,23 @@ $ftc-share-icon-list: (
 	twitter:#6aa9e0
 );
 
+@function ftcIconGetData($icon) {
+	$functionname: "ftc-icon-" + $icon;
+	@if(type-of($icon) != "string" or function-exists($functionname) == false) {
+		@warn "wrong parameter for function 'ftcIconGetData'. It needs to be a string with the fileName of the svg (without extension)";
+	} @else {
+		@return unquote("url('" + call($functionname) + "')");
+	}
+}
+
 /* FTC icons are simply turned into sass variables */
 @import 'sass/ftc-var';
 @import 'sass/sassvg';
+
 body {
 	font-family: "Times New Roman";
 }
-p {
-	font-size: 1.5em;
-}
-pre {
-	background-color: black;
-	color: white;
-	padding: 0 1em;
-	font-size: 1.5em;
-}
+
 .header {
 	a {
 		display: inline-block;
@@ -32,99 +34,43 @@ pre {
 }
 
 .brand-ftc {
-	background-color: $ftpink;
+	background-color: $icon-color-ftpink;
 }
 h2 {
 	border-bottom: 1px solid #999;
 }
-.ftc-icons {
-	.b {
-		border-radius: 50%;
-	}
-	.a {
-		border: 1px solid;
-	}
-	li {
-		margin-bottom: 10px;
-		list-style: none;
-		display: inline-block;
-	}
-	i {
-		display: inline-block;
-		width: 100px;
-		height: 100px;
-		background-position: left center;
-		background-repeat: no-repeat;
-	}
 
-	.social-linkedin {
-		background-image: sassvg(social-linkedin-alt, $fillcolor: $linkedin);
-		&:hover {
-			background-image: $social-linkedin;
-		}
-		border-radius: 10%;
-	}
-	.social-linkedin-alt {
-		background-image: sassvg(social-linkedin-alt);
-		&:hover {
-			background-image: $social-linkedin-alt;
-		}
-	}
-	.social-wechat {
-		background-image: sassvg(social-wechat);
-		&:hover {
-			background-image: $social-wechat;
+$ftc-list: sassvg-list("src");
+.ftc-icons {
+	list-style-type: none;
+	li {
+		display: inline-block;
+		margin-bottom: 1em;
+		margin-right: 1em;
+		i {
+			display: inline-block;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			width: 100px;
+			height: 100px;
 		}
 	}
-	.social-wechat-alt {
-		background-image: sassvg(social-wechat-alt);
-		&:hover {
-			background-image: $social-wechat-alt;
+	@each $icon in $ftc-list {
+		.#{$icon} {
+			background-image: sassvg($icon);
 		}
-	}
-	.social-weibo {
-		background-image: sassvg(social-weibo);
-		&:hover {
-			background-image: $social-weibo;
+		.#{$icon}:hover {
+			background-image: ftcIconGetData($icon);
 		}
-	}
-	.social-weibo-alt {
-		background-image: sassvg(social-weibo-alt, $fillcolor: $weibo);
-		&:hover {
-			background-image: $social-weibo-alt;
-		}
-	}
-	.social-facebook {
-		background-image: sassvg(social-facebook);
-		&:hover {
-			background-image: $social-facebook;
-		}		
-	}
-	.social-facebook-alt {
-		background-image: sassvg(social-facebook-alt);
-		&:hover {
-			background-image: $social-facebook-alt;
-		}		
-	}
-	.social-twitter {
-		background-image: sassvg(social-twitter);
-		&:hover {
-			background-image: $social-twitter;
-		}		
-	}
-	.social-twitter-alt {
-		background-image: sassvg(social-twitter-alt);
-		&:hover {
-			background-image: $social-twitter-alt;
-		}		
 	}
 }
+
 /* .hamburger {
 	background-image: sassvg("hamburger", $fillcolor: #FFCC99, $extrastyles: "background-color:#333");
 } */
 
-
-$icon-list: sassvg-list("svg");
+$ft-list: sassvg-list("svg");
 .ft-icons {
 	list-style-type: none;
 	li {
@@ -145,7 +91,7 @@ $icon-list: sassvg-list("svg");
 		width: 100px;
 		height: 100px;
 	}
-	@each $icon in $icon-list {
+	@each $icon in $ft-list {
 		$c1: random(256) - 1;
 		$c2: random(256) - 1;
 		$c3: random(256) - 1;
@@ -155,10 +101,6 @@ $icon-list: sassvg-list("svg");
 		.#{$icon}:hover {
 			background-image: sassvg($icon, $fillcolor:rgb($c2, $c3, $c1));
 		}
-	}
-
-	.social-linkedin {
-		background-color: #fff;
 	}	
 }
 

@@ -1,22 +1,22 @@
 'use strict'
-const fs = require('fs');
-const gulp = require('gulp');
-const del = require('del');
-const sass = require('gulp-sass');
-const rename = require('gulp-rename');
+let fs = require('fs');
+let gulp = require('gulp');
+let del = require('del');
+let sass = require('gulp-sass');
+let rename = require('gulp-rename');
 
-const svgmin = require('gulp-svgmin');
-const sassvg = require('gulp-sassvg');
-const svgToCss = require('gulp-svg-to-css');
-const svgstore = require('gulp-svgstore');
+let svgmin = require('gulp-svgmin');
+let sassvg = require('gulp-sassvg');
+let svgToCss = require('gulp-svg-to-css');
+let svgstore = require('gulp-svgstore');
 
 /*const rsvg = require('gulp-rsvg');*/
-const svg2png = require('gulp-svg2png');
+let svg2png = require('gulp-svg2png');
 /*const spritesmith = require('gulp.spritesmith');*/
-const mustache = require('gulp-mustache');
-const useref = require('gulp-useref');
-const sequence = require('gulp-sequence');
-const browserSync = require('browser-sync').create();
+let mustache = require('gulp-mustache');
+let sequence = require('gulp-sequence');
+let browserSync = require('browser-sync').create();
+let path = require('path');
 
 const svgsrc = 'src/*.svg';
 
@@ -24,28 +24,46 @@ const svgsrc = 'src/*.svg';
 //It first reads the file names under a directory.
 //If the filenames are resolve, then render template.
 gulp.task('demopage', function() {
-  var folder = 'o-ft-icons/svg';
+  var folders = [
+    'src',
+    'o-ft-icons/svg'
+  ];
+
   var template = 'demo/index.mustache';
-  var filenames = [];
 
-  var p = new Promise(function(resolve, reject) {
-    fs.readdir(folder, function(err, files) {
-      if (err) throw err;
-      filenames = files.map(function(filename) {
-        return filename.slice(0, -4);
+  function getFileNames(folder) {
+
+    return new Promise(function(resolve, reject) {
+      fs.readdir(folder, function(err, files) {
+        if (err) {
+          reject(err);
+        };
+
+        var filenames = files
+        .filter(function(file) {
+          return path.extname(file) === '.svg'
+        })
+        .map(function(file) {
+          return file.slice(0, -4);
+        });
+
+        resolve(filenames);
       });
-      resolve(filenames);
     });
-  });
+  }
 
-  p.then(function(val) {
+  var promisedFileNames = folders.map(getFileNames);
+
+  Promise.all(promisedFileNames)
+  .then(function(fileNames) {
     gulp.src(template)
       .pipe(mustache({
-        fticons: val
+        ftcicons: fileNames[0],
+        fticons: fileNames[1]
       }, {
         extension: '.html'
       }))
-      .pipe(gulp.dest('.tmp'));
+      .pipe(gulp.dest('.tmp'));    
   })
   .catch(function(reason) {
     console.log('Failed because: ' + reason);
@@ -65,8 +83,7 @@ gulp.task('svgtocss', function() {
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src([svgsrc, '!src/*-bg.svg', 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'])
-    .pipe(useref())
+  return gulp.src([svgsrc, 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'])
     .pipe(svgmin())
     .pipe(sassvg({
       outputFolder: '.tmp/sass',
@@ -87,7 +104,6 @@ gulp.task('sassvg', function() {
 //Minify and copy svg
 gulp.task('svgmin', function() {
   return gulp.src(svgsrc)
-    .pipe(useref())
     .pipe(svgmin())
     .pipe(gulp.dest('.tmp/svg'))
     .pipe(browserSync.stream());
@@ -114,7 +130,7 @@ gulp.task('clean', function() {
 gulp.task('sass:watch',function() {
   return gulp.src('demo/main.scss')
     .pipe(sass({
-      includePaths: ['.tmp']
+      includePaths: ['.tmp', 'bower_components']
     }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
@@ -124,7 +140,7 @@ gulp.task('svg:watch', sequence(['svgtocss',  'svgmin', 'svg2png'], 'sassvg', 's
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svg2css',  'svgmin', 'svgtopng', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
+gulp.task('dev', sequence('clean', ['svgtocss',  'svgmin', 'svg2png', 'demopage',  'copy:ftsvg'], 'sassvg','sass:watch'));
 
 gulp.task('serve:test', ['dev'], function() {
   browserSync.init({
