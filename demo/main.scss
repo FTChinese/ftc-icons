@@ -1,3 +1,5 @@
+@import "../main";
+
 /* Some color variables */
 $icon-color-ftpink:#FFCC99;
 
@@ -8,19 +10,6 @@ $ftc-share-icon-list: (
 	facebook: #3c5a99, 
 	twitter:#6aa9e0
 );
-
-@function ftcIconGetData($icon) {
-	$functionname: "ftc-icon-" + $icon;
-	@if(type-of($icon) != "string" or function-exists($functionname) == false) {
-		@warn "wrong parameter for function 'ftcIconGetData'. It needs to be a string with the fileName of the svg (without extension)";
-	} @else {
-		@return unquote("url('" + call($functionname) + "')");
-	}
-}
-
-/* FTC icons are simply turned into sass variables */
-@import 'sass/ftc-var';
-@import 'sass/sassvg';
 
 body {
 	font-family: "Times New Roman";

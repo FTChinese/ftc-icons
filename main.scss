@@ -1,11 +1,5 @@
-@import "build/sass/ftc-var";
-@import "build/sass/sassvg.scss";
+@import "scss/variables";
+@import "scss/ftc-svg-data";
+@import "scss/functions";
+@import "scss/sassvg.scss";
 
-@function ftcIconGetData($icon) {
-	$functionname: "ftc-icon-" + $icon;
-	@if(type-of($icon) != "string" or function-exists($functionname) == false) {
-		@warn "wrong parameter for function 'ftcIconGetData'. It needs to be a string with the fileName of the svg (without extension)";
-	} @else {
-		@return unquote("url('" + call($functionname) + "')");
-	}
-}
