@@ -1,19 +1,15 @@
 @import "../main";
 
 /* Some color variables */
-$icon-color-ftpink:#FFCC99;
+$ftpink:#FFCC99;
 
-$ftc-share-icon-list: (
+$ftc-share-icon-colors: (
 	wechat: #609700, 
 	weibo: #FFD12B, 
 	linedin: #0977b6, 
 	facebook: #3c5a99, 
 	twitter:#6aa9e0
 );
-
-body {
-	font-family: "Times New Roman";
-}
 
 .header {
 	a {
@@ -22,60 +18,69 @@ body {
 	}
 }
 
-.brand-ftc {
-	background-color: $icon-color-ftpink;
+.ftc-logo-masthead {
+	height: 64px;
+	width: 300px;
 }
-h2 {
-	border-bottom: 1px solid #999;
+.ftc-logo-square {
+	height: 100px;
+	width: 100px;
+	background-color: $ftpink;
 }
 
-$ftc-list: sassvg-list("src");
-.ftc-icons {
+ul {
+	margin: 0;
+	padding: 0;
 	list-style-type: none;
 	li {
 		display: inline-block;
-		margin-bottom: 1em;
-		margin-right: 1em;
-		i {
+		width: 180px;
+		margin: 0 0 20px;
+		text-align: center;
+		i, img {
 			display: inline-block;
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: contain;
+			border: 1px dotted #333;
 			width: 100px;
 			height: 100px;
 		}
+		i {
+			svg {
+				width: 100px;
+				height: 100px;
+			}
+		}
+		span {
+			display: block;
+		}
+	}	
+}
+
+$ftc-list: sassvg-list("src");
+.ftc-symbol-sprite {
+	@each $icon in $ftc-list {
+		.#{$icon} {
+			svg {
+				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+			}
+		}
 	}
+}
+.ftc-icons {
 	@each $icon in $ftc-list {
 		.#{$icon} {
 			background-image: sassvg($icon);
 		}
 		.#{$icon}:hover {
-			background-image: ftcIconGetData($icon);
+			background-image: ftcIconsGetIconDatauri($icon);
 		}
 	}
 }
 
 $ft-list: sassvg-list("svg");
 .ft-icons {
-	list-style-type: none;
-	li {
-		display: inline-block;
-		margin-bottom: 1em;
-		margin-right: 1em;
-	}
-	span {
-		display: block;
-		text-align: center;
-	}
-	.icon {
-		background-position: left top;
-		background-repeat: no-repeat;
-		background-size: contain;
-		display: inline-block;
-		margin: 1em;
-		width: 100px;
-		height: 100px;
-	}
 	@each $icon in $ft-list {
 		$c1: random(256) - 1;
 		$c2: random(256) - 1;
@@ -88,6 +93,8 @@ $ft-list: sassvg-list("svg");
 		}
 	}	
 }
+
+
 
 
 

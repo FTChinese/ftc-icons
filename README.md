@@ -47,24 +47,28 @@ If your icons are drawn on a transparent canvas with the path filled. You can ch
 
 ### Use SVG files directly
 
-Minified SVG icons is under the folder `build/svg`.
+Minified SVG icons is under the folder `assets/svg`.
 
 ### Use PNG files directly
 
-PNG files are generated from SVGs, put into `build/png`.
+PNG files are generated from SVGs, put into `assets/png`.
 
-### Use PNG sprite
+### Use SVG sprite
 
-`sprite/icons.sprite.png` is a sprite concatenated from individual PNGs which are first generated from SVGs after scaling. `sprite/icons.sprite.png.css` is the css file generated together with the sprite. When using png sprite, you should also link to this css file.
-
-### Use `<symbol>` SVG
-
-You can use a sprited svg file `sprite/sprite.symbol.svg`. This file combines all the separate svg icons and put each in a `symbol` element, each having an `id` which is the same as the individual svg file name (without the `.svg` extension). In you HTML makrup, you can insert icons needed with id fragment:
+You can use a sprited svg file `assets/sprites/ftc-icons-symbol.svg`. This file combines all the separate svg icons and put each in a `symbol` element, each having an `id` nameed after the individual svg file's name (without the `.svg` extension). In you HTML makrup, you can insert icons needed with id fragment:
 
 	<svg>
-		<use xlink:href="ftc-dist/icons/sprite.symbol.svg#brand-ftc" />
+		<use xlink:href="sprite/ftc-icons-symbol.svg#brand-ftc" />
 	</svg>
 
+By default, all attributes of the sprited icons are removed. You can define the icons style in you css:
+
+    svg {
+        width: 100px;
+        height: 100px;
+        fill: #609700;
+        background-color: #FFCC99;
+    }
 ## Develop
 
 The project has a submodule `o-ft-icons`. You need to recursively clone:

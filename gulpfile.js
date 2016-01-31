@@ -8,10 +8,10 @@ let svgmin = require('gulp-svgmin');
 let sassvg = require('gulp-sassvg');
 let svgToCss = require('gulp-svg-to-css');
 let svgstore = require('gulp-svgstore');
-
 /*const rsvg = require('gulp-rsvg');*/
 let svg2png = require('gulp-svg2png');
-/*const spritesmith = require('gulp.spritesmith');*/
+let changed = require('gulp-changed');
+
 let mustache = require('gulp-mustache');
 let sequence = require('gulp-sequence');
 let browserSync = require('browser-sync').create();
@@ -72,53 +72,75 @@ gulp.task('html', function() {
 
 //Generate sass variables from svg.
 gulp.task('svgtocss', function() {
+  const DEST = 'scss';
+
   return gulp.src(svgsrc)
+    .pipe(changed(DEST))
     .pipe(svgmin())
     .pipe(svgToCss({
       name: '_ftc-svg-data.scss',
       prefix: '@function ftc-icon-',
       template: '{{prefix}}{{filename}}(){@return "{{{dataurl}}}"; }'
     }))
-    .pipe(gulp.dest('scss'));
+    .pipe(gulp.dest(DEST));
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src([svgsrc, 'o-ft-icons/svg/*.svg', '!o-ft-icons/svg/social*.svg'])
-    .pipe(svgmin())
+  return gulp.src(svgsrc)
+    .pipe(svgmin({
+      plugins: [{
+        removeAttrs: { 
+          attrs: 'path:fill'
+        }
+      }]
+    }))
     .pipe(sassvg({
       outputFolder: 'scss',
       optimizeSvg: true
     }));
 });
 
-
 //Generate a svg sprite with `symbol` elements
-gulp.task('svgsymbol', function() {
-  var svgs = gulp.src(svgsrc)
-    .pipe(svgmin())
+gulp.task('svgstore', function() {
+  const DEST = '.tmp/sprite';
+
+  return gulp.src(svgsrc)
+    .pipe(changed(DEST))
+    .pipe(svgmin({
+      plugins: [{
+        removeAttrs: { 
+          attrs: 'path:fill'
+        }
+      }]
+    }))
     .pipe(svgstore())
-    .pipe(rename('icons.sprite.symbol.svg'))
-    .pipe(gulp.dest('.tmp/sprite'));
+    .pipe(gulp.dest(DEST));
 });
 
 //Minify and copy svg
 gulp.task('svgmin', function() {
+  const DEST = '.tmp/svg';
+
   return gulp.src(svgsrc)
+    .pipe(changed(DEST))
     .pipe(svgmin())
-    .pipe(gulp.dest('.tmp/svg'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(DEST))
+    .pipe(browserSync.stream({onece: true}));
 });
 
 //Generate png files from svg.
 gulp.task('svg2png', function() {
-  return gulp.src([svgsrc])
+  const DEST = '.tmp/png';
+
+  return gulp.src(svgsrc)
+    .pipe(changed(DEST))
     .pipe(svg2png()) //`1` is scale factor. You can change it.
-    .pipe(gulp.dest('.tmp/png'));
+    .pipe(gulp.dest());
 });
 
 gulp.task('copy:ftsvg', function() {
   gulp.src('o-ft-icons/svg/*.svg')
-    .pipe(gulp.dest('.tmp/ftsvg'))
+    .pipe(gulp.dest('.tmp/ftsvg'));
 });
 
 gulp.task('clean', function() {
@@ -127,20 +149,18 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('style:dev', function() {
+gulp.task('style:watch', ['svgtocss', 'sassvg'], function() {
   return gulp.src('demo/main.scss')
-    .pipe(sass({
-      includePaths: ['.tmp', 'bower_components']
-    }).on('error', sass.logError))
+    .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('svg:watch', sequence(['svgtocss', 'sassvg', 'svgmin', 'svg2png'], 'style:dev'));
+gulp.task('svg:watch', ['svgmin', /*'svg2png',*/ 'svgstore']);
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svgtocss', 'sassvg', 'svgmin', 'svg2png', 'copy:ftsvg'], 'style:dev'));
+gulp.task('dev', sequence('clean', ['svgmin', /*'svg2png',*/ 'svgstore', 'copy:ftsvg'], 'style:watch'));
 
 gulp.task('serve:test', ['html', 'dev'], function() {
   browserSync.init({
@@ -152,7 +172,7 @@ gulp.task('serve:test', ['html', 'dev'], function() {
     }
   });
 
-  gulp.watch(['src/*.svg'], ['svg:watch']);
+  gulp.watch(['src/*.svg'], ['svg:watch', 'style:watch', 'html']);
   gulp.watch('demo/*.mustache', ['html']);
   gulp.watch(['demo/*.scss'], ['style:watch']);
 });
@@ -169,17 +189,15 @@ gulp.task('copy:assets', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('assets', sequence(['clean', 'clean:assets'], ['svgmin', 'svg2png',  'copy:ftsvg'], 'copy:assets'));
+gulp.task('assets', sequence('clean:assets', ['svgmin', 'svg2png', 'svgstore', 'copy:ftsvg'], 'copy:assets'));
 
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
 gulp.task('styles', ['clean'], function() {
   return gulp.src('demo/*.scss')
-    .pipe(sass({
-      includePaths: ['bower_components']
-    }).on('error', sass.logError))
-    .pipe(gulp.dest('.tmp'))
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('serve', ['styles'], function() {
