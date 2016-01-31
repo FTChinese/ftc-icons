@@ -11,6 +11,7 @@ let svgstore = require('gulp-svgstore');
 /*const rsvg = require('gulp-rsvg');*/
 let svg2png = require('gulp-svg2png');
 let changed = require('gulp-changed');
+let rename = require('gulp-rename');
 
 let mustache = require('gulp-mustache');
 let sequence = require('gulp-sequence');
@@ -114,6 +115,7 @@ gulp.task('svgstore', function() {
       }]
     }))
     .pipe(svgstore())
+    .pipe(rename({basename: 'ftc-icons-symbol'}))
     .pipe(gulp.dest(DEST));
 });
 
@@ -135,7 +137,7 @@ gulp.task('svg2png', function() {
   return gulp.src(svgsrc)
     .pipe(changed(DEST))
     .pipe(svg2png()) //`1` is scale factor. You can change it.
-    .pipe(gulp.dest());
+    .pipe(gulp.dest(DEST));
 });
 
 gulp.task('copy:ftsvg', function() {
