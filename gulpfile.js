@@ -191,7 +191,7 @@ gulp.task('copy:assets', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('assets', sequence('clean:assets', ['svgmin', 'svg2png', 'svgstore', 'copy:ftsvg'], 'copy:assets'));
+gulp.task('assets', sequence(['clean', 'clean:assets'], ['svgmin', 'svg2png', 'svgstore', 'copy:ftsvg'], 'copy:assets'));
 
 /* =========== End of tasks for developers ===================== */
 
