@@ -140,7 +140,7 @@ gulp.task('png', function() {
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task('rsvg', function() {
+/*gulp.task('rsvg', function() {
   const DEST = '.tmp/png';
 
   return gulp.src(svgsrc)
@@ -150,7 +150,7 @@ gulp.task('rsvg', function() {
       scale: 0.32
     }))
     .pipe(gulp.dest(DEST));
-});
+});*/
 
 gulp.task('copy:ftsvg', function() {
   gulp.src('o-ft-icons/svg/*.svg')
