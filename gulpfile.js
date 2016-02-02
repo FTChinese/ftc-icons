@@ -102,7 +102,7 @@ gulp.task('sassvg', function() {
 });
 
 //Generate a svg sprite with `symbol` elements
-gulp.task('svgstore', function() {
+gulp.task('svgsprite', function() {
   const DEST = '.tmp/sprite';
 
   return gulp.src(svgsrc)
@@ -120,7 +120,7 @@ gulp.task('svgstore', function() {
 });
 
 //Minify and copy svg
-gulp.task('svgmin', function() {
+gulp.task('svg', function() {
   const DEST = '.tmp/svg';
 
   return gulp.src(svgsrc)
@@ -131,7 +131,7 @@ gulp.task('svgmin', function() {
 });
 
 //Generate png files from svg.
-gulp.task('svg2png', function() {
+gulp.task('png', function() {
   const DEST = '.tmp/png';
 
   return gulp.src(svgsrc)
@@ -158,11 +158,11 @@ gulp.task('style:watch', ['svgtocss', 'sassvg'], function() {
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('svg:watch', ['svgmin', /*'svg2png',*/ 'svgstore']);
+gulp.task('src:watch', ['svg', /*'png',*/ 'svgsprite']);
 
 //Combine all tasks together
 //Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svgmin', /*'svg2png',*/ 'svgstore', 'copy:ftsvg'], 'style:watch'));
+gulp.task('dev', sequence('clean', ['svg', /*'png',*/ 'svgsprite', 'copy:ftsvg'], 'style:watch'));
 
 gulp.task('serve:test', ['html', 'dev'], function() {
   browserSync.init({
@@ -174,7 +174,7 @@ gulp.task('serve:test', ['html', 'dev'], function() {
     }
   });
 
-  gulp.watch(['src/*.svg'], ['svg:watch', 'style:watch', 'html']);
+  gulp.watch(['src/*.svg'], ['src:watch', 'style:watch', 'html']);
   gulp.watch('demo/*.mustache', ['html']);
   gulp.watch(['demo/*.scss'], ['style:watch']);
 });
@@ -191,7 +191,7 @@ gulp.task('copy:assets', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('assets', sequence(['clean', 'clean:assets'], ['svgmin', 'svg2png', 'svgstore', 'copy:ftsvg'], 'copy:assets'));
+gulp.task('dist', sequence(['clean', 'clean:assets'], ['svg', 'png', 'svgsprite', 'copy:ftsvg'], 'copy:assets'));
 
 /* =========== End of tasks for developers ===================== */
 
