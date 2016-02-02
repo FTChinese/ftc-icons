@@ -81,15 +81,15 @@ To build your own icons, put you svg icons in `src` directory, run `gulp serve` 
 
 `gulp sassvg` will generate sass files named `_sassvg-data.scss` and `_sassvg.scss` under the folder `scss`. You can customize icons' fill color and background color.
 
-`gulp svg2css` generates a sass file under `scss` folder containing functions of the same name as svg file name. Every function returns an encoded data uri return a string `url(encoded-svg-data-uri)`.
+`gulp svgtocss` generates a sass file under `scss` folder containing functions of the same name as svg file name. Every function returns an encoded data uri return a string `url(encoded-svg-data-uri)`.
 
-`gulp svgsymbol` put individual SVG into a `symbol` element and concatenate them into a single SVG file.
+`gulp svgsprite` put individual SVG into a `symbol` element and concatenate them into a single SVG file.
 
-`gulp svgmin` minifies the original SVGs.
+`gulp svg` minifies the original SVGs and put them into 'svg' folder.
 
-`gulp svg2png` generate PNGs from SVGs. As you may need PNGs of different size, this task could be divided into several sub-tasks, each having a different scaling facter before generating the files.
+`gulp png` generate PNGs from SVGs. As you may need PNGs of different size, this task could be divided into several sub-tasks, each having a different scaling facter before generating the files.
 
-`gulp rsvg` is just an alternative to `svg2png`.
+`gulp rsvg` is just an alternative to `png`.
 
 
 
