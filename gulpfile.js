@@ -10,6 +10,7 @@ let svgToCss = require('gulp-svg-to-css');
 let svgstore = require('gulp-svgstore');
 /*const rsvg = require('gulp-rsvg');*/
 let svg2png = require('gulp-svg2png');
+let rsvg = require('gulp-rsvg');
 let changed = require('gulp-changed');
 let rename = require('gulp-rename');
 
@@ -140,7 +141,13 @@ gulp.task('png', function() {
     .pipe(gulp.dest(DEST));
 });
 
-/*gulp.task('rsvg', function() {
+gulp.task('svg2png', function() {
+  return gulp.src('src/brand-ftc-masthead.svg')
+    .pipe(svg2png())
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('rsvg', function() {
   const DEST = '.tmp/png';
 
   return gulp.src(svgsrc)
@@ -150,7 +157,7 @@ gulp.task('png', function() {
       scale: 0.32
     }))
     .pipe(gulp.dest(DEST));
-});*/
+});
 
 gulp.task('copy:ftsvg', function() {
   gulp.src('o-ft-icons/svg/*.svg')
@@ -203,7 +210,7 @@ gulp.task('copy:assets', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('dist', sequence(['clean', 'clean:assets'], ['svg', 'png', 'svgsprite', 'copy:ftsvg'], 'copy:assets'));
+gulp.task('dist', sequence('clean', ['svg', 'png', 'svgsprite', 'copy:ftsvg'], 'copy:assets'));
 
 /* =========== End of tasks for developers ===================== */
 
