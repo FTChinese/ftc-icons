@@ -8,14 +8,11 @@ let svgmin = require('gulp-svgmin');
 let sassvg = require('gulp-sassvg');
 let svgToCss = require('gulp-svg-to-css');
 let svgstore = require('gulp-svgstore');
-/*const rsvg = require('gulp-rsvg');*/
 let svg2png = require('gulp-svg2png');
-let rsvg = require('gulp-rsvg');
 let changed = require('gulp-changed');
 let rename = require('gulp-rename');
 
 let mustache = require('gulp-mustache');
-let sequence = require('gulp-sequence');
 let browserSync = require('browser-sync').create();
 let path = require('path');
 
@@ -55,7 +52,7 @@ gulp.task('html', function() {
 
   var promisedFileNames = folders.map(getFileNames);
 
-  Promise.all(promisedFileNames)
+  return Promise.all(promisedFileNames)
   .then(function(fileNames) {
     gulp.src(template)
       .pipe(mustache({
@@ -74,7 +71,7 @@ gulp.task('html', function() {
 
 //Generate sass variables from svg.
 gulp.task('svgtocss', function() {
-  const DEST = 'scss';
+  const DEST = '.tmp/scss';
 
   return gulp.src(svgsrc)
     .pipe(changed(DEST))
@@ -97,7 +94,7 @@ gulp.task('sassvg', function() {
       }]
     }))
     .pipe(sassvg({
-      outputFolder: 'scss',
+      outputFolder: '.tmp/scss',
       optimizeSvg: true
     }));
 });
@@ -128,7 +125,7 @@ gulp.task('svg', function() {
     .pipe(changed(DEST))
     .pipe(svgmin())
     .pipe(gulp.dest(DEST))
-    .pipe(browserSync.stream({onece: true}));
+    .pipe(browserSync.stream({once: true}));
 });
 
 //Generate png files from svg.
@@ -141,13 +138,7 @@ gulp.task('png', function() {
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task('svg2png', function() {
-  return gulp.src('src/brand-ftc-masthead.svg')
-    .pipe(svg2png())
-    .pipe(gulp.dest('.'));
-});
-
-gulp.task('rsvg', function() {
+/*gulp.task('rsvg', function() {
   const DEST = '.tmp/png';
 
   return gulp.src(svgsrc)
@@ -157,10 +148,10 @@ gulp.task('rsvg', function() {
       scale: 0.32
     }))
     .pipe(gulp.dest(DEST));
-});
+});*/
 
 gulp.task('copy:ftsvg', function() {
-  gulp.src('o-ft-icons/svg/*.svg')
+  return gulp.src('o-ft-icons/svg/*.svg')
     .pipe(gulp.dest('.tmp/ftsvg'));
 });
 
@@ -170,35 +161,38 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('style:watch', ['svgtocss', 'sassvg'], function() {
+gulp.task('style', function() {
   return gulp.src('demo/main.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('src:watch', ['svg', /*'png',*/ 'svgsprite']);
+gulp.task('src', gulp.parallel('svg', /*'png',*/ 'svgsprite', gulp.series('svgtocss', 'sassvg')));
 
-//Combine all tasks together
-//Must put sassvg befind other svg-related tasks since sassvg cannot create folder itself.
-gulp.task('dev', sequence('clean', ['svg', /*'png',*/ 'svgsprite', 'copy:ftsvg'], 'style:watch'));
+gulp.task('serve:test', 
+  gulp.series(
+    gulp.parallel('clean', 'html'), 
+    gulp.parallel('src', 'copy:ftsvg'),
+    'style', 
+    function serve() {
+      browserSync.init({
+        server: {
+          baseDir: ['.tmp', 'demo'],
+          routes: {
+            '/bower_components': 'bower_components'
+          }
+        }
+      });
 
-gulp.task('serve:test', ['html', 'dev'], function() {
-  browserSync.init({
-    server: {
-      baseDir: ['.tmp', 'demo'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
+      gulp.watch(['src/*.svg'], gulp.series('src', 'html', 'style'));
+      gulp.watch('demo/*.mustache', gulp.parallel('html'));
+      gulp.watch(['demo/*.scss', 'scss/_functions.scss', 'scss/_variables.scss'], gulp.parallel('style'));
     }
-  });
+  )
+);
 
-  gulp.watch(['src/*.svg'], ['src:watch', 'style:watch', 'html']);
-  gulp.watch('demo/*.mustache', ['html']);
-  gulp.watch(['demo/*.scss'], ['style:watch']);
-});
-
-// This will build the final file for release. Use with caution as it will overwrite all your previous efforts.
+// build the final file for release. 
 gulp.task('clean:assets', function() {
   return del('assets/**').then(function() {
     console.log('Clean before build');
@@ -210,27 +204,31 @@ gulp.task('copy:assets', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('dist', sequence('clean', ['svg', 'png', 'svgsprite', 'copy:ftsvg'], 'copy:assets'));
+gulp.task('dist', gulp.series('clean', gulp.parallel('src', 'copy:ftsvg'), 'copy:assets'));
 
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
-gulp.task('styles', ['clean'], function() {
+gulp.task('css', function css() {
   return gulp.src('demo/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('.tmp'));
 });
 
-gulp.task('serve', ['styles'], function() {
-  browserSync.init({
-    server: {
-      baseDir: ['demo', '.tmp', 'assets'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
+gulp.task('serve', 
+  gulp.series('clean', 'css', 
+    function serve() {
+      browserSync.init({
+        server: {
+          baseDir: ['demo', '.tmp', 'assets'],
+          routes: {
+            '/bower_components': 'bower_components'
+          }
+        }
+      });
     }
-  });
-});
+  )
+);
 
 
 //Just an alternative to `svg2png` in case `phantomjs` failed to work.
