@@ -11,6 +11,9 @@
     "FTC",
     "icons"
   ],
+  "scripts": {
+    "gulp": "./node_modules/gulp/bin/gulp.js"
+  },
   "author": "weiguo.ni",
   "license": "MIT",
   "bugs": {
