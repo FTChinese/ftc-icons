@@ -204,7 +204,7 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('dist', gulp.series('clean', gulp.parallel('src', 'copy:ftsvg'), 'copy:assets'));
+gulp.task('dist', gulp.series('clean', gulp.parallel('src', 'copy:ftsvg'), 'copy'));
 
 /* =========== End of tasks for developers ===================== */
 
