@@ -199,7 +199,7 @@ gulp.task('clean:assets', function() {
   });
 });
 
-gulp.task('copy:assets', function() {
+gulp.task('copy', function() {
   return gulp.src(['.tmp/**/*', '!.tmp/*.*'])
     .pipe(gulp.dest('assets'));
 });
