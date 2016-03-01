@@ -82,7 +82,7 @@ $ftc-list: sassvg-list("src");
 			background-image: sassvg($icon);
 		}
 		.#{$icon}:hover {
-			background-image: ftcIconsGetIconDatauri($icon);
+			background-image: oIconsGetSvgDatauri($icon);
 		}
 	}
 }
