@@ -22,7 +22,7 @@
    sodipodi:docname="brand-ftc.svg"><metadata
      id="metadata24"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs22" /><sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -38,25 +38,18 @@
      showgrid="true"
      inkscape:showpageshadow="false"
      inkscape:zoom="1.5410156"
-     inkscape:cx="161.90621"
+     inkscape:cx="49.642583"
      inkscape:cy="126.21546"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:current-layer="Layer_1"><inkscape:grid
        type="xygrid"
-       id="grid4141" /></sodipodi:namedview><g
-     display="none"
-     id="g3"
-     style="display:none"
-     transform="translate(0,-412)"><rect
-       id="Pink_square_3_"
-       display="inline"
-       width="511.99899"
-       height="512"
-       x="0"
-       y="0"
-       style="display:inline;fill:#ffcc99" /></g><g
+       id="grid4141" /></sodipodi:namedview>
+<!-- build:remove -->
+<rect width="100%" height="100%" x="0" y="0" fill="#ffcc99" />
+<!-- endbuild -->
+       <g
      id="g4147"
      transform="scale(0.1953125,0.1953125)"><g
        id="g6"><path
