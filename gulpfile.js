@@ -1,20 +1,21 @@
-'use strict'
-let fs = require('fs');
-let gulp = require('gulp');
-let del = require('del');
-let sass = require('gulp-sass');
+var path = require('path');
+var fs = require('fs');
+var merge = require('merge-stream');
+var gulp = require('gulp');
+var del = require('del');
+var sass = require('gulp-sass');
+var svgmin = require('gulp-svgmin');
+var sassvg = require('gulp-sassvg');
+var svgToCss = require('gulp-svg-to-css');
+var svgstore = require('gulp-svgstore');
+var svg2png = require('gulp-svg2png');
+var changed = require('gulp-changed');
+var rename = require('gulp-rename');
+var mustache = require('gulp-mustache');
+var browserSync = require('browser-sync').create();
 
-let svgmin = require('gulp-svgmin');
-let sassvg = require('gulp-sassvg');
-let svgToCss = require('gulp-svg-to-css');
-let svgstore = require('gulp-svgstore');
-let svg2png = require('gulp-svg2png');
-let changed = require('gulp-changed');
-let rename = require('gulp-rename');
-
-let mustache = require('gulp-mustache');
-let browserSync = require('browser-sync').create();
-let path = require('path');
+var config = require('./config.json');
+var projectName = path.basename(__dirname);
 
 const svgsrc = 'src/*.svg';
 
@@ -61,7 +62,7 @@ gulp.task('html', function() {
       }, {
         extension: '.html'
       }))
-      .pipe(gulp.dest('demo'))
+      .pipe(gulp.dest('.tmp'))
       .pipe(browserSync.stream({once: true}));    
   })
   .catch(function(reason) {
@@ -124,8 +125,7 @@ gulp.task('svg', function() {
   return gulp.src(svgsrc)
     .pipe(changed(DEST))
     .pipe(svgmin())
-    .pipe(gulp.dest(DEST))
-    .pipe(browserSync.stream({once: true}));
+    .pipe(gulp.dest(DEST));
 });
 
 //Generate png files from svg.
@@ -137,18 +137,6 @@ gulp.task('png', function() {
     .pipe(svg2png()) //`1` is scale factor. You can change it.
     .pipe(gulp.dest(DEST));
 });
-
-/*gulp.task('rsvg', function() {
-  const DEST = '.tmp/png';
-
-  return gulp.src(svgsrc)
-    .pipe(changed(DEST))
-    .pipe(rsvg({
-      format: 'png',
-      scale: 0.32
-    }))
-    .pipe(gulp.dest(DEST));
-});*/
 
 gulp.task('copy:ftsvg', function() {
   return gulp.src('o-ft-icons/svg/*.svg')
@@ -163,64 +151,83 @@ gulp.task('clean', function() {
 
 gulp.task('style', function() {
   return gulp.src('demo/main.scss')
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['scss', '.tmp/scss']
+    }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('src', gulp.parallel('svg', /*'png',*/ 'svgsprite', gulp.series('svgtocss', 'sassvg')));
-
 gulp.task('serve:test', 
   gulp.series(
-    gulp.parallel('clean', 'html'), 
-    gulp.parallel('src', 'copy:ftsvg'),
+    'clean', 
+    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'copy:ftsvg'),
+    'sassvg',
     'style', 
     function serve() {
       browserSync.init({
         server: {
-          baseDir: ['.tmp', 'demo'],
+          baseDir: ['.tmp'],
           routes: {
             '/bower_components': 'bower_components'
           }
         }
       });
 
-      gulp.watch(['src/*.svg'], gulp.series('src', 'html', 'style'));
+      gulp.watch('src/*.svg', gulp.series(gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite'), 'sassvg', 'style'));
       gulp.watch('demo/*.mustache', gulp.parallel('html'));
-      gulp.watch(['demo/*.scss', 'scss/_functions.scss', 'scss/_variables.scss'], gulp.parallel('style'));
+      gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('style'));
     }
   )
 );
 
+gulp.task('build', gulp.series('clean', gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'copy:ftsvg'), 'sassvg'));
+
+// deploy to server for demo
+gulp.task('copy:deploy', function() {
+  console.log('Copying files to: ' + config.deploy.assets + projectName);
+  return gulp.src('.tmp/**/**.{svg,png,css,html}')
+    .pipe(gulp.dest(config.deploy.assets + projectName));
+});
+
+gulp.task('deploy', gulp.series('build', 'style', 'copy:deploy'));
+
+
 // build the final file for release. 
 gulp.task('clean:assets', function() {
   return del('assets/**').then(function() {
-    console.log('Clean before build');
+    console.log('Clean before final dist');
   });
 });
 
-gulp.task('copy', function() {
-  return gulp.src(['.tmp/**/*', '!.tmp/*.*'])
+gulp.task('copy:dist', function() {
+  return gulp.src('.tmp/**/*.{svg,png,scss}')
     .pipe(gulp.dest('assets'));
 });
 
-gulp.task('dist', gulp.series('clean', gulp.parallel('src', 'copy:ftsvg'), 'copy'));
+gulp.task('dist',gulp.series('build', 'copy:dist'));
 
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
 gulp.task('css', function css() {
   return gulp.src('demo/*.scss')
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['scss', 'assets/scss']
+    }).on('error', sass.logError))
     .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('serve', 
-  gulp.series('clean', 'css', 
+  gulp.series('clean', 'html', 'css', 
     function serve() {
       browserSync.init({
         server: {
-          baseDir: ['demo', '.tmp', 'assets'],
+          baseDir: ['.tmp', 'assets'],
           routes: {
             '/bower_components': 'bower_components'
           }
