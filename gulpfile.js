@@ -3,15 +3,7 @@ var fs = require('fs');
 var merge = require('merge-stream');
 var gulp = require('gulp');
 var del = require('del');
-var sass = require('gulp-sass');
-var svgmin = require('gulp-svgmin');
-var sassvg = require('gulp-sassvg');
-var svgToCss = require('gulp-svg-to-css');
-var svgstore = require('gulp-svgstore');
-var svg2png = require('gulp-svg2png');
-var changed = require('gulp-changed');
-var rename = require('gulp-rename');
-var mustache = require('gulp-mustache');
+var $ = require('gulp-load-plugins')();
 var browserSync = require('browser-sync').create();
 
 var config = require('./config.json');
@@ -19,9 +11,8 @@ var projectName = path.basename(__dirname);
 
 const svgsrc = 'src/*.svg';
 
-//This task actually has nothing to do with gulp.
 //It first reads the file names under a directory.
-//If the filenames are resolve, then render template.
+//If the filenames are resolveed, then render template.
 
 gulp.task('html', function() {
   var folders = [
@@ -56,7 +47,7 @@ gulp.task('html', function() {
   return Promise.all(promisedFileNames)
   .then(function(fileNames) {
     gulp.src(template)
-      .pipe(mustache({
+      .pipe($.mustache({
         ftcicons: fileNames[0],
         fticons: fileNames[1]
       }, {
@@ -75,9 +66,9 @@ gulp.task('svgtocss', function() {
   const DEST = '.tmp/scss';
 
   return gulp.src(svgsrc)
-    .pipe(changed(DEST))
-    .pipe(svgmin())
-    .pipe(svgToCss({
+    .pipe($.changed(DEST))
+    .pipe($.svgmin())
+    .pipe($.svgToCss({
       name: '_ftc-svg-data.scss',
       prefix: '@function ftc-icon-',
       template: '{{prefix}}{{filename}}(){@return "{{{dataurl}}}"; }'
@@ -87,14 +78,15 @@ gulp.task('svgtocss', function() {
 
 gulp.task('sassvg', function() {
   return gulp.src(svgsrc)
-    .pipe(svgmin({
+    .pipe($.if('brand-ftc.svg', $.useref()))
+    .pipe($.svgmin({
       plugins: [{
         removeAttrs: { 
           attrs: 'path:fill'
         }
       }]
     }))
-    .pipe(sassvg({
+    .pipe($.sassvg({
       outputFolder: '.tmp/scss',
       optimizeSvg: true
     }));
@@ -105,16 +97,16 @@ gulp.task('svgsprite', function() {
   const DEST = '.tmp/sprite';
 
   return gulp.src(svgsrc)
-    .pipe(changed(DEST))
-    .pipe(svgmin({
+    .pipe($.changed(DEST))
+    .pipe($.svgmin({
       plugins: [{
         removeAttrs: { 
           attrs: 'path:fill'
         }
       }]
     }))
-    .pipe(svgstore())
-    .pipe(rename({basename: 'ftc-icons-symbol'}))
+    .pipe($.svgstore())
+    .pipe($.rename({basename: 'ftc-icons-symbol'}))
     .pipe(gulp.dest(DEST));
 });
 
@@ -123,8 +115,8 @@ gulp.task('svg', function() {
   const DEST = '.tmp/svg';
 
   return gulp.src(svgsrc)
-    .pipe(changed(DEST))
-    .pipe(svgmin())
+    .pipe($.changed(DEST))
+    .pipe($.svgmin())
     .pipe(gulp.dest(DEST));
 });
 
@@ -133,8 +125,8 @@ gulp.task('png', function() {
   const DEST = '.tmp/png';
 
   return gulp.src(svgsrc)
-    .pipe(changed(DEST))
-    .pipe(svg2png()) //`1` is scale factor. You can change it.
+    .pipe($.changed(DEST))
+    .pipe($.svg2png()) //`1` is scale factor. You can change it.
     .pipe(gulp.dest(DEST));
 });
 
@@ -151,16 +143,16 @@ gulp.task('clean', function() {
 
 gulp.task('style', function() {
   return gulp.src('demo/main.scss')
-    .pipe(sass({
+    .pipe($.sass({
       outputStyle: 'expanded',
       precision: 10,
       includePaths: ['scss', '.tmp/scss']
-    }).on('error', sass.logError))
+    }).on('error', $.sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('serve:test', 
+gulp.task('watch', 
   gulp.series(
     'clean', 
     gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'copy:ftsvg'),
@@ -209,16 +201,37 @@ gulp.task('copy:dist', function() {
 
 gulp.task('dist',gulp.series('build', 'copy:dist'));
 
+gulp.task('fav', function() {
+  return gulp.src('.tmp/png/brand-ftc.png')
+    .pipe($.favicons({
+      appName: 'icons',
+      background: '#FFCC99',
+      icons: {
+        android: false,              // Create Android homescreen icon. `boolean`
+        appleIcon: false,            // Create Apple touch icons. `boolean`
+        appleStartup: false,         // Create Apple startup images. `boolean`
+        coast: false,                // Create Opera Coast icon. `boolean`
+        favicons: true,             // Create regular favicons. `boolean`
+        firefox: false,              // Create Firefox OS icons. `boolean`
+        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
+        twitter: false,              // Create Twitter Summary Card image. `boolean`
+        windows: false,              // Create Windows 8 tile icons. `boolean`
+        yandex: false                // Create Yandex browser icon. `boolean`
+      }
+    }))
+    .pipe(gulp.dest('favicons'));
+});
+
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
 gulp.task('css', function css() {
   return gulp.src('demo/*.scss')
-    .pipe(sass({
+    .pipe($.sass({
       outputStyle: 'expanded',
       precision: 10,
       includePaths: ['scss', 'assets/scss']
-    }).on('error', sass.logError))
+    }).on('error', $.sass.logError))
     .pipe(gulp.dest('.tmp'));
 });
 
