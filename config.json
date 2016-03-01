@@ -1,0 +1,16 @@
+{
+	"static": {
+		"jquery": "http://interactive.ftchinese.com/bower_components/jquery/dist/jquery.min.js",
+		"zepto": "http://interactive.ftchinese.com/bower_components/zepto/zepto.min.js",
+		"d3": "http://interactive.ftchinese.com/bower_components/d3/d3.min.js",
+	    "log": "http://static.ftchinese.com/js/log.js?v=6"
+	},
+	"deploy": {
+		"index": "../deploy/dev_www/frontend/tpl/special/",
+		"assets": "../../ftrepo/ft-interact/"
+	},
+	"test": {
+		"dest": "../../ftrepo/interact/"
+	},
+	"prefixUrl": "http://interactive.ftchinese.com/"
+}
