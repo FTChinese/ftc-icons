@@ -202,13 +202,14 @@ gulp.task('copy:dist', function() {
 gulp.task('dist',gulp.series('build', 'copy:dist'));
 
 gulp.task('fav', function() {
-  return gulp.src('.tmp/png/brand-ftc.png')
+  return gulp.src('assets/svg/brand-ftc.svg')
+    .pipe($.svg2png(2))
     .pipe($.favicons({
       appName: 'icons',
       background: '#FFCC99',
       icons: {
         android: false,              // Create Android homescreen icon. `boolean`
-        appleIcon: false,            // Create Apple touch icons. `boolean`
+        appleIcon: true,            // Create Apple touch icons. `boolean`
         appleStartup: false,         // Create Apple startup images. `boolean`
         coast: false,                // Create Opera Coast icon. `boolean`
         favicons: true,             // Create regular favicons. `boolean`
