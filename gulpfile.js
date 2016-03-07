@@ -96,7 +96,7 @@ gulp.task('sassvg', function() {
 gulp.task('svgsprite', function() {
   const DEST = '.tmp/sprite';
 
-  return gulp.src(svgsrc)
+  return gulp.src('src/brand*.svg')
     .pipe($.changed(DEST))
     .pipe($.svgmin({
       plugins: [{
