@@ -5,6 +5,7 @@ var gulp = require('gulp');
 var del = require('del');
 var $ = require('gulp-load-plugins')();
 var browserSync = require('browser-sync').create();
+var lazypipe = require('lazypipe');
 
 var config = require('./config.json');
 var projectName = path.basename(__dirname);
@@ -91,20 +92,31 @@ gulp.task('sassvg', function() {
 });
 
 //Generate a svg sprite with `symbol` elements
-gulp.task('svgsprite', function() {
-  const DEST = '.tmp/sprite';
-
-  return gulp.src('src/brand*.svg')
-    .pipe($.changed(DEST))
-    .pipe($.svgmin({
-      plugins: [{
+var svgSymbol = lazypipe()
+  .pipe($.svgmin, {      
+    plugins: [{
         removeAttrs: { 
           attrs: 'path:fill'
         }
       }]
-    }))
-    .pipe($.svgstore())
+    })
+  .pipe($.svgstore);
+
+gulp.task('svgsprite', function() {
+  const DEST = '.tmp/sprite';
+
+  return gulp.src('src/*.svg')
+    .pipe($.changed(DEST))
+    .pipe(svgSymbol())
     .pipe($.rename({basename: 'ftc-icons-symbol'}))
+    .pipe(gulp.dest(DEST));
+});
+
+gulp.task('logo', function() {
+  const DEST = '.tmp/sprite';
+  return gulp.src('src/brand-ftc*.svg')
+    .pipe(svgSymbol())
+    .pipe($.rename({basename: 'ftc-logo'}))
     .pipe(gulp.dest(DEST));
 });
 
