@@ -160,7 +160,7 @@ gulp.task('style', function() {
 gulp.task('watch', 
   gulp.series(
     'clean', 
-    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite'),
+    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'logo'),
     'sassvg',
     'style', 
     function serve() {
@@ -180,7 +180,7 @@ gulp.task('watch',
   )
 );
 
-gulp.task('build', gulp.series('clean', gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite'), 'sassvg'));
+gulp.task('build', gulp.series('clean', gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'logo'), 'sassvg'));
 
 // deploy to server for demo
 gulp.task('copy:deploy', function() {
