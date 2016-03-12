@@ -16,8 +16,7 @@ const svgsrc = 'src/*.svg';
 
 gulp.task('html', function() {
   var folders = [
-    'src',
-    'o-ft-icons/svg'
+    'src'
   ];
 
   var template = 'demo/index.mustache';
@@ -48,8 +47,7 @@ gulp.task('html', function() {
   .then(function(fileNames) {
     gulp.src(template)
       .pipe($.mustache({
-        ftcicons: fileNames[0],
-        fticons: fileNames[1]
+        ftcicons: fileNames[0]
       }, {
         extension: '.html'
       }))
@@ -130,11 +128,6 @@ gulp.task('png', function() {
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task('copy:ftsvg', function() {
-  return gulp.src('o-ft-icons/svg/*.svg')
-    .pipe(gulp.dest('.tmp/ftsvg'));
-});
-
 gulp.task('clean', function() {
   return del(['.tmp/**']).then(()=>{
     console.log('Old files deleted');
@@ -155,7 +148,7 @@ gulp.task('style', function() {
 gulp.task('watch', 
   gulp.series(
     'clean', 
-    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'copy:ftsvg'),
+    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite'),
     'sassvg',
     'style', 
     function serve() {
@@ -175,7 +168,7 @@ gulp.task('watch',
   )
 );
 
-gulp.task('build', gulp.series('clean', gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'copy:ftsvg'), 'sassvg'));
+gulp.task('build', gulp.series('clean', gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite'), 'sassvg'));
 
 // deploy to server for demo
 gulp.task('copy:deploy', function() {
