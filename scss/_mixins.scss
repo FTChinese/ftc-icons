@@ -1,0 +1,9 @@
+@mixin oIconsSvgSassIcon($name, $fillcolor, $size) {
+	background-image: sassvg($name, $fillcolor);
+	display: inline-block;
+	width: $size + 0px;
+	height: $size + 0px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}
