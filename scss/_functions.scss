@@ -1,3 +1,5 @@
+@import "../assets/scss/ftc-svg-data";
+
 @function oIconsGetSvgDatauri($icon) {
 	$functionname: "ftc-icon-" + $icon;
 	@if(type-of($icon) != "string" or function-exists($functionname) == false) {
