@@ -113,12 +113,22 @@ gulp.task('svgsprite', function() {
 });
 
 gulp.task('logo', function() {
-  const DEST = '.tmp/sprite';
-  return gulp.src('src/brand-ftc*.svg')
+  const DEST = '.tmp/logo';
+  const sprite = gulp.src('src/brand-ftc*.svg')
     .pipe(svgSymbol())
-    .pipe($.rename({basename: 'ftc-logo'}))
+    .pipe($.rename({basename: 'logo'}))
     .pipe(gulp.dest(DEST));
+
+  const png = gulp.src('src//brand-ftc*.svg')
+    .pipe($.svg2png())
+    .pipe($.rename({
+      prefix: 'logo.svg.'
+    }))
+    .pipe(gulp.dest(DEST));
+
+    return merge(sprite, png);
 });
+
 
 //Minify and copy svg
 gulp.task('svg', function() {
