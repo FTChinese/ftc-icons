@@ -77,7 +77,7 @@ gulp.task('svgtocss', function() {
 
 gulp.task('sassvg', function() {
   return gulp.src(svgsrc)
-    .pipe($.if('brand-ftc.svg', $.useref()))
+    .pipe($.useref())
     .pipe($.svgmin({
       plugins: [{
         removeAttrs: { 
