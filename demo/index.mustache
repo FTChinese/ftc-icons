@@ -41,6 +41,12 @@
         <span>{{.}}</span>
       </li>
     {{/ftcicons}}
+    {{#socialicons}}
+      <li>
+        <i class="{{.}}"><svg><use xlink:href="sprite/ftc-icons-symbol.svg#{{.}}" /></svg></i>
+        <span>{{.}}</span>
+      </li>
+    {{/socialicons}}
   </ul> 
 
 
@@ -55,6 +61,12 @@
       <span>{{.}}</span>
     </li>
   {{/ftcicons}}
+  {{#socialicons}}
+    <li>
+      <i class="{{.}}"></i>
+      <span>{{.}}</span>
+    </li>
+  {{/socialicons}}
   </ul>
 
   <h2>FTC icons used as image src</h2>
@@ -65,6 +77,12 @@
       <span>{{.}}</span>
     </li>
   {{/ftcicons}}
+  {{#socialicons}}
+    <li>
+      <img src="svg/{{.}}.svg" />
+      <span>{{.}}</span>
+    </li>
+  {{/socialicons}}
   </ul>
 
 

@@ -67,8 +67,17 @@ ul {
 }
 
 $ftc-list: sassvg-list("src");
+$social-list: sassvg-list("social-icons");
+
 .ftc-symbol-sprite {
 	@each $icon in $ftc-list {
+		.#{$icon} {
+			svg {
+				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+			}
+		}
+	}
+	@each $icon in $social-list {
 		.#{$icon} {
 			svg {
 				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
@@ -81,29 +90,10 @@ $ftc-list: sassvg-list("src");
 		.#{$icon} {
 			background-image: sassvg($icon);
 		}
-		.#{$icon}:hover {
-			background-image: oIconsGetSvgDatauri($icon);
+	}
+	@each $icon in $social-list {
+		.#{$icon} {
+			background-image: sassvg($icon);
 		}
 	}
 }
-
-$ft-list: sassvg-list("svg");
-.ft-icons {
-	@each $icon in $ft-list {
-		$c1: random(256) - 1;
-		$c2: random(256) - 1;
-		$c3: random(256) - 1;
-		.#{$icon} {
-			background-image: sassvg($icon, $fillcolor:rgb($c1, $c2, $c3));
-		}
-		.#{$icon}:hover {
-			background-image: sassvg($icon, $fillcolor:rgb($c2, $c3, $c1));
-		}
-	}	
-}
-
-
-
-
-
-

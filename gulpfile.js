@@ -1,14 +1,14 @@
-var path = require('path');
-var fs = require('fs');
-var merge = require('merge-stream');
-var gulp = require('gulp');
-var del = require('del');
-var $ = require('gulp-load-plugins')();
-var browserSync = require('browser-sync').create();
-var lazypipe = require('lazypipe');
+const path = require('path');
+const fs = require('fs');
+const merge = require('merge-stream');
+const gulp = require('gulp');
+const del = require('del');
+const $ = require('gulp-load-plugins')();
+const browserSync = require('browser-sync').create();
+const lazypipe = require('lazypipe');
 
-var config = require('./config.json');
-var projectName = path.basename(__dirname);
+const config = require('./config.json');
+const projectName = path.basename(__dirname);
 
 const svgsrc = 'src/*.svg';
 
@@ -17,7 +17,8 @@ const svgsrc = 'src/*.svg';
 
 gulp.task('html', function() {
   var folders = [
-    'src'
+    'src',
+    'src/social-icons'
   ];
 
   var template = 'demo/index.mustache';
@@ -48,7 +49,8 @@ gulp.task('html', function() {
   .then(function(fileNames) {
     gulp.src(template)
       .pipe($.mustache({
-        ftcicons: fileNames[0]
+        ftcicons: fileNames[0],
+        socialicons: fileNames[1]
       }, {
         extension: '.html'
       }))
@@ -76,57 +78,115 @@ gulp.task('svgtocss', function() {
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src(['src/*.svg', '!src/*-round.svg'])
-    .pipe($.useref())
-    .pipe($.svgmin({
+  return gulp.src('src/**/*.svg')
+    .pipe($.svgmin(/*{
       plugins: [{
         removeAttrs: { 
           attrs: 'path:fill'
         }
       }]
+    }*/))
+    .pipe($.cheerio({
+      run: function($, file) {
+        $('rect').remove();
+        $('path').removeAttr('fill')
+      },
+      parserOptions: {
+        xmlMode: true
+      }
     }))
+
     .pipe($.sassvg({
       outputFolder: '.tmp/scss',
       optimizeSvg: true
     }));
 });
 
+gulp.task('social', function() {
+  const social = gulp.src('src/social-icons/*.svg')
+    .pipe($.svgmin())
+    .pipe($.cheerio({
+      run: function($, file) {
+          var rect = $('rect').remove();
+          var bgColor = rect.attr('fill');
+          $('path').attr('fill', bgColor);
+        },
+      parserOptions: {
+        xmlMode: true
+      }
+    }))
+    .pipe(gulp.dest('.tmp/svg'))
+    .pipe($.svg2png())
+    .pipe(gulp.dest('.tmp/png'));
+
+  const round = gulp.src('src/social-icons/*.svg')
+    .pipe($.svgmin())
+    .pipe($.cheerio({
+      run: function($, file) {
+          $('rect').attr('rx', '50%').attr('ry', '50%');
+        },
+      parserOptions: {
+        xmlMode: true
+      }
+    }))
+    .pipe($.rename(function(path) {
+      path.basename += '-round'
+    }))
+    .pipe(gulp.dest('.tmp/svg'))
+    .pipe($.svg2png())
+    .pipe(gulp.dest('.tmp/png'));
+
+  const hollow = gulp.src('src/social-icons/*.svg')
+    .pipe($.svgmin())
+    .pipe($.rename(function(path){
+      path.basename += '-hollow'
+    }))
+    .pipe(gulp.dest('.tmp/svg'))
+    .pipe($.svg2png())
+    .pipe(gulp.dest('.tmp/png'));
+
+  return merge(social, round, hollow)
+})
+
 //Generate a svg sprite with `symbol` elements
-var svgSymbol = lazypipe()
-  .pipe($.svgmin, {      
-    plugins: [{
-        removeAttrs: { 
-          attrs: 'path:fill'
-        }
-      }]
-    })
-  .pipe($.svgstore);
 
 gulp.task('svgsprite', function() {
   const DEST = '.tmp/sprite';
 
-  return gulp.src('src/*.svg')
+  return gulp.src('src/**/*.svg')
     .pipe($.changed(DEST))
-    .pipe(svgSymbol())
+    .pipe($.svgmin())
+    .pipe($.cheerio({
+      run: function($, file) {
+        $('rect').remove();
+        $('path').removeAttr('fill')
+      },
+      parserOptions: {
+        xmlMode: true
+      }
+    }))
+    .pipe($.svgstore())
     .pipe($.rename({basename: 'ftc-icons-symbol'}))
     .pipe(gulp.dest(DEST));
 });
 
 gulp.task('logo', function() {
-  const DEST = '.tmp/logo';
-  const sprite = gulp.src('src/brand-ftc*.svg')
-    .pipe(svgSymbol())
-    .pipe($.rename({basename: 'logo'}))
-    .pipe(gulp.dest(DEST));
-
-  const png = gulp.src('src//brand-ftc*.svg')
-    .pipe($.svg2png())
-    .pipe($.rename({
-      prefix: 'logo.svg.'
+  return gulp.src('src/brand-ftc*.svg')
+    .pipe($.svgmin())
+    .pipe($.cheerio({
+      run: function($, file) {
+        $('path').attr('fill', '#ffffff')
+      },
+      parserOptions: {
+        xmlMode: true
+      }      
     }))
-    .pipe(gulp.dest(DEST));
-
-    return merge(sprite, png);
+    .pipe($.rename(function(path) {
+      path.basename += '-white';
+    }))
+    .pipe(gulp.dest('.tmp/svg'))
+    .pipe($.svg2png())
+    .pipe(gulp.dest('.tmp/png'));
 });
 
 
@@ -170,7 +230,7 @@ gulp.task('style', function() {
 gulp.task('watch', 
   gulp.series(
     'clean', 
-    gulp.parallel('html', 'svgtocss', 'svg', /*'png',*/ 'svgsprite'/*, 'logo'*/),
+    gulp.parallel('html', 'svgtocss', 'social', 'svg', /*'png',*/ 'svgsprite', 'logo'),
     'sassvg',
     'style', 
     function serve() {
