@@ -76,7 +76,7 @@ gulp.task('svgtocss', function() {
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src(svgsrc)
+  return gulp.src(['src/*.svg', '!src/*-round.svg'])
     .pipe($.useref())
     .pipe($.svgmin({
       plugins: [{
@@ -170,7 +170,7 @@ gulp.task('style', function() {
 gulp.task('watch', 
   gulp.series(
     'clean', 
-    gulp.parallel('html', 'svgtocss', 'svg', 'png', 'svgsprite', 'logo'),
+    gulp.parallel('html', 'svgtocss', 'svg', /*'png',*/ 'svgsprite', 'logo'),
     'sassvg',
     'style', 
     function serve() {

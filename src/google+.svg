@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="100"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="google+.svg">
+  <defs
+     id="defs13" />
+  <metadata
+     id="metadata52">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>btn_google+_signin_light_normal_web</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="955"
+     id="namedview50"
+     showgrid="true"
+     inkscape:zoom="7.89"
+     inkscape:cx="28.073511"
+     inkscape:cy="50"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4212" />
+  </sodipodi:namedview>
+  <path
+     fill="#dc4e41"
+     d="M 35.455078 24.544922 C 21.382361 24.544922 10 35.927283 10 50 C 10 64.072717 21.382361 75.455078 35.455078 75.455078 C 50.145976 75.455078 59.890625 65.127475 59.890625 50.582031 C 59.890625 48.909305 59.708416 47.636007 59.490234 46.363281 L 35.455078 46.363281 L 35.455078 55.091797 L 49.890625 55.091797 C 49.308807 58.837249 45.527798 66.072266 35.455078 66.072266 C 26.764175 66.072266 19.671875 58.872721 19.671875 50 C 19.671875 41.127279 26.764175 33.927734 35.455078 33.927734 C 40.400529 33.927734 43.708701 36.037289 45.599609 37.855469 L 52.509766 31.199219 C 48.073406 27.053767 42.3278 24.544922 35.455078 24.544922 z M 75.455078 39.091797 L 75.455078 46.363281 L 68.181641 46.363281 L 68.181641 53.636719 L 75.455078 53.636719 L 75.455078 60.908203 L 82.726562 60.908203 L 82.726562 53.636719 L 90 53.636719 L 90 46.363281 L 82.726562 46.363281 L 82.726562 39.091797 L 75.455078 39.091797 z " />
+</svg>
