@@ -14,7 +14,7 @@
 
 @mixin oIconsSassvg($icon-name, $color:null, $container-width: 20, $container-height: null, $apply-base-styles: true) {
 	
-	@if($_o-icons-dev == true) {
+	@if($_o-icons-dev-mode == true) {
 		background-image: url("png/#{$icon-name}.png");
 	} @else {
 		background-image: url(oAssetsResolve("icons/png/#{$icon-name}.png", ftc-icons));
@@ -37,7 +37,7 @@
 
 @mixin oIconsGetSvg($icon-name, $container-width: 20, $container-height: null, $apply-base-styles: true) {
 
-	@if($_o-icons-dev == true) {
+	@if($_o-icons-dev-mode == true) {
 		background-image: url("png/#{$icon-name}.png");
 		background-image: url("svg/#{$icon-name}.svg");
 	} @else {
@@ -48,4 +48,21 @@
 	@if ($apply-base-styles == true) {
 		@include _baseStyles($container-width);
 	}
+}
+
+// Set styles on `svg` elements. Its containing box should be `position:relative;`
+@mixin oIconsSvgSprite($icon-name, $color: null, $width: 20, $height:null) {
+	width: $width + 0px;
+	@if ($height == null) {
+		$height: $width;
+	}
+	height: $height+0px;
+	@if ($color != null) {
+		fill: $color;
+	}
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -($height / 2 + 0px);
+	margin-left: -($width / 2 + 0px);		
 }

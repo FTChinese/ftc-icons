@@ -38,14 +38,15 @@ ul {
 			height: 100px;
 			object-fit: contain;
 		}
-		i:after {
-			border: 1px dotted #333;
-		}
 		i {
 			svg {
 				width: 100px;
 				height: 100px;
 			}
+			display: inline-block;
+			border: 1px dotted #333;
+			width: 100px;
+			height: 100px;
 		}
 		span {
 			display: block;
@@ -59,8 +60,11 @@ $social-list: sassvg-list("social-icons");
 .symbol-sprite {
 	@each $icon in $ftc-list {
 		.#{$icon} {
+			position: relative;
 			svg {
-				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+				// fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+				$random-color: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+				@include oIconsSvgSprite($icon, $random-color, 100);
 			}
 		}
 	}
