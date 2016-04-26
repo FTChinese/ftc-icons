@@ -1,9 +1,51 @@
-@mixin oIconsSvgSassIcon($name, $fillcolor, $size) {
-	background-image: sassvg($name, $fillcolor);
+@mixin _baseStyles($container-width, $container-height: null) {
 	display: inline-block;
-	width: $size + 0px;
-	height: $size + 0px;
-	background-size: contain;
+	width: $container-width + 0px;
+	@if ($container-height == null) {
+		$container-height: $container-width;
+	}
+	height: $container-height + 0px;
 	background-repeat: no-repeat;
+	background-size: contain;
 	background-position: 50%;
+	background-color: transparent;
+	vertical-align: middle;	
+}
+
+@mixin oIconsSassvg($icon-name, $color:null, $container-width: 20, $container-height: null, $apply-base-styles: true) {
+	
+	@if($_o-icons-dev == true) {
+		background-image: url("png/#{$icon-name}.png");
+	} @else {
+		background-image: url(oAssetsResolve("icons/png/#{$icon-name}.png", ftc-icons));
+	}
+	$key: "i-" + $icon-name;
+
+	@if $color == null {
+		@if map-has-key($o-icons-palette, $key) {
+			$color: map-get($o-icons-palette, $key);
+		} @else {
+			$color: #000000;
+		}
+	}	
+	background-image: sassvg($icon-name, $color);
+
+	@if ($apply-base-styles == true) {
+		@include _baseStyles($container-width);
+	}
+}
+
+@mixin oIconsGetSvg($icon-name, $container-width: 20, $container-height: null, $apply-base-styles: true) {
+
+	@if($_o-icons-dev == true) {
+		background-image: url("png/#{$icon-name}.png");
+		background-image: url("svg/#{$icon-name}.svg");
+	} @else {
+		background-image: url(oAssetsResolve("icons/png/#{$icon-name}.png", ftc-icons));
+		background-image: url(oAssetsResolve("icons/svg/#{$icon-name}.svg", ftc-icons));
+	}	
+
+	@if ($apply-base-styles == true) {
+		@include _baseStyles($container-width);
+	}
 }

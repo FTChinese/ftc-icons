@@ -1,23 +1,6 @@
+$_o-icons-dev: true;
+
 @import "../main";
-
-@import "variables";
-
-@import "ftc-svg-data";
-
-@import "functions";
-
-@import "sassvg";
-
-/* Some color variables */
-$ftpink:#FFCC99;
-
-$ftc-share-icon-colors: (
-	wechat: #609700, 
-	weibo: #FFD12B, 
-	linedin: #0977b6, 
-	facebook: #3c5a99, 
-	twitter:#6aa9e0
-);
 
 .header {
 	a {
@@ -33,7 +16,7 @@ $ftc-share-icon-colors: (
 .ftc-logo-square {
 	height: 100px;
 	width: 100px;
-	background-color: $ftpink;
+	@include oColorsFor(page, background);
 }
 
 ul {
@@ -45,7 +28,7 @@ ul {
 		width: 180px;
 		margin: 0 0 20px;
 		text-align: center;
-		i, img {
+		img {
 			display: inline-block;
 			background-position: center center;
 			background-repeat: no-repeat;
@@ -53,6 +36,10 @@ ul {
 			border: 1px dotted #333;
 			width: 100px;
 			height: 100px;
+			object-fit: contain;
+		}
+		i:after {
+			border: 1px dotted #333;
 		}
 		i {
 			svg {
@@ -69,7 +56,7 @@ ul {
 $ftc-list: sassvg-list("src");
 $social-list: sassvg-list("social-icons");
 
-.ftc-symbol-sprite {
+.symbol-sprite {
 	@each $icon in $ftc-list {
 		.#{$icon} {
 			svg {
@@ -85,15 +72,23 @@ $social-list: sassvg-list("social-icons");
 		}
 	}
 }
-.ftc-icons {
+.sassvg {
 	@each $icon in $ftc-list {
 		.#{$icon} {
-			background-image: sassvg($icon);
+			&:after {
+				content: '';
+				@include oIconsSassvg($icon, $container-width: 100);
+			}			
 		}
 	}
 	@each $icon in $social-list {
 		.#{$icon} {
-			background-image: sassvg($icon);
+			@include oIconsSassvg($icon, $container-width: 100);
 		}
 	}
 }
+
+.png-img-white-on-dark {
+	background-color: #000000;
+}
+

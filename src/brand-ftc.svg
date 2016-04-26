@@ -45,7 +45,7 @@
        type="xygrid"
        id="grid4141" /></sodipodi:namedview>
 <!-- build:remove -->
-<rect
+<rect class="background"
      width="100%"
      height="100%"
      x="0"

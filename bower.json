@@ -27,6 +27,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "o-colors": "^3.3.2"
+    "o-colors": "^3.3.2",
+    "o-assets": "^3.0.1"
   }
 }

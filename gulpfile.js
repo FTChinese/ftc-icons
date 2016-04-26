@@ -5,20 +5,16 @@ const gulp = require('gulp');
 const del = require('del');
 const $ = require('gulp-load-plugins')();
 const browserSync = require('browser-sync').create();
-const lazypipe = require('lazypipe');
 
 const projectName = path.basename(__dirname);
 const demoPath = '../../ftrepo/ft-interact/';
 
 const svgsrc = 'src/*.svg';
 
-
-
-
 // For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
 // Do not put src/varitants into sassvg or symbol sprite.
 gulp.task('sassvg', function() {
-  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
+  return gulp.src('src/**/*.svg')
     .pipe($.svgmin(/*{
       plugins: [{
         removeAttrs: { 
@@ -36,7 +32,7 @@ gulp.task('sassvg', function() {
       }
     }))
     .pipe($.sassvg({
-      outputFolder: '.tmp/scss',
+      outputFolder: 'scss/sassvg',
       optimizeSvg: true
     }));
 });
@@ -66,7 +62,7 @@ gulp.task('svgsprite', function() {
 gulp.task('svgpng', function() {
   const svg = '.tmp/svg';
   const png = '.tmp/png';
-  return gulp.src('src/*.svg',)
+  return gulp.src('src/*.svg')
     .pipe($.svgmin())
     .pipe(gulp.dest(svg))
     .pipe($.svg2png()) //`1` is scale factor. You can change it.
@@ -91,7 +87,7 @@ gulp.task('social', function() {
     .pipe($.svg2png())
     .pipe(gulp.dest('.tmp/png'));
 
-  const round = gulp.src('src/social-icons/*.svg')
+  const roundHollow = gulp.src('src/social-icons/*.svg')
     .pipe($.svgmin())
     .pipe($.cheerio({
       run: function($, file) {
@@ -102,7 +98,7 @@ gulp.task('social', function() {
       }
     }))
     .pipe($.rename(function(path) {
-      path.basename += '-round'
+      path.basename += '-round-hollow'
     }))
     .pipe(gulp.dest('.tmp/svg'))
     .pipe($.svg2png())
@@ -117,17 +113,17 @@ gulp.task('social', function() {
     .pipe($.svg2png())
     .pipe(gulp.dest('.tmp/png'));
 
-  return merge(social, round, hollow)
+  return merge(social, roundHollow, hollow)
 });
 
 // generate a white version of each file by setting the `fill` attribute on all path to `#ffffff`
 // If the file has `rect` with classname `background`, set its `fill` to `#000000`
 gulp.task('white', function() {
-  return gulp.src('src/*.svg')
+  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
     .pipe($.svgmin())
     .pipe($.cheerio({
       run: function($, file) {
-        $('rect.background').attr('fill', '#000000')
+        $('rect.background').remove();
         $('path').attr('fill', '#ffffff');
       },
       parserOptions: {
@@ -200,22 +196,22 @@ gulp.task('mustache', function() {
   });
 });
 
-gulp.task('style', function() {
+gulp.task('styles', function() {
   return gulp.src('demo/main.scss')
     .pipe($.sass({
       outputStyle: 'expanded',
       precision: 10,
-      includePaths: ['scss', '.tmp/scss']
+      includePaths: ['bower_components']
     }).on('error', $.sass.logError))
     .pipe(gulp.dest('.tmp'))
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('build', gulp.series('clean', gulp.parallel('mustache', 'svgpng', 'white', 'svgsprite', 'sassvg'));
+gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'mustache')));
 
-gulp.task('watch', 
+gulp.task('dev', 
   gulp.parallel(
-    'mustache', 'style', 
+    'mustache', 'styles', 
     function serve() {
       browserSync.init({
         server: {
@@ -226,9 +222,9 @@ gulp.task('watch',
         }
       });
 
-      gulp.watch('src/*.svg', gulp.series(gulp.parallel('mustache', 'svgsprite', 'sassvg'), 'style'));
+      gulp.watch('src/*.svg', gulp.series(gulp.parallel('sassvg', 'svgsprite', 'mustache'), 'styles'));
       gulp.watch('demo/*.mustache', gulp.parallel('mustache'));
-      gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('style'));
+      gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('styles'));
     }
   )
 );
@@ -242,7 +238,7 @@ gulp.task('copy:deploy', function() {
     .pipe(gulp.dest(demoPath + projectName));
 });
 
-gulp.task('deploy', gulp.series('build', 'style', 'copy:deploy'));
+gulp.task('deploy', gulp.series('mustache', 'build', 'styles', 'copy:deploy'));
 
 
 // build the final file for release. 
@@ -254,11 +250,12 @@ gulp.task('clean:assets', function() {
 
 gulp.task('copy:dist', function() {
   return gulp.src('.tmp/**/*.{svg,png,scss}')
-    .pipe(gulp.dest('assets'));
+    .pipe(gulp.dest('icons'));
 });
 
-gulp.task('dist',gulp.series('build', 'copy:dist'));
+gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
 
+// Generate favicons
 gulp.task('fav', function() {
   return gulp.src('assets/svg/brand-ftc.svg')
     .pipe($.svg2png(2))
@@ -284,25 +281,13 @@ gulp.task('fav', function() {
 /* =========== End of tasks for developers ===================== */
 
 // Just for view. No file modification.
-gulp.task('css', function css() {
-  return gulp.src('demo/*.scss')
-    .pipe($.sass({
-      outputStyle: 'expanded',
-      precision: 10,
-      includePaths: ['scss', 'assets/scss']
-    }).on('error', $.sass.logError))
-    .pipe(gulp.dest('.tmp'));
-});
 
 gulp.task('serve', 
-  gulp.series('clean', 'mustache', 'css', 
+  gulp.series('clean', 'mustache', 'styles', 
     function serve() {
       browserSync.init({
         server: {
-          baseDir: ['.tmp', 'assets'],
-          routes: {
-            '/bower_components': 'bower_components'
-          }
+          baseDir: ['.tmp', 'icons']
         }
       });
     }

@@ -1,6 +1,10 @@
-@import "assets/scss/sassvg.scss";
+@import "o-colors/main";
+
+@import "scss/sassvg/sassvg.scss";
 
 @import "scss/variables";
+@import "scss/colors";
+
 @import "scss/functions";
 @import "scss/mixins";
 
