@@ -249,7 +249,7 @@ gulp.task('clean:assets', function() {
 });
 
 gulp.task('copy:dist', function() {
-  return gulp.src('.tmp/**/*.{svg,png,scss}')
+  return gulp.src('.tmp/**/*.{svg,png}')
     .pipe(gulp.dest('.'));
 });
 
