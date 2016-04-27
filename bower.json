@@ -25,9 +25,11 @@
     "src",
     "templates"
   ],
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "o-colors": "^3.3.2",
     "o-assets": "^3.0.1"
+  },
+  "devDependencies": {
+
   }
 }
