@@ -5,6 +5,7 @@ const gulp = require('gulp');
 const del = require('del');
 const $ = require('gulp-load-plugins')();
 const browserSync = require('browser-sync').create();
+const lazypipe = require('lazypipe');
 
 const projectName = path.basename(__dirname);
 const demoPath = '../../ftrepo/ft-interact/';
@@ -37,14 +38,9 @@ gulp.task('sassvg', function() {
     }));
 });
 
-//Generate a svg sprite with `symbol` elements
-gulp.task('svgsprite', function() {
-  const DEST = '.tmp/sprite';
-
-  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
-    .pipe($.changed(DEST))
-    .pipe($.svgmin())
-    .pipe($.cheerio({
+const svgStore = lazypipe()
+  .pipe($.svgmin)
+  .pipe($.cheerio, {
       run: function($, file) {
         $('rect').remove();
         $('path').removeAttr('fill')
@@ -52,9 +48,34 @@ gulp.task('svgsprite', function() {
       parserOptions: {
         xmlMode: true
       }
-    }))
-    .pipe($.svgstore())
-    .pipe($.rename({basename: 'ftc-icons-symbol'}))
+    })
+    .pipe($.svgstore);
+
+//Generate a svg sprite with `symbol` elements
+gulp.task('svgsprite', function() {
+  const DEST = '.tmp/sprite';
+
+  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
+    .pipe(svgStore())
+    .pipe($.rename({basename: 'all-icons'}))
+    .pipe(gulp.dest(DEST));
+});
+
+gulp.task('socialsprite', function() {
+  const DEST = '.tmp/sprite';
+
+  return gulp.src(['src/social-icons/*.svg'])
+    .pipe(svgStore())
+    .pipe($.rename({basename: 'social-icons'}))
+    .pipe(gulp.dest(DEST));
+});
+
+gulp.task('oftenused', function() {
+  const DEST = '.tmp/sprite';
+
+  return gulp.src(['src/arrow*.svg', 'src/cross.svg', 'src/hamburger.svg'])
+    .pipe(svgStore())
+    .pipe($.rename({basename: 'arrow-hamburger-cross'}))
     .pipe(gulp.dest(DEST));
 });
 
