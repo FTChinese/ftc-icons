@@ -12,18 +12,13 @@
 	vertical-align: middle;	
 }
 
-@mixin oIconsSassvg($icon-name, $color:null, $container-width: 20, $container-height: null, $apply-base-styles: true) {
+@mixin oIconsGetSassvg($icon-name, $color:null, $container-width: 20, $container-height: null, $apply-base-styles: true) {
 	
-	@if($_o-icons-dev-mode == true) {
-		background-image: url("png/#{$icon-name}.png");
-	} @else {
-		background-image: url(oAssetsResolve("icons/png/#{$icon-name}.png", ftc-icons));
-	}
-	$key: "i-" + $icon-name;
+	background-image: url(oAssetsResolve("png/#{$icon-name}.png", ftc-icons));
 
 	@if $color == null {
-		@if map-has-key($o-icons-palette, $key) {
-			$color: map-get($o-icons-palette, $key);
+		@if map-has-key($o-icons-palette, $icon-name) {
+			$color: map-get($o-icons-palette, $icon-name);
 		} @else {
 			$color: #000000;
 		}
@@ -37,13 +32,8 @@
 
 @mixin oIconsGetSvg($icon-name, $container-width: 20, $container-height: null, $apply-base-styles: true) {
 
-	@if($_o-icons-dev-mode == true) {
-		background-image: url("png/#{$icon-name}.png");
-		background-image: url("svg/#{$icon-name}.svg");
-	} @else {
-		background-image: url(oAssetsResolve("icons/png/#{$icon-name}.png", ftc-icons));
-		background-image: url(oAssetsResolve("icons/svg/#{$icon-name}.svg", ftc-icons));
-	}	
+	background-image: url(oAssetsResolve("png/#{$icon-name}.png", ftc-icons));
+	background-image: url(oAssetsResolve("svg/#{$icon-name}.svg", ftc-icons));
 
 	@if ($apply-base-styles == true) {
 		@include _baseStyles($container-width);

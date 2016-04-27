@@ -42,6 +42,16 @@ You can use a sprited svg file `assets/sprites/ftc-icons-symbol.svg`. This file 
 		<use xlink:href="sprite/ftc-icons-symbol.svg#brand-ftc" />
 	</svg>
 
+### Preset colors if you are not using svg or png file directly
+```
+'brand-color': #ffcc99,
+'social-wechat': #609700,
+'social-weibo': #e6162d,
+'social-linkedin': #0977b6,
+'social-facebook': #3c5a99,
+'social-twitter': #6aa9e0,
+'rss': #FB9E3C,
+```
 
 ## Gulp Commands
 

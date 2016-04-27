@@ -1,19 +1,21 @@
 $o-icons-palette: (
-	'i-social-wechat': #609700,
-	'i-social-weibo': #e6162d,
-	'i-social-linkedin': #0977b6,
-	'i-social-facebook': #3c5a99,
-	'i-social-twitter': #6aa9e0,
-	'i-rss': #FB9E3C,
+	'brand-color': #ffcc99,
+	'social-wechat': #609700,
+	'social-weibo': #e6162d,
+	'social-linkedin': #0977b6,
+	'social-facebook': #3c5a99,
+	'social-twitter': #6aa9e0,
+	'rss': #FB9E3C,
 );
 
 $o-icons-usecases: (
-	'icon-wechat': (background: 'i-social-wechat'),
-	'icon-weibo': (background: 'i-social-weibo'),
-	'icon-linkedin': (background: 'i-social-linkedin'),
-	'icon-facebook': (background: 'i-social-facebook'),
-	'icon-twitter': (background: 'i-social-twitter'),
-	'icon-rss': (background: 'i-rss'),
+	'brand': (background: 'brand-color'),
+	'social-wechat': (background: 'social-wechat'),
+	'social-weibo': (background: 'social-weibo'),
+	'social-linkedin': (background: 'social-linkedin'),
+	'social-facebook': (background: 'social-facebook'),
+	'social-twitter': (background: 'social-twitter'),
+	'rss': (background: 'rss'),
 );
 
 $o-colors-palette: map-merge($o-icons-palette, $o-colors-palette);

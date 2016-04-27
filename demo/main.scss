@@ -1,6 +1,7 @@
-$_o-icons-dev: true;
-
 @import "../main";
+@include oAssetsSetModulePaths((
+	ftc-icons: '',
+));
 
 .header {
 	a {
@@ -16,7 +17,7 @@ $_o-icons-dev: true;
 .ftc-logo-square {
 	height: 100px;
 	width: 100px;
-	@include oColorsFor(page, background);
+	@include oColorsFor(brand, background);
 }
 
 ul {
@@ -81,18 +82,18 @@ $social-list: sassvg-list("social-icons");
 		.#{$icon} {
 			&:after {
 				content: '';
-				@include oIconsSassvg($icon, $container-width: 100);
+				@include oIconsGetSassvg($icon, $container-width: 100);
 			}			
 		}
 	}
 	@each $icon in $social-list {
 		.#{$icon} {
-			@include oIconsSassvg($icon, $container-width: 100);
+			@include oIconsGetSassvg($icon, $container-width: 100);
 		}
 	}
 }
 
-.png-img-white-on-dark {
-	background-color: #000000;
+.png-img-white-on-dark img{
+	background-color: #333;
 }
 

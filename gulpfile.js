@@ -209,6 +209,8 @@ gulp.task('styles', function() {
 
 gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'mustache')));
 
+// Run `gulp build` before this task.
+// Split into two steps due to complicated asynchronous management and heavy IO.
 gulp.task('dev', 
   gulp.parallel(
     'mustache', 'styles', 
@@ -229,8 +231,6 @@ gulp.task('dev',
   )
 );
 
-
-
 // deploy to server for demo
 gulp.task('copy:deploy', function() {
   console.log('Copying files to: ' + demoPath + projectName);
@@ -243,14 +243,14 @@ gulp.task('deploy', gulp.series('mustache', 'build', 'styles', 'copy:deploy'));
 
 // build the final file for release. 
 gulp.task('clean:assets', function() {
-  return del('assets/**').then(function() {
+  return del(['png/*', 'svg/*', 'sprite/*']).then(function() {
     console.log('Clean before final dist');
   });
 });
 
 gulp.task('copy:dist', function() {
   return gulp.src('.tmp/**/*.{svg,png,scss}')
-    .pipe(gulp.dest('icons'));
+    .pipe(gulp.dest('.'));
 });
 
 gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
@@ -287,7 +287,7 @@ gulp.task('serve',
     function serve() {
       browserSync.init({
         server: {
-          baseDir: ['.tmp', 'icons']
+          baseDir: ['.tmp', '.']
         }
       });
     }
