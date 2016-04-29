@@ -1,0 +1,7 @@
+@include oColorsSetUseCase(brand, background, 'brand-color');
+@include oColorsSetUseCase(social-wechat, background, 'social-wechat');
+@include oColorsSetUseCase(social-weibo, background, 'social-weibo');
+@include oColorsSetUseCase(social-linkedin, background, 'social-linkedin');
+@include oColorsSetUseCase(social-facebook, background, 'social-facebook');
+@include oColorsSetUseCase(social-twitter, background, 'social-twitter');
+@include oColorsSetUseCase(rss, background, 'rss');

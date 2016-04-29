@@ -17,8 +17,8 @@
 	background-image: url(oAssetsResolve("png/#{$icon-name}.png", ftc-icons));
 
 	@if $color == null {
-		@if map-has-key($o-icons-palette, $icon-name) {
-			$color: map-get($o-icons-palette, $icon-name);
+		@if map-has-key($o-colors-palette, $icon-name) {
+			$color: map-get($o-colors-palette, $icon-name);
 		} @else {
 			$color: #000000;
 		}

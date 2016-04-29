@@ -16,14 +16,14 @@
     "node"
   ],
   "ignore": [
-    "o-ft-icons",
     "node_modules",
     "bower_components",
     "test",
     "tests",
     "demo",
     "src",
-    "templates"
+    ".editorconfig",
+    ".gitattribute"
   ],
   "dependencies": {
     "o-colors": "^3.3.2",

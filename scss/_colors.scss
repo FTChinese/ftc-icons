@@ -1,22 +1,7 @@
-$o-icons-palette: (
-	'brand-color': #ffcc99,
-	'social-wechat': #609700,
-	'social-weibo': #e6162d,
-	'social-linkedin': #0977b6,
-	'social-facebook': #3c5a99,
-	'social-twitter': #6aa9e0,
-	'rss': #FB9E3C,
-);
-
-$o-icons-usecases: (
-	'brand': (background: 'brand-color'),
-	'social-wechat': (background: 'social-wechat'),
-	'social-weibo': (background: 'social-weibo'),
-	'social-linkedin': (background: 'social-linkedin'),
-	'social-facebook': (background: 'social-facebook'),
-	'social-twitter': (background: 'social-twitter'),
-	'rss': (background: 'rss'),
-);
-
-$o-colors-palette: map-merge($o-icons-palette, $o-colors-palette);
-$o-colors-usecases: map-merge($o-icons-usecases, $o-colors-palette);
+@include oColorsSetColor('brand-color', #ffcc99);
+@include oColorsSetColor('social-wechat', #609700);
+@include oColorsSetColor('social-weibo', #e6162d);
+@include oColorsSetColor('social-linkedin', #0977b6);
+@include oColorsSetColor('social-facebook', #3c5a99);
+@include oColorsSetColor('social-twitter', #6aa9e0);
+@include oColorsSetColor('rss', #FB9E3C);
