@@ -253,15 +253,18 @@ gulp.task('dev',
 );
 
 // deploy to server for demo
-gulp.task('copy:deploy', function() {
+gulp.task('copy:demo', function() {
   console.log('Copying files to: ' + demoPath + projectName);
   return gulp.src('.tmp/**/**.{svg,png,css,html}')
     .pipe(gulp.dest(demoPath + projectName));
 });
 
-gulp.task('deploy', gulp.series('mustache', 'build', 'styles', 'copy:deploy'));
+gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
 
-
+gulp.task('deploy', function() {
+  return gulp.src('.tmp/**/**/*.{svg,png}')
+    .pipe(gulp.dest('../../ftrepo/dev_www/frontend/static/ftc-icons'))
+})
 // build the final file for release. 
 gulp.task('clean:assets', function() {
   return del(['png/*', 'svg/*', 'sprite/*']).then(function() {
