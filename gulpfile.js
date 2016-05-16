@@ -159,6 +159,28 @@ gulp.task('white', function() {
     .pipe(gulp.dest('.tmp/png/white'));
 });
 
+// Generate favicons
+gulp.task('fav', function() {
+  return gulp.src('src/brand-ftc-square.svg')
+    .pipe($.svg2png(2))
+    .pipe($.favicons({
+      appName: 'icons',
+      background: '#FFCC99',
+      icons: {
+        android: false,              // Create Android homescreen icon. `boolean`
+        appleIcon: true,            // Create Apple touch icons. `boolean`
+        appleStartup: false,         // Create Apple startup images. `boolean`
+        coast: false,                // Create Opera Coast icon. `boolean`
+        favicons: true,             // Create regular favicons. `boolean`
+        firefox: false,              // Create Firefox OS icons. `boolean`
+        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
+        twitter: false,              // Create Twitter Summary Card image. `boolean`
+        windows: false,              // Create Windows 8 tile icons. `boolean`
+        yandex: false                // Create Yandex browser icon. `boolean`
+      }
+    }))
+    .pipe(gulp.dest('.tmp/favicons'));
+});
 
 /* demo tasks */
 gulp.task('clean', function() {
@@ -228,7 +250,7 @@ gulp.task('styles', function() {
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'mustache')));
+gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'fav', 'mustache')));
 
 // Run `gulp build` before this task.
 // Split into two steps due to complicated asynchronous management and heavy IO.
@@ -263,7 +285,7 @@ gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
 
 gulp.task('deploy', function() {
   return gulp.src('.tmp/**/**/*.{svg,png}')
-    .pipe(gulp.dest('../../ftrepo/dev_www/frontend/static/ftc-icons'))
+    .pipe(gulp.dest('../dev_www/frontend/static/ftc-icons'))
 })
 // build the final file for release. 
 gulp.task('clean:assets', function() {
@@ -279,28 +301,7 @@ gulp.task('copy:dist', function() {
 
 gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
 
-// Generate favicons
-gulp.task('fav', function() {
-  return gulp.src('assets/svg/brand-ftc.svg')
-    .pipe($.svg2png(2))
-    .pipe($.favicons({
-      appName: 'icons',
-      background: '#FFCC99',
-      icons: {
-        android: false,              // Create Android homescreen icon. `boolean`
-        appleIcon: true,            // Create Apple touch icons. `boolean`
-        appleStartup: false,         // Create Apple startup images. `boolean`
-        coast: false,                // Create Opera Coast icon. `boolean`
-        favicons: true,             // Create regular favicons. `boolean`
-        firefox: false,              // Create Firefox OS icons. `boolean`
-        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
-        twitter: false,              // Create Twitter Summary Card image. `boolean`
-        windows: false,              // Create Windows 8 tile icons. `boolean`
-        yandex: false                // Create Yandex browser icon. `boolean`
-      }
-    }))
-    .pipe(gulp.dest('favicons'));
-});
+
 
 /* =========== End of tasks for developers ===================== */
 

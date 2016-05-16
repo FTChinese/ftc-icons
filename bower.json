@@ -23,7 +23,9 @@
     "demo",
     "src",
     ".editorconfig",
-    ".gitattribute"
+    ".gitattribute",
+    ".npmrc",
+    ".bowerrc"
   ],
   "dependencies": {
     "o-colors": "^3.3.2",
