@@ -284,7 +284,7 @@ gulp.task('copy:demo', function() {
 gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
 
 gulp.task('deploy', function() {
-  return gulp.src('.tmp/**/**/*.{svg,png}')
+  return gulp.src('.tmp/**/**/*.{svg,png,ico}')
     .pipe(gulp.dest('../dev_www/frontend/static/ftc-icons'))
 })
 // build the final file for release. 
