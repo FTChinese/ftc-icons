@@ -8,12 +8,11 @@ const browserSync = require('browser-sync').create();
 const lazypipe = require('lazypipe');
 
 const projectName = path.basename(__dirname);
-const demoPath = '../../ftrepo/ft-interact/';
+const demoPath = '../ft-interact/';
 
 const svgsrc = 'src/*.svg';
 
 // For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
-// Do not put src/varitants into sassvg or symbol sprite.
 gulp.task('sassvg', function() {
   return gulp.src('src/**/*.svg')
     .pipe($.svgmin(/*{
@@ -58,24 +57,6 @@ gulp.task('svgsprite', function() {
   return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
     .pipe(svgStore())
     .pipe($.rename({basename: 'all-icons'}))
-    .pipe(gulp.dest(DEST));
-});
-
-gulp.task('socialsprite', function() {
-  const DEST = '.tmp/sprite';
-
-  return gulp.src(['src/social-icons/*.svg'])
-    .pipe(svgStore())
-    .pipe($.rename({basename: 'social-icons'}))
-    .pipe(gulp.dest(DEST));
-});
-
-gulp.task('oftenused', function() {
-  const DEST = '.tmp/sprite';
-
-  return gulp.src(['src/arrow*.svg', 'src/cross.svg', 'src/hamburger.svg'])
-    .pipe(svgStore())
-    .pipe($.rename({basename: 'arrow-hamburger-cross'}))
     .pipe(gulp.dest(DEST));
 });
 
@@ -150,9 +131,6 @@ gulp.task('white', function() {
       parserOptions: {
         xmlMode: true
       }      
-    }))
-    .pipe($.rename(function(path) {
-      path.basename += '-white';
     }))
     .pipe(gulp.dest('.tmp/svg/white'))
     .pipe($.svg2png())
@@ -318,16 +296,3 @@ gulp.task('serve',
     }
   )
 );
-
-
-//Just an alternative to `svg2png` in case `phantomjs` failed to work.
-//This plugin is dependent of `librsvg`. You have to have it installed on your system. On Mac `brew install librsvg`.
-// gulp.task('rsvg', function() {
-//   return gulp.src([svgsrc, '!src/brand-*.svg'])
-//     .pipe(rsvg({
-//       format: 'png',
-//       scale: 0.32
-//     }))
-//     .pipe(gulp.dest('.tmp/png'))
-//     .pipe(gulp.dest('png'));
-// });
