@@ -20,7 +20,17 @@ co(function *() {
       });
     }
 
-    
+    const iconNames = yield helper.readDir('svg');
+    const iconPath = iconNames.map(function(iconName) {
+        return path.resolve('svg', iconName)
+    });
+
+    const svgs = yield Promise.all(iconPath.map(helper.readFile));
+    const pngs = yield Promise.all(svgs.map(svg2png));
+    iconNames.map(function(iconName, i) {
+        const ws = fs.createWriteStream('.tmp/' + iconName.slice(0, -4) + '.png');
+        ws.write(pngs[i]);
+    });
 })
 .then(function() {
 
