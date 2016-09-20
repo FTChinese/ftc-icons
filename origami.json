@@ -1,0 +1,28 @@
+{
+    "description": "FTC icons",
+    "origamiType": "module",
+    "origamiCategory": "primitives",
+    "origamiVersion": 1,
+    "support": "https://github.com/FTChinese/ftc-icons/issues",
+    "supportStatus": "active",
+    "demos": [
+        {
+            "name": "assvg-background",
+            "template": "demos/src/icons.html",
+            "data": "demos/src/data.json",
+            "description": "Inlined svg code in css"
+        },
+        {
+        	"name": "svg-symbol",
+        	"template": "demos/src/icons.html",
+        	"data": "demos/src/data.json",
+        	"description": "All icons in svg symbol"
+        },
+        {
+        	"name": "image-src",
+        	"template": "demos/src/icons.html",
+        	"data": "demos/src/data.json",
+        	"description": "SVG file as image src"
+        }
+    ]
+}
