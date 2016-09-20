@@ -4,14 +4,13 @@ const nunjucks = require('nunjucks');
 
 var env = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(
-    ['templates'], 
+    ['templates', 'views'], 
     {noCache: true}
   ),
   {autoescape: false}
 );
 
 function render(name, context) {
-  const obj = {};
   return new Promise(function(resolve, reject) {
     env.render(name, context, function(err, result) {
       if (err) {
