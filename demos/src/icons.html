@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<div>
+  <ul>
+  	{% for icon in icons %}
+    <li>
+      <i class="{{icon}}"></i>
+      <span>{{icon}}</span>
+    </li>
+    {% endfor %}
+  </ul>	
+</div>
+{% endblock %}

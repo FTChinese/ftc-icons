@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<div>
+  <ul>
+    {% for icon in icons%}
+      <li>
+        <i class="{{icon}}"><svg><use xlink:href="sprite/ftc-icons-symbol.svg#{{icon}}" /></svg></i>
+        <span>{{icon}}</span>
+      </li>
+    {% endfor %}
+  </ul> 	
+</div>
+{% endblock %}
