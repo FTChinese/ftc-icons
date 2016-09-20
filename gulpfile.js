@@ -75,13 +75,11 @@ gulp.task('svgsprite', function() {
 
 // Generate individual svg and png.
 gulp.task('svgpng', function() {
-  const svg = '.tmp/svg';
-  const png = '.tmp/png';
-  return gulp.src('src/*.svg')
+  const DEST = '.tmp/png';
+  return gulp.src('svg/*.svg')
     .pipe($.svgmin())
-    .pipe(gulp.dest(svg))
     .pipe($.svg2png()) //`1` is scale factor. You can change it.
-    .pipe(gulp.dest(png));
+    .pipe(gulp.dest(DEST));
 });
 
 // Generate favicons
@@ -125,71 +123,71 @@ gulp.task('styles', function() {
     .pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'fav', 'mustache')));
+// gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'fav', 'mustache')));
 
 // Run `gulp build` before this task.
 // Split into two steps due to complicated asynchronous management and heavy IO.
-gulp.task('dev', 
-  gulp.parallel(
-    'mustache', 'styles', 
-    function serve() {
-      browserSync.init({
-        server: {
-          baseDir: ['.tmp'],
-          routes: {
-            '/bower_components': 'bower_components'
-          }
-        }
-      });
+// gulp.task('dev', 
+//   gulp.parallel(
+//     'mustache', 'styles', 
+//     function serve() {
+//       browserSync.init({
+//         server: {
+//           baseDir: ['.tmp'],
+//           routes: {
+//             '/bower_components': 'bower_components'
+//           }
+//         }
+//       });
 
-      gulp.watch('src/*.svg', gulp.series(gulp.parallel('sassvg', 'svgsprite', 'mustache'), 'styles'));
-      gulp.watch('demo/*.mustache', gulp.parallel('mustache'));
-      gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('styles'));
-    }
-  )
-);
+//       gulp.watch('src/*.svg', gulp.series(gulp.parallel('sassvg', 'svgsprite', 'mustache'), 'styles'));
+//       gulp.watch('demo/*.mustache', gulp.parallel('mustache'));
+//       gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('styles'));
+//     }
+//   )
+// );
 
-// deploy to server for demo
-gulp.task('copy:demo', function() {
-  console.log('Copying files to: ' + demoPath + projectName);
-  return gulp.src('.tmp/**/**.{svg,png,css,html}')
-    .pipe(gulp.dest(demoPath + projectName));
-});
+// // deploy to server for demo
+// gulp.task('copy:demo', function() {
+//   console.log('Copying files to: ' + demoPath + projectName);
+//   return gulp.src('.tmp/**/**.{svg,png,css,html}')
+//     .pipe(gulp.dest(demoPath + projectName));
+// });
 
-gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
+// gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
 
-gulp.task('deploy', function() {
-  return gulp.src('.tmp/**/**/*.{svg,png,ico}')
-    .pipe(gulp.dest('../dev_www/frontend/static/ftc-icons'))
-})
-// build the final file for release. 
-gulp.task('clean:assets', function() {
-  return del(['png/*', 'svg/*', 'sprite/*']).then(function() {
-    console.log('Clean before final dist');
-  });
-});
+// gulp.task('deploy', function() {
+//   return gulp.src('.tmp/**/**/*.{svg,png,ico}')
+//     .pipe(gulp.dest('../dev_www/frontend/static/ftc-icons'))
+// })
+// // build the final file for release. 
+// gulp.task('clean:assets', function() {
+//   return del(['png/*', 'svg/*', 'sprite/*']).then(function() {
+//     console.log('Clean before final dist');
+//   });
+// });
 
-gulp.task('copy:dist', function() {
-  return gulp.src('.tmp/**/*.{svg,png}')
-    .pipe(gulp.dest('.'));
-});
+// gulp.task('copy:dist', function() {
+//   return gulp.src('.tmp/**/*.{svg,png}')
+//     .pipe(gulp.dest('.'));
+// });
 
-gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
+// gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
 
 
 
-/* =========== End of tasks for developers ===================== */
+// /* =========== End of tasks for developers ===================== */
 
-// Just for view. No file modification.
+// // Just for view. No file modification.
 
-gulp.task('serve', 
-  gulp.series('clean', 'mustache', 'styles', 
-    function serve() {
-      browserSync.init({
-        server: {
-          baseDir: ['.tmp', '.']
-        }
-      });
-    }
-  )
-);
+// gulp.task('serve', 
+//   gulp.series('clean', 'mustache', 'styles', 
+//     function serve() {
+//       browserSync.init({
+//         server: {
+//           baseDir: ['.tmp', '.']
+//         }
+//       });
+//     }
+//   )
+// );
