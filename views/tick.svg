@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="54" height="46"><path fill="{% if foreground %}{{foreground}}{% endif %}" d="M43.391 1.557L20.299 24.646l-9.77-9.774-9.635 9.644 19.395 19.397.01-.027.033.027 32.693-32.729z"/></svg>

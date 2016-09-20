@@ -1,0 +1,118 @@
+{
+    "arrow-down": {
+        "foreground": "#010202"
+    },
+    "arrow-downwards": null,
+    "arrow-left": {
+        "foreground": "#010202"
+    },
+    "arrow-right": {
+        "foreground": "#010202"
+    },
+    "arrow-up-down": {
+        "foreground": "#010202"
+    },
+    "arrow-up": {
+        "foreground": "#010202"
+    },
+    "arrow-upwards": null,
+    "brand-fast-ft": null,
+    "brand-fast": null,
+    "brand-ft-logo-square": null,
+    "brand-ft-masthead": null,
+    "brand-ft": {
+        "foreground": "#040203"
+    },
+    "brand-ftc-masthead": null,
+    "brand-ftc-square": {
+        "background": "#fc9"
+    },
+    "clippings": null,
+    "comment": null,
+    "cross": null,
+    "cross_disk": null,
+    "email": null,
+    "eye": null,
+    "follow-star-hollow": {
+        "foreground": "#27757B"
+    },
+    "follow-star": {
+        "foreground": "#27757B"
+    },
+    "font-size": null,
+    "gift": {
+        "foreground": "#1D1D1B"
+    },
+    "grid": null,
+    "hamburger": null,
+    "more": null,
+    "myft-bolder": null,
+    "plus": {
+        "foreground": "#27757b"
+    },
+    "printer": {
+        "foreground": "#505050"
+    },
+    "profile": null,
+    "pullquote": null,
+    "refresh": null,
+    "rss": {
+        "background": "#d66d06",
+        "foreground": "#fff"
+    },
+    "search": null,
+    "section-arts": null,
+    "section-blogs": null,
+    "section-business-education": null,
+    "section-business-life": null,
+    "section-columnists": {
+        "foreground": "#333"
+    },
+    "section-companies": null,
+    "section-ftfm": null,
+    "section-house-and-home": null,
+    "section-leader-and-letters": null,
+    "section-lex": null,
+    "section-magazine": null,
+    "section-markets-data": null,
+    "section-markets": null,
+    "section-money": null,
+    "section-special-report": null,
+    "section-uk": null,
+    "section-world": null,
+    "settings": null,
+    "share": {
+        "foreground": "#1D1D1B"
+    },
+    "sign-in": null,
+    "sign-out": null,
+    "social-facebook": {
+        "background": "#3c5a99",
+        "foreground": "#fff"
+    },
+    "social-linkedin": {
+        "background": "#0977b6",
+        "foreground": "#fff"
+    },
+    "social-twitter": {
+        "background": "#6aa9e0",
+        "foreground": "#fff"
+    },
+    "social-url": {
+        "background": "#27757b",
+        "foreground": "#fff"
+    },
+    "social-wechat": {
+        "background": "#609700",
+        "foreground": "#fff"
+    },
+    "social-weibo": {
+        "background": "#e6162d",
+        "foreground": "#fff"
+    },
+    "speechbubble": null,
+    "tick": {
+        "foreground": "#010101"
+    },
+    "warning": null
+}

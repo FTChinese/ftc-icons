@@ -1,9 +1,10 @@
 const fs = require('fs');
+const junk = require('junk')
 const nunjucks = require('nunjucks');
 
 var env = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(
-    ['partials', 'demos/src'], 
+    ['views'], 
     {noCache: true}
   ),
   {autoescape: false}
@@ -52,8 +53,21 @@ function readFile(filename) {
   );
 }
 
+function readDir(path) {
+  return new Promise(function(resolve, reject) {
+    fs.readdir(path, 'utf8', function(err, files) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(files.filter(junk.not));
+      }
+    });
+  });
+}
+
 module.exports = {
   readJson: readJson,
   readFile: readFile,
+  readDir: readDir,
   render: render
 };

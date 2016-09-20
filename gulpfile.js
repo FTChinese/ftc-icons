@@ -13,6 +13,19 @@ const demoPath = '../ft-interact/';
 const svgsrc = 'src/*.svg';
 
 // For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
+// minify svg templates in `views`
+gulp.task('svgmin', () => {
+  return gulp.src('views/*.svg')
+    .pipe($.cheerio({
+      run: function($, file) {
+        $('rect').attr('fill', '{% if background %}{{background}}{% endif %}');
+        $('path').attr('fill', '{% if foreground %}{{foreground}}{% endif %}');
+      }
+    }))
+    .pipe($.svgmin())
+    .pipe(gulp.dest('views'));
+});
+
 gulp.task('sassvg', function() {
   return gulp.src('src/**/*.svg')
     .pipe($.svgmin(/*{
@@ -71,72 +84,6 @@ gulp.task('svgpng', function() {
     .pipe(gulp.dest(png));
 });
 
-// Use one source file to generate different social icons.
-gulp.task('social', function() {
-  const social = gulp.src('src/social-icons/*.svg')
-    .pipe($.svgmin())
-    .pipe($.cheerio({
-      run: function($, file) {
-          var rect = $('rect').remove();
-          var bgColor = rect.attr('fill');
-          $('path').attr('fill', bgColor);
-        },
-      parserOptions: {
-        xmlMode: true
-      }
-    }))
-    .pipe(gulp.dest('.tmp/svg'))
-    .pipe($.svg2png())
-    .pipe(gulp.dest('.tmp/png'));
-
-  const roundHollow = gulp.src('src/social-icons/*.svg')
-    .pipe($.svgmin())
-    .pipe($.cheerio({
-      run: function($, file) {
-          $('rect').attr('rx', '50%').attr('ry', '50%');
-        },
-      parserOptions: {
-        xmlMode: true
-      }
-    }))
-    .pipe($.rename(function(path) {
-      path.basename += '-round-hollow'
-    }))
-    .pipe(gulp.dest('.tmp/svg'))
-    .pipe($.svg2png())
-    .pipe(gulp.dest('.tmp/png'));
-
-  const hollow = gulp.src('src/social-icons/*.svg')
-    .pipe($.svgmin())
-    .pipe($.rename(function(path){
-      path.basename += '-hollow'
-    }))
-    .pipe(gulp.dest('.tmp/svg'))
-    .pipe($.svg2png())
-    .pipe(gulp.dest('.tmp/png'));
-
-  return merge(social, roundHollow, hollow)
-});
-
-// generate a white version of each file by setting the `fill` attribute on all path to `#ffffff`
-// If the file has `rect` with classname `background`, set its `fill` to `#000000`
-gulp.task('white', function() {
-  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
-    .pipe($.svgmin())
-    .pipe($.cheerio({
-      run: function($, file) {
-        $('rect.background').remove();
-        $('path').attr('fill', '#ffffff');
-      },
-      parserOptions: {
-        xmlMode: true
-      }      
-    }))
-    .pipe(gulp.dest('.tmp/svg/white'))
-    .pipe($.svg2png())
-    .pipe(gulp.dest('.tmp/png/white'));
-});
-
 // Generate favicons
 gulp.task('fav', function() {
   return gulp.src('src/brand-ftc-square.svg')
@@ -164,56 +111,6 @@ gulp.task('fav', function() {
 gulp.task('clean', function() {
   return del(['.tmp/**']).then(()=>{
     console.log('Old files deleted');
-  });
-});
-
-//It first reads the file names under a directory.
-//If the filenames are resolveed, then render template.
-
-gulp.task('mustache', function() {
-  var folders = [
-    'src',
-    'src/social-icons'
-  ];
-
-  var template = 'demo/index.mustache';
-
-  function getFileNames(folder) {
-
-    return new Promise(function(resolve, reject) {
-      fs.readdir(folder, function(err, files) {
-        if (err) {
-          reject(err);
-        };
-
-        var filenames = files
-        .filter(function(file) {
-          return path.extname(file) === '.svg'
-        })
-        .map(function(file) {
-          return file.slice(0, -4);
-        });
-        resolve(filenames);
-      });
-    });
-  }
-
-  var promisedFileNames = folders.map(getFileNames);
-
-  return Promise.all(promisedFileNames)
-  .then(function(fileNames) {
-    gulp.src(template)
-      .pipe($.mustache({
-        ftcicons: fileNames[0],
-        socialicons: fileNames[1]
-      }, {
-        extension: '.html'
-      }))
-      .pipe(gulp.dest('.tmp'))
-      .pipe(browserSync.stream({once: true}));    
-  })
-  .catch(function(reason) {
-    console.log('Failed because: ' + reason);
   });
 });
 

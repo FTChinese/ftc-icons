@@ -12,7 +12,8 @@
     "icons"
   ],
   "scripts": {
-    "gulp": "./node_modules/gulp/bin/gulp.js"
+    "gulp": "./node_modules/gulp/bin/gulp.js",
+    "postversion": "git push && git push --tags"
   },
   "author": "weiguo.ni",
   "license": "MIT",
@@ -22,6 +23,8 @@
   "homepage": "https://github.com/FTChinese/ftc-icons",
   "devDependencies": {
     "browser-sync": "^2.16.0",
+    "cheerio": "^0.22.0",
+    "co": "^4.6.0",
     "del": "^2.2.2",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-changed": "^1.3.2",
@@ -35,7 +38,15 @@
     "gulp-svg2png": "^2.0.0",
     "gulp-svgmin": "^1.2.3",
     "gulp-svgstore": "^6.0.0",
+    "is-there": "^4.3.3",
     "lazypipe": "^1.0.1",
-    "merge-stream": "^1.0.0"
+    "merge-stream": "^1.0.0",
+    "mkdir": "0.0.2",
+    "nunjucks": "^2.5.2",
+    "string-to-stream": "^1.1.0",
+    "svg2png": "^4.0.0"
+  },
+  "dependencies": {
+    "junk": "^2.0.0"
   }
 }
