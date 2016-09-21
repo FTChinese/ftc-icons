@@ -8,6 +8,7 @@ const str = require('string-to-stream');
 const cheerio = require('cheerio');
 const svg2png = require('svg2png');
 const chalk = require('chalk');
+const iconList = require('./icon-list.json');
 
 const helper = require('./helper');
 
@@ -21,8 +22,6 @@ co(function *() {
         if (err) console.log(err);
       });
     }
-
-    const iconList = yield helper.readJson('icon-list.json');
 
     const iconNames = Object.keys(iconList);
 

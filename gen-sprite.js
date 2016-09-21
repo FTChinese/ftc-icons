@@ -79,38 +79,35 @@ co(function *() {
 
 // prepare variables needed.
     if (argv.input) {
+// iconNames have no extension
     	iconNames = argv.input;
     	iconPaths = iconNames.map(iconName => path.join('svg', `${iconName}.svg`));
-
-    	if (!argv.output) {
-    		destSprite = `sprite/${iconNames.join('_')}.svg`
-    	} else {
-    		destSprite = `sprite/${argv.output}.svg`;
-    	}
-
     } else {
-    	destSprite = 'sprite/all.svg';
-
     	iconPaths = yield helper.readDir('svg');
+// iconNames hav extension .svg
  		iconNames = iconPaths.map(iconPath => path.basename(iconPath)); 
-
-
     }
+
+	if (argv.output) {
+		destSprite = `sprite/${argv.output}`
+	} else {
+		destSprite = argv.input ? `sprite/${argv.input.join('_')}.svg` : 'sprite/all.svg';
+	}
 
 // always extract data from svg.
 	const iconData = yield Promise.all(iconPaths.map(extractSvg));
 
 // if no icon name specified, generate individual symbol file.
 	if (!argv.input) {		
-		// render each symbols
+// render each symbols
 		const symbols = iconData.map(data => symbolTemplate(data, 'o-icons'));
 
-		// write each symbols to file
+// write each symbols to file
 		symbols.forEach((symbol, i) => {
 			console.log(`Generating SVG symbol file: ${iconNames[i]}`);
 
 			str(symbol)
-				.pipe(fs.createWriteStream(`symbol/${iconNames[i]}.svg`))
+				.pipe(fs.createWriteStream(`symbol/${iconNames[i]}`))
 				.on('error', function(e) {
 					throw e;
 				});
@@ -122,7 +119,6 @@ co(function *() {
 	const spriteSymbols = iconData.map(data => symbolTemplate(data));
 
     const spriteString = spriteTemplate(spriteSymbols.join(''));
-
 
     const destPath = `sprite/${argv.output}.svg`
     console.log(`Generating sprite file ${destSprite}`)

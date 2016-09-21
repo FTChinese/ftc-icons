@@ -52,7 +52,9 @@
     "refresh": null,
     "rss": {
         "background": "#d66d06",
-        "foreground": "#fff"
+        "foreground": "#fff",
+        "rx": "5",
+        "ry": "5"
     },
     "search": null,
     "section-arts": null,

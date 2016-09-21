@@ -15,113 +15,113 @@ const svgsrc = 'src/*.svg';
 // For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
 // minify svg templates in `views`
 gulp.task('svgmin', () => {
-  return gulp.src('views/*.svg')
+  return gulp.src('templates/*.svg')
     .pipe($.cheerio({
       run: function($, file) {
-        $('rect').attr('fill', '{% if background %}{{background}}{% endif %}');
-        $('path').attr('fill', '{% if foreground %}{{foreground}}{% endif %}');
+        $('rect').attr('fill', '{{background}}');
+        $('path').attr('fill', '{{foreground}}');
       }
     }))
     .pipe($.svgmin())
     .pipe(gulp.dest('templates'));
 });
 
-gulp.task('sassvg', function() {
-  return gulp.src('src/**/*.svg')
-    .pipe($.svgmin(/*{
-      plugins: [{
-        removeAttrs: { 
-          attrs: 'path:fill'
-        }
-      }]
-    }*/))
-    .pipe($.cheerio({
-      run: function($, file) {
-        $('rect').remove();
-        $('path').removeAttr('fill')
-      },
-      parserOptions: {
-        xmlMode: true
-      }
-    }))
-    .pipe($.sassvg({
-      outputFolder: 'scss/sassvg',
-      optimizeSvg: true
-    }));
-});
+// gulp.task('sassvg', function() {
+//   return gulp.src('src/**/*.svg')
+//     .pipe($.svgmin(/*{
+//       plugins: [{
+//         removeAttrs: { 
+//           attrs: 'path:fill'
+//         }
+//       }]
+//     }*/))
+//     .pipe($.cheerio({
+//       run: function($, file) {
+//         $('rect').remove();
+//         $('path').removeAttr('fill')
+//       },
+//       parserOptions: {
+//         xmlMode: true
+//       }
+//     }))
+//     .pipe($.sassvg({
+//       outputFolder: 'scss/sassvg',
+//       optimizeSvg: true
+//     }));
+// });
 
-const svgStore = lazypipe()
-  .pipe($.svgmin)
-  .pipe($.cheerio, {
-      run: function($, file) {
-        $('rect').remove();
-        $('path').removeAttr('fill')
-      },
-      parserOptions: {
-        xmlMode: true
-      }
-    })
-    .pipe($.svgstore);
+// const svgStore = lazypipe()
+//   .pipe($.svgmin)
+//   .pipe($.cheerio, {
+//       run: function($, file) {
+//         $('rect').remove();
+//         $('path').removeAttr('fill')
+//       },
+//       parserOptions: {
+//         xmlMode: true
+//       }
+//     })
+//     .pipe($.svgstore);
 
-//Generate a svg sprite with `symbol` elements
-gulp.task('svgsprite', function() {
-  const DEST = '.tmp/sprite';
+// //Generate a svg sprite with `symbol` elements
+// gulp.task('svgsprite', function() {
+//   const DEST = '.tmp/sprite';
 
-  return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
-    .pipe(svgStore())
-    .pipe($.rename({basename: 'all-icons'}))
-    .pipe(gulp.dest(DEST));
-});
+//   return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
+//     .pipe(svgStore())
+//     .pipe($.rename({basename: 'all-icons'}))
+//     .pipe(gulp.dest(DEST));
+// });
 
-// Generate individual svg and png.
-gulp.task('svgpng', function() {
-  const DEST = '.tmp/png';
-  return gulp.src('svg/*.svg')
-    .pipe($.svgmin())
-    .pipe($.svg2png()) //`1` is scale factor. You can change it.
-    .pipe(gulp.dest(DEST));
-});
+// // Generate individual svg and png.
+// gulp.task('svgpng', function() {
+//   const DEST = '.tmp/png';
+//   return gulp.src('svg/*.svg')
+//     .pipe($.svgmin())
+//     .pipe($.svg2png()) //`1` is scale factor. You can change it.
+//     .pipe(gulp.dest(DEST));
+// });
 
-// Generate favicons
-gulp.task('fav', function() {
-  return gulp.src('src/brand-ftc-square.svg')
-    .pipe($.svg2png(2))
-    .pipe($.favicons({
-      appName: 'icons',
-      background: '#FFCC99',
-      icons: {
-        android: false,              // Create Android homescreen icon. `boolean`
-        appleIcon: true,            // Create Apple touch icons. `boolean`
-        appleStartup: false,         // Create Apple startup images. `boolean`
-        coast: false,                // Create Opera Coast icon. `boolean`
-        favicons: true,             // Create regular favicons. `boolean`
-        firefox: false,              // Create Firefox OS icons. `boolean`
-        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
-        twitter: false,              // Create Twitter Summary Card image. `boolean`
-        windows: false,              // Create Windows 8 tile icons. `boolean`
-        yandex: false                // Create Yandex browser icon. `boolean`
-      }
-    }))
-    .pipe(gulp.dest('.tmp/favicons'));
-});
+// // Generate favicons
+// gulp.task('fav', function() {
+//   return gulp.src('src/brand-ftc-square.svg')
+//     .pipe($.svg2png(2))
+//     .pipe($.favicons({
+//       appName: 'icons',
+//       background: '#FFCC99',
+//       icons: {
+//         android: false,              // Create Android homescreen icon. `boolean`
+//         appleIcon: true,            // Create Apple touch icons. `boolean`
+//         appleStartup: false,         // Create Apple startup images. `boolean`
+//         coast: false,                // Create Opera Coast icon. `boolean`
+//         favicons: true,             // Create regular favicons. `boolean`
+//         firefox: false,              // Create Firefox OS icons. `boolean`
+//         opengraph: false,            // Create Facebook OpenGraph image. `boolean`
+//         twitter: false,              // Create Twitter Summary Card image. `boolean`
+//         windows: false,              // Create Windows 8 tile icons. `boolean`
+//         yandex: false                // Create Yandex browser icon. `boolean`
+//       }
+//     }))
+//     .pipe(gulp.dest('.tmp/favicons'));
+// });
 
-/* demo tasks */
-gulp.task('clean', function() {
-  return del(['.tmp/**']).then(()=>{
-    console.log('Old files deleted');
-  });
-});
+// /* demo tasks */
+// gulp.task('clean', function() {
+//   return del(['.tmp/**']).then(()=>{
+//     console.log('Old files deleted');
+//   });
+// });
 
-gulp.task('styles', function() {
-  return gulp.src('demo/main.scss')
-    .pipe($.sass({
-      outputStyle: 'expanded',
-      precision: 10,
-      includePaths: ['bower_components']
-    }).on('error', $.sass.logError))
-    .pipe(gulp.dest('.tmp'))
-    .pipe(browserSync.stream({once: true}));
-});
+// gulp.task('styles', function() {
+//   return gulp.src('demo/main.scss')
+//     .pipe($.sass({
+//       outputStyle: 'expanded',
+//       precision: 10,
+//       includePaths: ['bower_components']
+//     }).on('error', $.sass.logError))
+//     .pipe(gulp.dest('.tmp'))
+//     .pipe(browserSync.stream({once: true}));
+// });
 
 // gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'fav', 'mustache')));
 
