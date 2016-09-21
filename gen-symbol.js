@@ -25,6 +25,7 @@ function buildData(svg) {
 		content: content
 	};
 }
+
 co(function *() {
 	const destDir = 'symbol';
 
