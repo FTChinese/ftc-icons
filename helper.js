@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const junk = require('junk')
 const nunjucks = require('nunjucks');
 
@@ -53,13 +54,13 @@ function readFile(filename) {
   );
 }
 
-function readDir(path) {
+function readDir(filepath) {
   return new Promise(function(resolve, reject) {
-    fs.readdir(path, 'utf8', function(err, files) {
+    fs.readdir(filepath, 'utf8', function(err, files) {
       if (err) {
         reject(err);
       } else {
-        resolve(files.filter(junk.not));
+        resolve(files.filter(junk.not).map(file => path.join(filepath, file)));
       }
     });
   });
