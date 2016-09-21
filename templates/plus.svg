@@ -1,1 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M42.108 0v42.108H0v15.784h42.108V100h15.784V57.892H100V42.108H57.892V0H42.108z" fill="{% if foreground %}{{foreground}}{% endif %}"/></svg>
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><path d="M53.9 0v53.9H0v20.2h53.9V128h20.2V74.1H128V53.9H74.1V0H53.9z" fill="{% if foreground %}{{foreground}}{% endif %}" fill-rule="evenodd"/></svg>

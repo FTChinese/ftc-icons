@@ -30,25 +30,19 @@
     "clippings": null,
     "comment": null,
     "cross": null,
-    "cross_disk": null,
     "email": null,
     "eye": null,
-    "follow-star-hollow": {
-        "foreground": "#27757B"
-    },
-    "follow-star": {
-        "foreground": "#27757B"
-    },
     "font-size": null,
     "gift": {
         "foreground": "#1D1D1B"
     },
-    "grid": null,
+    "grid": {
+        "foreground": "#2BBBBF"
+    },
     "hamburger": null,
     "more": null,
-    "myft-bolder": null,
     "plus": {
-        "foreground": "#27757b"
+        "foreground": "#27757B"
     },
     "printer": {
         "foreground": "#505050"
@@ -111,6 +105,9 @@
         "foreground": "#fff"
     },
     "speechbubble": null,
+    "tick-thin": {
+        "foreground": "#27757B"
+    },
     "tick": {
         "foreground": "#010101"
     },

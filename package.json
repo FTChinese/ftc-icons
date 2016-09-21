@@ -23,6 +23,7 @@
   "homepage": "https://github.com/FTChinese/ftc-icons",
   "devDependencies": {
     "browser-sync": "^2.16.0",
+    "chalk": "^1.1.3",
     "cheerio": "^0.22.0",
     "co": "^4.6.0",
     "del": "^2.2.2",
@@ -45,7 +46,9 @@
     "merge-stream": "^1.0.0",
     "mkdir": "0.0.2",
     "nunjucks": "^2.5.2",
+    "promisify-node": "^0.4.0",
     "string-to-stream": "^1.1.0",
-    "svg2png": "^4.0.0"
+    "svg2png": "^4.0.0",
+    "svgo": "^0.7.0"
   }
 }

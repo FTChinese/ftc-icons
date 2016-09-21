@@ -11,6 +11,7 @@ var env = new nunjucks.Environment(
 );
 
 function render(name, context) {
+  const obj = {};
   return new Promise(function(resolve, reject) {
     env.render(name, context, function(err, result) {
       if (err) {
