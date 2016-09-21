@@ -55,7 +55,7 @@ co(function *() {
       .then(buffer => {
       	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
 
-        fs.writeFile(`.tmp/${iconName}.png`, buffer)
+        fs.writeFile(`png/${iconName}.png`, buffer)
       }, (e) => {
         console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
         console.error(e);
