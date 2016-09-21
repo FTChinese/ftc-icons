@@ -23,7 +23,7 @@ gulp.task('svgmin', () => {
       }
     }))
     .pipe($.svgmin())
-    .pipe(gulp.dest('views'));
+    .pipe(gulp.dest('templates'));
 });
 
 gulp.task('sassvg', function() {

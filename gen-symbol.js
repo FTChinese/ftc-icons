@@ -61,6 +61,7 @@ co(function *() {
     		return result.replace('o-icons__', '');
     	})
     });
+    
     str(sprite)
     .pipe(fs.createWriteStream('sprite/all.svg'));
 })

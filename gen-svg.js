@@ -6,6 +6,8 @@ const co = require('co');
 const mkdirp = require('mkdirp');
 const str = require('string-to-stream');
 const cheerio = require('cheerio');
+const svg2png = require('svg2png');
+const chalk = require('chalk');
 
 const helper = require('./helper');
 
@@ -24,7 +26,7 @@ co(function *() {
 
     const iconNames = Object.keys(iconList);
 
-    const renderedSvgs = yield Promise.all(iconNames.map(function(iconName) {
+    const svgs = yield Promise.all(iconNames.map(function(iconName) {
     	const context = iconList[iconName];
 
     	const template = iconName + '.svg';
@@ -34,56 +36,50 @@ co(function *() {
 
     iconNames.forEach(function(iconName, i) {
     	const iconObj = iconList[iconName];
-    	var svgString = renderedSvgs[i];
+    	var svg = svgs[i];
 
     	if (iconObj && iconObj.hasOwnProperty('background')) {
-    		$ = cheerio.load(svgString, {
-    			xmlMode: true,	
-  				decodeEntities: false
-    		});
-    		const rectEl = `<rect width="100%" height="100%" fill="${iconObj.background}"/>`;
-    		$('svg').prepend(rectEl)
-    		svgString = $.html();
+    		svg = transformSvg(svg, iconObj);
     	}
 
-		str(svgString)
-		.pipe(fs.createWriteStream('svg/' + iconName + '.svg'));
-    });
+    console.log(`Generating ${iconName}.svg`);
 
-    // const svgs = yield Promise.all(iconList.map(function(iconName) {
-    // 	return helper.readFile('views/' + iconName);
-    // }));
+		str(svg)
+			.pipe(fs.createWriteStream(`svg/${iconName}.svg`))
+			.on('error', (e) => {
+				console.error(e);
+			});
+			
+// svg2png only accepts raw buffer.
+		svg2png(Buffer.from(svg))
+      .then(buffer => {
+      	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
 
-    // svgs.forEach(function(svg, i) {
-    // 	$ = cheerio.load(svg, {
-    // 		xmlMode: true,	
-  		// 	decodeEntities: false
-    // 	});
-    // 	const background = $('rect').attr('fill');
-    // 	const foreground = $('path').attr('fill');
-    // 	const key = iconList[i].slice(0, -4);
-    	
+        fs.writeFile(`.tmp/${iconName}.png`, buffer)
+      }, (e) => {
+        console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
+        console.error(e);
+      });
+  });
 
-    // 	if (background || foreground) {
-    // 		meta[key] = {};
-    // 		if (background) {
-    // 			meta[key].background = background;
-    // 		}
-    // 		if (foreground) {
-	   //  		meta[key].foreground = foreground
-	   //  	}
-    // 	} else {
-    // 		meta[key] = null;
-    // 	}
-    	
-    // });
-    // console.log(meta);
-
-    // str(JSON.stringify(meta, null, 4))
-    // 	.pipe(fs.createWriteStream('.tmp/meta.json'));
 })
 .then(function() {
 
 }, function(err) {
 	console.error(err.stack);
 });
+
+function transformSvg(svg, data) {
+  $ = cheerio.load(svg, {
+    xmlMode: true,  
+    decodeEntities: false
+  });
+  var styles = `fill="${data.background}"`;
+  if (data.rx && data.ry) {
+    styles += `rx="${data.rx}" ry="${data.ry}"`;
+  }
+  const rectEl = `<rect width="100%" height="100%" ${styles}/>`;
+  
+  $('svg').prepend(rectEl)
+  return $.html();
+}
