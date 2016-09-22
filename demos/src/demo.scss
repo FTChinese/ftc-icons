@@ -16,25 +16,27 @@ ul {
 		width: 180px;
 		margin: 0 0 20px;
 		text-align: center;
-		img {
+		i {
 			display: inline-block;
-			background-position: center center;
-			background-repeat: no-repeat;
-			background-size: contain;
 			border: 1px dotted #333;
 			width: 100px;
 			height: 100px;
-			object-fit: contain;
-		}
-		i {
+
 			svg {
 				width: 100px;
 				height: 100px;
 			}
-			display: inline-block;
-			border: 1px dotted #333;
-			width: 100px;
-			height: 100px;
+			
+			&:after {
+				display: inline-block;
+				width: 100px;
+				height: 100px;
+				background-repeat: no-repeat;
+				background-size: contain;
+				background-position: 50%;
+				background-color: transparent;
+				vertical-align: middle;
+			}
 		}
 		span {
 			display: block;
@@ -46,17 +48,38 @@ $icon-list: sassvg-list("svg");
 
 .o-icons__sassvg {
 	@each $icon in $icon-list {
+		$c: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
 		.#{$icon} {
 			&:after {
 				content: '';
-				@include oIconsGetSassvg($icon, $container-width: 100);
+				@include oIconsGetSassvg($icon, $color: $c, $apply-base-styles: false);
 			}			
 		}
 	}	
 }
 
-.o-icons__embedded-symbol,
+.o-icons__svg-fallback-png {
+	@each $icon in $icon-list {
+		.#{$icon} {
+			&:after {
+				content: '';
+				@include oIconsGetSvg($icon, $apply-base-styles: false);
+			}			
+		}
+	}		
+}
+
 .o-icons__svg-symbol {
+	@each $icon in $icon-list {
+		.#{$icon} {
+			svg {
+				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+			}
+		}
+	}
+}
+
+.o-icons__embedded-symbol {
 	@each $icon in $icon-list {
 		.#{$icon} {
 			svg {
