@@ -1,5 +1,6 @@
 {
   "name": "ftc-icons",
+  "version": "3.0.0",
   "description": "FTC icons",
   "main": "main.scss",
   "authors": [
