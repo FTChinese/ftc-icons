@@ -192,8 +192,8 @@ gulp.task('serve', gulp.parallel('html', 'styles', () => {
 gulp.task('copy', () => {
   const DEST = path.resolve(__dirname, demosDir, projectName);
   console.log(`Deploying to ${DEST}`);
-  return gulp.src(['.tmp/**/*', 'static/**/*.{svg,png,ico}'])
+  return gulp.src(['.tmp/**/*', 'static*/**/*.{svg,png,ico}'])
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task('demo', gulp.series('clean', gulp.parallel('html', 'styles'), 'copy'));
+gulp.task('demo', gulp.series('clean', 'prod', gulp.parallel('html', 'styles'), 'copy', 'dev'));
