@@ -1,16 +1,36 @@
-const path = require('path');
 const fs = require('fs');
-const merge = require('merge-stream');
-const gulp = require('gulp');
+const path = require('path');
+const url = require('url');
+const isThere = require('is-there');
+const co = require('co');
+const mkdirp = require('mkdirp');
+const str = require('string-to-stream');
+const helper = require('./helper');
+
 const del = require('del');
-const $ = require('gulp-load-plugins')();
 const browserSync = require('browser-sync').create();
-const lazypipe = require('lazypipe');
+const cssnext = require('postcss-cssnext');
 
+const gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
+
+const data = require('./icon-list.json');
+
+const demosDir = '../ft-interact/demos';
 const projectName = path.basename(__dirname);
-const demoPath = '../ft-interact/';
 
-const svgsrc = 'src/*.svg';
+process.env.NODE_ENV = 'dev';
+
+// change NODE_ENV between tasks.
+gulp.task('prod', function(done) {
+  process.env.NODE_ENV = 'prod';
+  done();
+});
+
+gulp.task('dev', function(done) {
+  process.env.NODE_ENV = 'dev';
+  done();
+});
 
 // For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
 // minify svg templates in `views`
@@ -26,168 +46,144 @@ gulp.task('svgmin', () => {
     .pipe(gulp.dest('templates'));
 });
 
-// gulp.task('sassvg', function() {
-//   return gulp.src('src/**/*.svg')
-//     .pipe($.svgmin(/*{
-//       plugins: [{
-//         removeAttrs: { 
-//           attrs: 'path:fill'
-//         }
-//       }]
-//     }*/))
-//     .pipe($.cheerio({
-//       run: function($, file) {
-//         $('rect').remove();
-//         $('path').removeAttr('fill')
-//       },
-//       parserOptions: {
-//         xmlMode: true
-//       }
-//     }))
-//     .pipe($.sassvg({
-//       outputFolder: 'scss/sassvg',
-//       optimizeSvg: true
-//     }));
-// });
+gulp.task('sassvg', function() {
+  return gulp.src('src/*.svg')
+    .pipe($.cheerio({
+      run: function($, file) {
+        $('rect').remove();
+        $('path').removeAttr('fill')
+      },
+      parserOptions: {
+        xmlMode: true
+      }
+    }))
+    .pipe($.sassvg({
+      outputFolder: 'sassvg',
+      optimizeSvg: true
+    }));
+});
 
-// const svgStore = lazypipe()
-//   .pipe($.svgmin)
-//   .pipe($.cheerio, {
-//       run: function($, file) {
-//         $('rect').remove();
-//         $('path').removeAttr('fill')
-//       },
-//       parserOptions: {
-//         xmlMode: true
-//       }
-//     })
-//     .pipe($.svgstore);
-
-// //Generate a svg sprite with `symbol` elements
-// gulp.task('svgsprite', function() {
-//   const DEST = '.tmp/sprite';
-
-//   return gulp.src(['src/*.svg', 'src/social-icons/*.svg'])
-//     .pipe(svgStore())
-//     .pipe($.rename({basename: 'all-icons'}))
-//     .pipe(gulp.dest(DEST));
-// });
-
-// // Generate individual svg and png.
-// gulp.task('svgpng', function() {
-//   const DEST = '.tmp/png';
-//   return gulp.src('svg/*.svg')
-//     .pipe($.svgmin())
-//     .pipe($.svg2png()) //`1` is scale factor. You can change it.
-//     .pipe(gulp.dest(DEST));
-// });
-
-// // Generate favicons
-// gulp.task('fav', function() {
-//   return gulp.src('src/brand-ftc-square.svg')
-//     .pipe($.svg2png(2))
-//     .pipe($.favicons({
-//       appName: 'icons',
-//       background: '#FFCC99',
-//       icons: {
-//         android: false,              // Create Android homescreen icon. `boolean`
-//         appleIcon: true,            // Create Apple touch icons. `boolean`
-//         appleStartup: false,         // Create Apple startup images. `boolean`
-//         coast: false,                // Create Opera Coast icon. `boolean`
-//         favicons: true,             // Create regular favicons. `boolean`
-//         firefox: false,              // Create Firefox OS icons. `boolean`
-//         opengraph: false,            // Create Facebook OpenGraph image. `boolean`
-//         twitter: false,              // Create Twitter Summary Card image. `boolean`
-//         windows: false,              // Create Windows 8 tile icons. `boolean`
-//         yandex: false                // Create Yandex browser icon. `boolean`
-//       }
-//     }))
-//     .pipe(gulp.dest('.tmp/favicons'));
-// });
+// Generate favicons
+gulp.task('fav', function() {
+  return gulp.src('src/brand-ftc-square.svg')
+    .pipe($.svg2png(2))
+    .pipe($.favicons({
+      appName: 'icons',
+      background: '#FFCC99',
+      icons: {
+        android: false,              // Create Android homescreen icon. `boolean`
+        appleIcon: true,            // Create Apple touch icons. `boolean`
+        appleStartup: false,         // Create Apple startup images. `boolean`
+        coast: false,                // Create Opera Coast icon. `boolean`
+        favicons: true,             // Create regular favicons. `boolean`
+        firefox: false,              // Create Firefox OS icons. `boolean`
+        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
+        twitter: false,              // Create Twitter Summary Card image. `boolean`
+        windows: false,              // Create Windows 8 tile icons. `boolean`
+        yandex: false                // Create Yandex browser icon. `boolean`
+      }
+    }))
+    .pipe(gulp.dest('.tmp/favicons'));
+});
 
 // /* demo tasks */
-// gulp.task('clean', function() {
-//   return del(['.tmp/**']).then(()=>{
-//     console.log('Old files deleted');
-//   });
-// });
+gulp.task('html', () => {
+// determine whether include `/api/resize-iframe.js` listed in `ftc-components`.
+  var embedded = false;
 
-// gulp.task('styles', function() {
-//   return gulp.src('demo/main.scss')
-//     .pipe($.sass({
-//       outputStyle: 'expanded',
-//       precision: 10,
-//       includePaths: ['bower_components']
-//     }).on('error', $.sass.logError))
-//     .pipe(gulp.dest('.tmp'))
-//     .pipe(browserSync.stream({once: true}));
-// });
+  return co(function *() {
+    const destDir = '.tmp';
 
-// gulp.task('build', gulp.series('clean', gulp.parallel('sassvg', 'svgsprite', 'svgpng', 'social', 'white', 'fav', 'mustache')));
+    if (!isThere(destDir)) {
+      mkdirp(destDir, (err) => {
+        if (err) console.log(err);
+      });
+    }
+    if (process.env.NODE_ENV === 'prod') {
+      embedded = true;
+    }
 
-// Run `gulp build` before this task.
-// Split into two steps due to complicated asynchronous management and heavy IO.
-// gulp.task('dev', 
-//   gulp.parallel(
-//     'mustache', 'styles', 
-//     function serve() {
-//       browserSync.init({
-//         server: {
-//           baseDir: ['.tmp'],
-//           routes: {
-//             '/bower_components': 'bower_components'
-//           }
-//         }
-//       });
+    const origami = yield helper.readJson('origami.json');
 
-//       gulp.watch('src/*.svg', gulp.series(gulp.parallel('sassvg', 'svgsprite', 'mustache'), 'styles'));
-//       gulp.watch('demo/*.mustache', gulp.parallel('mustache'));
-//       gulp.watch(['demo/*.scss', 'scss/*.scss'], gulp.parallel('styles'));
-//     }
-//   )
-// );
+    const demos = origami.demos;
 
-// // deploy to server for demo
-// gulp.task('copy:demo', function() {
-//   console.log('Copying files to: ' + demoPath + projectName);
-//   return gulp.src('.tmp/**/**.{svg,png,css,html}')
-//     .pipe(gulp.dest(demoPath + projectName));
-// });
+    const htmlString = yield Promise.all(demos.map(function(demo) {
+      
+      const template = path.basename(demo.template);
+      console.log(`Using template "${template}" for "${demo.name}"`);
 
-// gulp.task('demo', gulp.series('mustache', 'build', 'styles', 'copy:demo'));
+      const context = {
+        pageTitle: demo.name,
+        description: demo.description,
+        icons: Object.keys(data),
+        embedded: embedded
+      };
 
-// gulp.task('deploy', function() {
-//   return gulp.src('.tmp/**/**/*.{svg,png,ico}')
-//     .pipe(gulp.dest('../dev_www/frontend/static/ftc-icons'))
-// })
-// // build the final file for release. 
-// gulp.task('clean:assets', function() {
-//   return del(['png/*', 'svg/*', 'sprite/*']).then(function() {
-//     console.log('Clean before final dist');
-//   });
-// });
+      return helper.render(template, context);
+    }));
 
-// gulp.task('copy:dist', function() {
-//   return gulp.src('.tmp/**/*.{svg,png}')
-//     .pipe(gulp.dest('.'));
-// });
+    demos.forEach(function(demo, i) {
+      str(htmlString[i])
+        .pipe(fs.createWriteStream('.tmp/' + demo.name + '.html'));
+    });     
+  })
+  .then(function(){
+    browserSync.reload('*.html');
+  }, function(err) {
+    console.error(err.stack);
+  });
+});
 
-// gulp.task('dist',gulp.series('clean', 'build', 'copy:dist'));
+gulp.task('styles', function styles() {
+  const DEST = '.tmp/styles';
 
+  return gulp.src('demos/src/demo.scss')
+    .pipe($.changed(DEST))
+    .pipe($.plumber())
+    .pipe($.sourcemaps.init({loadMaps:true}))
+    .pipe($.sass({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['bower_components']
+    }).on('error', $.sass.logError))
+    .pipe($.postcss([
+      cssnext({
+        features: {
+          colorRgba: false
+        }
+      })
+    ]))
+    .pipe($.sourcemaps.write('./'))
+    .pipe(gulp.dest(DEST))
+    .pipe(browserSync.stream({once: true}));
+});
 
+gulp.task('clean', function() {
+  return del(['.tmp/**']).then(()=>{
+    console.log('Old files deleted');
+  });
+});
 
-// /* =========== End of tasks for developers ===================== */
+gulp.task('serve', gulp.parallel('html', 'styles', () => {
+  browserSync.init({
+    server: {
+      baseDir: ['.tmp', 'png', 'svg', 'sprite'],
+      index: 'icons.html',
+      directory: true,
+      routes: {
+        '/bower_components': 'bower_components'
+      }
+    }
+  });
 
-// // Just for view. No file modification.
+  gulp.watch(['demos/src/*.{html,json}'], gulp.parallel('html'));
 
-// gulp.task('serve', 
-//   gulp.series('clean', 'mustache', 'styles', 
-//     function serve() {
-//       browserSync.init({
-//         server: {
-//           baseDir: ['.tmp', '.']
-//         }
-//       });
-//     }
-//   )
-// );
+  gulp.watch([
+    'demos/src/*.scss', 
+    'src/scss/*.scss',
+    'sassvg/*.scss',
+    '*.scss'], 
+    gulp.parallel('styles')
+  );
+
+}));
