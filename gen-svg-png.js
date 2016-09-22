@@ -8,6 +8,7 @@ const str = require('string-to-stream');
 const cheerio = require('cheerio');
 const svg2png = require('svg2png');
 const chalk = require('chalk');
+const nunjucks = require('nunjucks');
 const iconList = require('./icon-list.json');
 
 const helper = require('./helper');
@@ -15,7 +16,6 @@ const helper = require('./helper');
 // generate svgs from templates in `views` with `icon-list` as template context.
 co(function *() {
 	const destDir = '.tmp';
-	const meta = {};
 
     if (!isThere(destDir)) {
       mkdirp(destDir, (err) => {
@@ -68,16 +68,17 @@ co(function *() {
 	console.error(err.stack);
 });
 
+function svgRect(data) {
+	const rectEl = '<rect width="100%" height="100%" fill="{{background}}"{% if rx %} rx="{{rx}}"{% endif %}{% if ry %} ry="{{ry}}"{% endif %}/>';
+	return nunjucks.renderString(rectEl, data)
+}
+
 function transformSvg(svg, data) {
   $ = cheerio.load(svg, {
     xmlMode: true,  
     decodeEntities: false
   });
-  var styles = `fill="${data.background}"`;
-  if (data.rx && data.ry) {
-    styles += `rx="${data.rx}" ry="${data.ry}"`;
-  }
-  const rectEl = `<rect width="100%" height="100%" ${styles}/>`;
+  const rectEl = svgRect(data);
   
   $('svg').prepend(rectEl)
   return $.html();

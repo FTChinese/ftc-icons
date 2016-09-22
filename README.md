@@ -53,6 +53,45 @@ You can use a sprited svg file `assets/sprites/ftc-icons-symbol.svg`. This file 
 'rss': #FB9E3C,
 ```
 
+## Commands
+
+### Batch SVG and PNG generation
+```
+node gen-svg-png.js
+```
+Will generate all svg and png version of icons listed in `icon-list.json`.
+
+
+### SVG sprite
+```
+node gen-sprite.js
+```
+Will combine all svg files into a single one with each svg path inside `symbol` element. Each symbol has an `id` same as the file name.
+
+It also accepts an `-i` argument to specify which icons you want to combine into a svg symbol file:
+```
+node gen-sprite.js -i social-wechat social-weibo -o wechat-weibo.svg
+```
+will generate a file containing only the specified icons.
+
+`-o, --output` is the target file name. If omitted, the target file will use a name by combining specified icon name with separated by `_`.
+
+In addition each symbol element will have its own individual file geneated under `symbol` folder. If you set this folder in you template's include path, you can include each `<iconname>.svg` inside you HTML. The symbol element has an id of `o-icons__<iconname>` so you can refer to it using fragments.
+
+
+### Generate a single icon
+You can generate the SVG and PNG version of a single icon with custom background, foreground, radius
+```
+node gen-single.js -i=social-wechat -b=#fff -f=#000 -x=50% -y=50%
+```
+
+- `-i, --input` icon name. Mandatory.
+- `-b, --background` The icon's background color. Optional. If not present, fallback to seting in `icon-list.json`.
+- `-x, --rx` set svg `<rect>` element's `rx` attribute.
+- `-y, --ry` set svg `<rect>` element's `ry` attribute.
+
+Generated file will be put in `.tmp`
+
 ## Gulp Commands
 
 `gulp sassvg` will generate sass files named `_sassvg-data.scss` and `_sassvg.scss` under the folder `scss`. You can customize icons' fill color and background color.
