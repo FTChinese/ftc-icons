@@ -1,7 +1,8 @@
 {
   "name": "ftc-icons",
   "version": "2.0.2",
-  "main": "main.scss",
+  "main": "index.js",
+  "description": "FTC icons",
   "private": true,
   "repository": {
     "type": "git",
@@ -42,13 +43,10 @@
     "gulp-svgmin": "^1.2.3",
     "is-there": "^4.3.3",
     "junk": "^2.0.0",
-    "lazypipe": "^1.0.1",
-    "merge-stream": "^1.0.0",
     "minimist": "^1.2.0",
     "mkdir": "0.0.2",
     "nunjucks": "^2.5.2",
     "postcss-cssnext": "^2.8.0",
-    "promisify-node": "^0.4.0",
     "string-to-stream": "^1.1.0",
     "svg2png": "^4.0.0",
     "svgo": "^0.7.0"
