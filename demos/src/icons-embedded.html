@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<svg style="display: none">
+{% for icon in icons %}
+{% include "partials/" + icon + ".svg" %}
+{% endfor %}
+</svg>
+<div class="{{className}}">
+	<ul>
+	    {% for icon in icons%}
+	      <li>
+	        <i class="{{icon}}"><svg><use xlink:href="#o-icons__{{icon}}" /></svg></i>
+	        <span>{{icon}}</span>
+	      </li>
+	    {% endfor %}			
+	</ul>
+</div>
+{% endblock %}
