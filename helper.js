@@ -5,7 +5,7 @@ const nunjucks = require('nunjucks');
 
 var env = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(
-    ['templates', 'views'], 
+    ['templates', 'demos/src'], 
     {noCache: true}
   ),
   {autoescape: false}
