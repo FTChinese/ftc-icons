@@ -47,7 +47,7 @@ gulp.task('svgmin', () => {
 });
 
 gulp.task('sassvg', function() {
-  return gulp.src('src/*.svg')
+  return gulp.src('svg/*.svg')
     .pipe($.cheerio({
       run: function($, file) {
         $('rect').remove();
@@ -109,12 +109,13 @@ gulp.task('html', () => {
 
     const htmlString = yield Promise.all(demos.map(function(demo) {
       
-      const template = path.basename(demo.template);
+      const template = demo.template;
       console.log(`Using template "${template}" for "${demo.name}"`);
 
       const context = {
         pageTitle: demo.name,
         description: demo.description,
+        className: 'o-icons__' + demo.name,
         icons: Object.keys(data),
         embedded: embedded
       };
@@ -167,7 +168,7 @@ gulp.task('clean', function() {
 gulp.task('serve', gulp.parallel('html', 'styles', () => {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', 'png', 'svg', 'sprite'],
+      baseDir: ['.tmp', '.'],
       index: 'icons.html',
       directory: true,
       routes: {
@@ -176,7 +177,7 @@ gulp.task('serve', gulp.parallel('html', 'styles', () => {
     }
   });
 
-  gulp.watch(['demos/src/*.{html,json}'], gulp.parallel('html'));
+  gulp.watch(['demos/src/*.{html,json}', 'origami.json'], gulp.parallel('html'));
 
   gulp.watch([
     'demos/src/*.scss', 

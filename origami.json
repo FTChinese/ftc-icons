@@ -7,22 +7,28 @@
     "supportStatus": "active",
     "demos": [
         {
-            "name": "svg-png-background",
-            "template": "demos/src/icons.html",
-            "data": "demos/src/data.json",
-            "description": "SVG file as image src"
-        },
-        {
-            "name": "sassvg-background",
+            "name": "sassvg",
             "template": "demos/src/icons.html",
             "data": "demos/src/data.json",
             "description": "Inlined svg code in css"
         },
         {
+            "name": "svg-fallback-png",
+            "template": "demos/src/icons.html",
+            "data": "demos/src/data.json",
+            "description": "Use svg image as background with fallback to png"
+        },
+        {
+            "name": "embedded-symbol",
+            "template": "demos/src/icons-embedded.html",
+            "data": "demos/src/data.json",
+            "description": "SVG file as image src"
+        },
+        {
         	"name": "svg-symbol",
-        	"template": "demos/src/icons.html",
+        	"template": "demos/src/icons-symbol.html",
         	"data": "demos/src/data.json",
-        	"description": "All icons in svg symbol"
+        	"description": "All icons in svg symbol with randomly generated color filled"
         }
     ]
 }

@@ -13,6 +13,9 @@ const iconList = require('./icon-list.json');
 
 const helper = require('./helper');
 
+const svgDir = 'static/svg';
+const pngDir = 'static/png';
+
 // generate svgs from templates in `views` with `icon-list` as template context.
 co(function *() {
 	const destDir = '.tmp';
@@ -27,8 +30,8 @@ co(function *() {
 
     const svgs = yield Promise.all(iconNames.map(function(iconName) {
     	const context = iconList[iconName];
-
-    	const template = iconName + '.svg';
+//build template path
+    	const template = `templates/${iconName}.svg`;
 
     	return helper.render(template, context);
     }));
@@ -44,7 +47,8 @@ co(function *() {
     console.log(`Generating ${iconName}.svg`);
 
 		str(svg)
-			.pipe(fs.createWriteStream(`svg/${iconName}.svg`))
+// build svg dest path
+			.pipe(fs.createWriteStream(`${svgDir}/${iconName}.svg`))
 			.on('error', (e) => {
 				console.error(e);
 			});
@@ -53,8 +57,8 @@ co(function *() {
 		svg2png(Buffer.from(svg))
       .then(buffer => {
       	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
-
-        fs.writeFile(`png/${iconName}.png`, buffer)
+// build png dest path
+        fs.writeFile(`${pngDir}/${iconName}.png`, buffer)
       }, (e) => {
         console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
         console.error(e);
