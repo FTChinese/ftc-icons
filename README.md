@@ -1,3 +1,6 @@
+## Next
+I plan to move FT and FTC logos to a separate repo. API is subject to change.
+
 ## Install
 `bower install ftc-icons`
 
