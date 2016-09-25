@@ -13,7 +13,7 @@ const iconList = require('./icon-list.json');
 
 const helper = require('./helper');
 
-const svgDir = 'static/svg';
+const svgDir = 'svg';
 const pngDir = 'static/png';
 
 // generate svgs from templates in `views` with `icon-list` as template context.
@@ -28,43 +28,24 @@ co(function *() {
 
     const iconNames = Object.keys(iconList);
 
-    const svgs = yield Promise.all(iconNames.map(function(iconName) {
-    	const context = iconList[iconName];
-//build template path
-    	const template = `templates/${iconName}.svg`;
-
-    	return helper.render(template, context);
-    }));
+    const svgs = yield Promise.all(iconNames.map((iconName) => {
+			const iconPath = `${svgDir}/${iconName}.svg`;
+			return helper.readFile(iconPath);
+		}));
 
     iconNames.forEach(function(iconName, i) {
-    	const iconObj = iconList[iconName];
     	var svg = svgs[i];
-
-    	if (iconObj && iconObj.hasOwnProperty('background')) {
-    		svg = transformSvg(svg, iconObj);
-    	}
-
-    console.log(`Generating ${iconName}.svg`);
-
-		str(svg)
-// build svg dest path
-			.pipe(fs.createWriteStream(`${svgDir}/${iconName}.svg`))
-			.on('error', (e) => {
-				console.error(e);
-			});
-
 // svg2png only accepts raw buffer.
-		svg2png(Buffer.from(svg))
-      .then(buffer => {
-      	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
+			svg2png(Buffer.from(svg))
+	      .then(buffer => {
+	      	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
 // build png dest path
-        fs.writeFile(`${pngDir}/${iconName}.png`, buffer)
-      }, (e) => {
-        console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
-        console.error(e);
-      });
+	        fs.writeFile(`${pngDir}/${iconName}.png`, buffer)
+	      }, (e) => {
+	        console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
+	        console.error(e);
+	      });
   });
-
 })
 .then(function() {
 
