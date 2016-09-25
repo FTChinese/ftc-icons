@@ -52,7 +52,7 @@ co(function *() {
 			.on('error', (e) => {
 				console.error(e);
 			});
-			
+
 // svg2png only accepts raw buffer.
 		svg2png(Buffer.from(svg))
       .then(buffer => {
@@ -79,11 +79,11 @@ function svgRect(data) {
 
 function transformSvg(svg, data) {
   $ = cheerio.load(svg, {
-    xmlMode: true,  
+    xmlMode: true,
     decodeEntities: false
   });
   const rectEl = svgRect(data);
-  
+
   $('svg').prepend(rectEl)
   return $.html();
 }
