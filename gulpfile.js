@@ -32,17 +32,24 @@ gulp.task('dev', function(done) {
   done();
 });
 
-// For sassvg, we should remove any redundant path, fill color and only keep a single path for main pattern.
-// minify svg templates in `views`
+// minify svg
 gulp.task('svgmin', () => {
-  return gulp.src('templates/*.svg')
+  return gulp.src('svg/*.svg')
+    .pipe($.svgmin())
+    .pipe(gulp.dest('svg'));
+});
+
+// generate nunjucks templates for image-services.
+// each icon is asssumed to have at most two lines: a `rect` for background and a `path` for the icon's shape.
+gulp.task('templates', () => {
+  return gulp.src('svg/*.svg')
+    .pipe($.svgmin())
     .pipe($.cheerio({
       run: function($, file) {
         $('rect').attr('fill', '{{background}}');
         $('path').attr('fill', '{{foreground}}');
       }
     }))
-    .pipe($.svgmin())
     .pipe(gulp.dest('templates'));
 });
 
@@ -108,7 +115,7 @@ gulp.task('html', () => {
     const demos = origami.demos;
 
     const htmlString = yield Promise.all(demos.map(function(demo) {
-      
+
       const template = demo.template;
       console.log(`Using template "${template}" for "${demo.name}"`);
 
@@ -126,7 +133,7 @@ gulp.task('html', () => {
     demos.forEach(function(demo, i) {
       str(htmlString[i])
         .pipe(fs.createWriteStream('.tmp/' + demo.name + '.html'));
-    });     
+    });
   })
   .then(function(){
     browserSync.reload('*.html');
@@ -180,10 +187,10 @@ gulp.task('serve', gulp.parallel('html', 'styles', () => {
   gulp.watch(['demos/src/*.{html,json}', 'origami.json'], gulp.parallel('html'));
 
   gulp.watch([
-    'demos/src/*.scss', 
+    'demos/src/*.scss',
     'src/scss/*.scss',
     'sassvg/*.scss',
-    '*.scss'], 
+    '*.scss'],
     gulp.parallel('styles')
   );
 

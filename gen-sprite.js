@@ -17,7 +17,7 @@ const argv = commandLineArgs(optionDefinitions);
 
 const helper = require('./helper');
 
-const svgDir = 'static/svg';
+const svgDir = 'svg';
 const spriteDir = 'static/sprite';
 const partialsDir = 'partials'
 
@@ -42,7 +42,7 @@ co(function *() {
     } else {
     	iconPaths = yield helper.readDir(svgDir);
 // iconNames hav extension .svg
- 		iconNames = iconPaths.map(iconPath => path.basename(iconPath, '.svg')); 
+ 		iconNames = iconPaths.map(iconPath => path.basename(iconPath, '.svg'));
     }
 
 	if (argv.output) {
@@ -55,7 +55,7 @@ co(function *() {
 	const iconData = yield Promise.all(iconPaths.map(extractSvg));
 
 // if no icon name specified, generate individual symbol file.
-	if (!argv.input) {		
+	if (!argv.input) {
 // render each symbols
 		const symbols = iconData.map(data => symbolTemplate(data, 'o-icons'));
 
@@ -70,7 +70,7 @@ co(function *() {
 				.on('error', function(e) {
 					throw e;
 				});
-		}); 			
+		});
 	}
 
 // whether argv exists or not, you need to output sprite.
@@ -98,7 +98,7 @@ function buildPath(filename, dir) {
 
 function extract(svg) {
 	$ = cheerio.load(svg, {
-		xmlMode: true,	
+		xmlMode: true,
 		decodeEntities: false
 	});
 	const width = $('svg').attr('width');
