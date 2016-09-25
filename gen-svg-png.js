@@ -15,56 +15,29 @@ const helper = require('./helper');
 
 const svgDir = 'svg';
 const pngDir = 'static/png';
+const iconNames = Object.keys(iconList);
 
-// generate svgs from templates in `views` with `icon-list` as template context.
-co(function *() {
-	const destDir = '.tmp';
+iconNames.map((iconName) => {
+	co(function *() {
+		const iconPath = `${svgDir}/${iconName}.svg`;
 
-    if (!isThere(destDir)) {
-      mkdirp(destDir, (err) => {
-        if (err) console.log(err);
-      });
-    }
+	  const svg = yield helper.readFile(iconPath);
 
-    const iconNames = Object.keys(iconList);
+	// svg2png only accepts raw buffer.
+		svg2png(Buffer.from(svg))
+	    .then(buffer => {
 
-    const svgs = yield Promise.all(iconNames.map((iconName) => {
-			const iconPath = `${svgDir}/${iconName}.svg`;
-			return helper.readFile(iconPath);
-		}));
-
-    iconNames.forEach(function(iconName, i) {
-    	var svg = svgs[i];
-// svg2png only accepts raw buffer.
-			svg2png(Buffer.from(svg))
-	      .then(buffer => {
-	      	console.log(`Converting ${iconName}.svg to ${iconName}.png`);
-// build png dest path
-	        fs.writeFile(`${pngDir}/${iconName}.png`, buffer)
-	      }, (e) => {
-	        console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
-	        console.error(e);
-	      });
-  });
-})
-.then(function() {
-
-}, function(err) {
-	console.error(err.stack);
+	// build png dest path
+	      fs.writeFile(`${pngDir}/${iconName}.png`, buffer)
+	    }, (e) => {
+	      console.log(chalk.red('Error with file:'), chalk.red(iconName + '.svg'));
+	      console.error(e);
+	    });
+		return iconName;
+	})
+	.then(function(name) {
+		console.log(`Converting ${name}.svg to ${name}.png`);
+	}, function(err) {
+		console.error(err.stack);
+	});
 });
-
-function svgRect(data) {
-	const rectEl = '<rect width="100%" height="100%" fill="{{background}}"{% if rx %} rx="{{rx}}"{% endif %}{% if ry %} ry="{{ry}}"{% endif %}/>';
-	return nunjucks.renderString(rectEl, data)
-}
-
-function transformSvg(svg, data) {
-  $ = cheerio.load(svg, {
-    xmlMode: true,
-    decodeEntities: false
-  });
-  const rectEl = svgRect(data);
-
-  $('svg').prepend(rectEl)
-  return $.html();
-}
