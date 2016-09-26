@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 const isThere = require('is-there');
 const co = require('co');
 const mkdirp = require('mkdirp');
 const str = require('string-to-stream');
-const helper = require('./helper');
+const helper = require('./lib/helper');
 
 const del = require('del');
 const browserSync = require('browser-sync').create();
@@ -14,7 +13,7 @@ const cssnext = require('postcss-cssnext');
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 
-const data = require('./icon-list.json');
+const iconList = require('./icon-list.json');
 
 const demosDir = '../ft-interact/demos';
 const projectName = path.basename(__dirname);
@@ -40,13 +39,11 @@ gulp.task('svgmin', () => {
 });
 
 // generate nunjucks templates for image-services.
-// each icon is asssumed to have at most two lines: a `rect` for background and a `path` for the icon's shape.
 gulp.task('templates', () => {
   return gulp.src('svg/*.svg')
     .pipe($.svgmin())
     .pipe($.cheerio({
       run: function($, file) {
-        $('rect').attr('fill', '{{background}}');
         $('path').attr('fill', '{{foreground}}');
       }
     }))
@@ -70,27 +67,18 @@ gulp.task('sassvg', function() {
     }));
 });
 
-// Generate favicons
-gulp.task('fav', function() {
-  return gulp.src('src/brand-ftc-square.svg')
-    .pipe($.svg2png(2))
-    .pipe($.favicons({
-      appName: 'icons',
-      background: '#FFCC99',
-      icons: {
-        android: false,              // Create Android homescreen icon. `boolean`
-        appleIcon: true,            // Create Apple touch icons. `boolean`
-        appleStartup: false,         // Create Apple startup images. `boolean`
-        coast: false,                // Create Opera Coast icon. `boolean`
-        favicons: true,             // Create regular favicons. `boolean`
-        firefox: false,              // Create Firefox OS icons. `boolean`
-        opengraph: false,            // Create Facebook OpenGraph image. `boolean`
-        twitter: false,              // Create Twitter Summary Card image. `boolean`
-        windows: false,              // Create Windows 8 tile icons. `boolean`
-        yandex: false                // Create Yandex browser icon. `boolean`
-      }
-    }))
-    .pipe(gulp.dest('.tmp/favicons'));
+gulp.task('svgstore', () => {
+  return gulp.src('svg/*.svg')
+    .pipe($.svgmin())
+    .pipe($.svgstore())
+    .pipe($.rename('all.svg'))
+    .pipe(gulp.dest('sprite'))
+});
+
+gulp.task('svg2png', () => {
+  return gulp.src('svg/*.svg')
+    .pipe($.svg2png())
+    .pipe(gulp.dest('.tmp/png'));
 });
 
 // /* demo tasks */
@@ -123,7 +111,7 @@ gulp.task('html', () => {
         pageTitle: demo.name,
         description: demo.description,
         className: 'o-icons__' + demo.name,
-        icons: Object.keys(data),
+        icons: iconList,
         embedded: embedded
       };
 

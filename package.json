@@ -14,7 +14,10 @@
   ],
   "scripts": {
     "gulp": "./node_modules/gulp/bin/gulp.js",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "list": "node lib/build-list.js",
+    "svg2png": "node lib/convert-svg2png.js",
+    "partials": "node lib/html-partials.js"
   },
   "author": "weiguo.ni",
   "license": "MIT",
@@ -40,7 +43,9 @@
     "gulp-sass": "^2.3.2",
     "gulp-sassvg": "^1.4.2",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-svg2png": "^2.0.2",
     "gulp-svgmin": "^1.2.3",
+    "gulp-svgstore": "^6.0.0",
     "is-there": "^4.3.3",
     "junk": "^2.0.0",
     "minimist": "^1.2.0",
