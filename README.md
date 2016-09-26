@@ -3,6 +3,8 @@ I plan to move FT and FTC logos to a separate repo. API is subject to change.
 
 Use svg to generate templates instead of vice versa.
 
+From v3.0.1 ftc-icons will use fticons as submodule since it seems they abandoned font icons infavor of svg.
+
 ## Install
 `bower install ftc-icons`
 
