@@ -106,7 +106,3 @@ Generated file will be put in `.tmp`
 `gulp svgsprite` put individual SVG into a `symbol` element and concatenate them into a single SVG file.
 
 `gulp svgpng` produces minified svg and corresponding png files.
-
-`gulp social` produces differnent social icons of different shapes in both svg and png format from a single svg file.
-
-`gulp white` produces a white version of each icon.

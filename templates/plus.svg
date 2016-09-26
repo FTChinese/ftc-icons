@@ -1,1 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M53.9 0v53.9H0v20.2h53.9V128h20.2V74.1H128V53.9H74.1V0H53.9z" fill="{{foreground}}" fill-rule="evenodd"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewbox="0 0 1024 1024"><path d="M736 464H560V288h-96v176H288v96h176v176h96V560h176z" fill="{{foreground}}"/></svg>

@@ -33,14 +33,14 @@ gulp.task('dev', function(done) {
 
 // minify svg
 gulp.task('svgmin', () => {
-  return gulp.src('svg/*.svg')
+  return gulp.src('fticons/svg/*.svg')
     .pipe($.svgmin())
     .pipe(gulp.dest('svg'));
 });
 
 // generate nunjucks templates for image-services.
 gulp.task('templates', () => {
-  return gulp.src('svg/*.svg')
+  return gulp.src('fticons/svg/*.svg')
     .pipe($.svgmin())
     .pipe($.cheerio({
       run: function($, file) {
@@ -80,6 +80,8 @@ gulp.task('svg2png', () => {
     .pipe($.svg2png())
     .pipe(gulp.dest('.tmp/png'));
 });
+
+gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('sassvg', 'svgstore')));
 
 // /* demo tasks */
 gulp.task('html', () => {
