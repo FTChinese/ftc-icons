@@ -7,13 +7,10 @@ const mkdirp = require('mkdirp');
 const str = require('string-to-stream');
 const svg2png = require('svg2png');
 const chalk = require('chalk');
-const iconList = require('./icon-list.json');
-
-const helper = require('./helper');
+const iconNames = require('./icon-list.json');
 
 const svgDir = 'svg';
 const pngDir = 'static/png';
-const iconNames = Object.keys(iconList);
 
 if (!isThere(pngDir)) {
 	mkdirp.sync(pngDir);

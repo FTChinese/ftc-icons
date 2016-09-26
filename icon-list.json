@@ -1,105 +1,49 @@
-{
-    "arrow-down": {
-        "foreground": "#010202"
-    },
-    "arrow-downwards": null,
-    "arrow-left": {
-        "foreground": "#010202"
-    },
-    "arrow-right": {
-        "foreground": "#010202"
-    },
-    "arrow-up-down": {
-        "foreground": "#010202"
-    },
-    "arrow-up": {
-        "foreground": "#010202"
-    },
-    "arrow-upwards": null,
-    "clippings": null,
-    "comment": null,
-    "cross": null,
-    "email": null,
-    "eye": null,
-    "font-size": null,
-    "gift": {
-        "foreground": "#1D1D1B"
-    },
-    "grid": {
-        "foreground": "#2BBBBF"
-    },
-    "hamburger": null,
-    "more": null,
-    "plus": {
-        "foreground": "#27757B"
-    },
-    "printer": {
-        "foreground": "#505050"
-    },
-    "profile": null,
-    "refresh": null,
-    "rss": {
-        "background": "#d66d06",
-        "foreground": "#fff",
-        "rx": "5",
-        "ry": "5"
-    },
-    "search": null,
-    "section-arts": null,
-    "section-blogs": null,
-    "section-business-education": null,
-    "section-business-life": null,
-    "section-columnists": {
-        "foreground": "#333"
-    },
-    "section-companies": null,
-    "section-ftfm": null,
-    "section-house-and-home": null,
-    "section-leader-and-letters": null,
-    "section-lex": null,
-    "section-magazine": null,
-    "section-markets-data": null,
-    "section-markets": null,
-    "section-money": null,
-    "section-special-report": null,
-    "section-uk": null,
-    "section-world": null,
-    "settings": null,
-    "share": {
-        "foreground": "#1D1D1B"
-    },
-    "sign-in": null,
-    "sign-out": null,
-    "social-facebook": {
-        "background": "#3c5a99",
-        "foreground": "#fff"
-    },
-    "social-linkedin": {
-        "background": "#0977b6",
-        "foreground": "#fff"
-    },
-    "social-twitter": {
-        "background": "#6aa9e0",
-        "foreground": "#fff"
-    },
-    "social-url": {
-        "background": "#27757b",
-        "foreground": "#fff"
-    },
-    "social-wechat": {
-        "background": "#609700",
-        "foreground": "#fff"
-    },
-    "social-weibo": {
-        "background": "#e6162d",
-        "foreground": "#fff"
-    },
-    "speechbubble": null,
-    "tick-thin": {
-        "foreground": "#27757B"
-    },
-    "tick": {
-        "foreground": "#010101"
-    },
-    "warning": null
-}
+[
+    "arrow-down",
+    "arrow-downwards",
+    "arrow-left",
+    "arrow-right",
+    "arrow-up-down",
+    "arrow-up",
+    "arrow-upwards",
+    "clippings",
+    "comment",
+    "cross",
+    "email",
+    "eye",
+    "font-size",
+    "gift",
+    "grid",
+    "hamburger",
+    "more",
+    "plus",
+    "printer",
+    "profile",
+    "refresh",
+    "search",
+    "section-arts",
+    "section-blogs",
+    "section-business-education",
+    "section-business-life",
+    "section-columnists",
+    "section-companies",
+    "section-ftfm",
+    "section-house-and-home",
+    "section-leader-and-letters",
+    "section-lex",
+    "section-magazine",
+    "section-markets-data",
+    "section-markets",
+    "section-money",
+    "section-special-report",
+    "section-uk",
+    "section-world",
+    "settings",
+    "share",
+    "sign-in",
+    "sign-out",
+    "speechbubble",
+    "tick-thin",
+    "tick",
+    "warning"
+]

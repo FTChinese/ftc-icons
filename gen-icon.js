@@ -1,4 +1,5 @@
-const fs = require('fs');
+const promisify = require('promisify-node');
+const fs = promisify('fs');
 const path = require('path');
 const url = require('url');
 const isThere = require('is-there');
@@ -9,18 +10,13 @@ const cheerio = require('cheerio');
 const svg2png = require('svg2png');
 const chalk = require('chalk');
 const helper = require('./helper');
-const nunjucks = require('nunjucks');
-const iconList = require('./icon-list.json');
 
 const minimist = require('minimist');
 const options = {
-	string: ['input', 'background', 'foreground', 'rx', 'ry'],
+	string: ['input', 'color'],
 	alias: {
 		i: 'input',
-		b: 'background',
-		f: 'foreground',
-		x: 'rx',
-		y: 'ry'
+		c: 'color'
 	}
 }
 const argv = minimist(process.argv.slice(2), options);
@@ -37,22 +33,19 @@ if (!isThere(destDir)) {
 
 if (argv.i) {
 	const iconName = argv.i;
-// default icon setting.
-	const iconObj = iconList[iconName];
-	const iconPath = `templates/${iconName}.svg`;
-	const context = Object.assign(iconObj, argv);
-	console.log(context);
+	const iconPath = `svg/${iconName}.svg`;
 
-	helper.readFile(iconPath)
-		.then(function(content) {
-			return nunjucks.renderString(content, context);
-		})
-		.then(function(string) {
-			return transformSvg(string, context);
+	fs.readFile(iconPath)
+		.then(function(svg) {
+			if (argv.c) {
+				return transformSvg(svg, argv.c)
+			} else {
+				return svg
+			}
 		})
 		.then(function(result) {
 			str(result)
-			.pipe(fs.createWriteStream(`.tmp/${argv.i}.svg`))
+			.pipe(fs.createWriteStream(`.tmp/${iconName}.svg`))
 			.on('error', (e) => {
 				console.error(e);
 			});
@@ -71,18 +64,11 @@ if (argv.i) {
 	console.log('You should provide an icon name. (No extension).')
 }
 
-function svgRect(data) {
-	const rectEl = '<rect width="100%" height="100%" fill="{{background}}"{% if rx %} rx="{{rx}}"{% endif %}{% if ry %} ry="{{ry}}"{% endif %}/>';
-	return nunjucks.renderString(rectEl, data)
-}
-
-function transformSvg(svg, data) {
+function transformSvg(svg, color) {
   $ = cheerio.load(svg, {
-    xmlMode: true,  
+    xmlMode: true,
     decodeEntities: false
   });
-  const rectEl = svgRect(data);
-  
-  $('svg').prepend(rectEl)
+	$('path').attr('fill', color)
   return $.html();
 }

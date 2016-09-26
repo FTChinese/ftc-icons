@@ -5,7 +5,7 @@ const nunjucks = require('nunjucks');
 
 var env = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(
-    ['.', 'demos/src/'], 
+    ['.', 'demos/src/'],
     {noCache: true}
   ),
   {autoescape: false}
@@ -47,7 +47,10 @@ function readFile(filename) {
           console.log('Cannot find file: ' + filename);
           reject(err);
         } else {
-          resolve(data);
+          resolve({
+            path: filename,
+            content: data
+          });
         }
       });
     }

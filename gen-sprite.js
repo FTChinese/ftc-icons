@@ -16,127 +16,83 @@ const optionDefinitions = [
 const argv = commandLineArgs(optionDefinitions);
 
 const helper = require('./helper');
+const iconList = argv.input;
 
 const svgDir = 'svg';
 const spriteDir = 'static/sprite';
-const partialsDir = 'partials'
 
-co(function *() {
-	var iconNames;
-	var iconPaths;
-	var destSprite;
+if (argv.input) {
+	co(function *() {
+		var dest = '';
 
-    if (!isThere(spriteDir)) {
-      mkdirp(spriteDir, (err) => {
-        if (err) console.log(err);
-      });
-    }
+		if (argv.output) {
+			dest = `${spriteDir}/${argv.output}.svg`;
+		} else {
+			dest = `${spriteDir}/${argv.input.join('_')}.svg`;
+		}
 
-// prepare variables needed.
-    if (argv.input) {
-// iconNames have no extension
-    	iconNames = argv.input;
-    	iconPaths = iconNames.map(iconName => {
-    		return buildPath(iconName, svgDir)
-    	});
-    } else {
-    	iconPaths = yield helper.readDir(svgDir);
-// iconNames hav extension .svg
- 		iconNames = iconPaths.map(iconPath => path.basename(iconPath, '.svg'));
-    }
+	  if (!isThere(spriteDir)) {
+	    mkdirp(spriteDir, (err) => {
+	      if (err) console.log(err);
+	    });
+	  }
 
-	if (argv.output) {
-		destSprite = buildPath(argv.output, spriteDir);
-	} else {
-		destSprite = argv.input ? buildPath(argv.input.join('_'), spriteDir) : buildPath('all', spriteDir);
-	}
+		const iconFiles = iconList.map(icon => path.join(svgDir, `${icon}.svg`));
 
-// always extract data from svg.
-	const iconData = yield Promise.all(iconPaths.map(extractSvg));
+		// readFile returns an object {path: file-path, content: file-content}
+		const svgs = yield Promise.all(iconFiles.map(helper.readFile));
+	  const svgData = svgs.map(extractSvg);
 
-// if no icon name specified, generate individual symbol file.
-	if (!argv.input) {
-// render each symbols
-		const symbols = iconData.map(data => symbolTemplate(data, 'o-icons'));
+	// whether argv exists or not, you need to output sprite.
+	// render each symbol again for sprite, which does not need `prefix`
+		const spriteSymbols = svgData.map(data => symbolTemplate(data));
 
-// write each symbols to file
-		symbols.forEach((symbol, i) => {
-			const iconName = iconNames[i];
+	  const spriteString = spriteTemplate(spriteSymbols.map(symbol => {
+	    return symbol.content;
+	  }).join(''));
 
-			console.log(`Generating SVG symbol file: ${iconName}`);
+	  str(spriteString)
+	  	.pipe(fs.createWriteStream(dest));
+	})
+	.then(function() {
 
-			str(symbol)
-				.pipe(fs.createWriteStream(buildPath(iconName, partialsDir)))
-				.on('error', function(e) {
-					throw e;
-				});
-		});
-	}
-
-// whether argv exists or not, you need to output sprite.
-// render each symbol again for sprite, which does not need `prefix`
-	const spriteSymbols = iconData.map(data => symbolTemplate(data));
-
-    const spriteString = spriteTemplate(spriteSymbols.join(''));
-
-    console.log(`Generating sprite file ${destSprite}`)
-    str(spriteString)
-    	.pipe(fs.createWriteStream(destSprite));
-})
-.then(function() {
-
-}, function(err) {
-	console.error(err.stack);
-});
-
-function buildPath(filename, dir) {
-	if (!dir) {
-		dir = '.';
-	}
-	return `${dir}/${filename}.svg`;
+	}, function(err) {
+		console.error(err.stack);
+	});
+} else {
+	console.log('Please specify the icon names');
 }
 
-function extract(svg) {
-	$ = cheerio.load(svg, {
+function extractSvg(svg) {
+	$ = cheerio.load(svg.content, {
 		xmlMode: true,
 		decodeEntities: false
 	});
 	const width = $('svg').attr('width');
 	const height = $('svg').attr('height');
 	$('rect').remove();
+// remove any color on path
 	$('path').removeAttr('fill');
 	const content = $('svg').html();
 	return {
+    path: svg.path,
 		width: width,
 		height: height,
 		content: content
 	};
 }
 
-function extractSvg(file) {
-	return new Promise(function(resolve, reject) {
-		fs.readFile(file, 'utf8', function(err, data) {
-			if (err) {
-				reject(err)
-			} else {
-				const extractedData = extract(data);
-				resolve(Object.assign(extractedData, {
-					iconName: path.basename(file, '.svg')
-				}));
-			}
-		});
-	});
-}
-
 function symbolTemplate(data, prefix) {
 	var id = null;
+  var name = path.basename(data.path, '.svg');
 	if (prefix) {
-		id = `${prefix}__${data.iconName}`;
-	} else {
-		id = data.iconName;
+		name = `${prefix}__${name}`;
 	}
 
-	return `<symbol id="${id}" viewBox="0 0 ${data.width} ${data.height}">${data.content}</symbol>`;
+  return {
+    path: data.path,
+    content: `<symbol id="${name}" viewBox="0 0 ${data.width} ${data.height}">${data.content}</symbol>`
+  }
 }
 
 function spriteTemplate(content) {
