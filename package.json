@@ -15,9 +15,11 @@
   "scripts": {
     "gulp": "./node_modules/gulp/bin/gulp.js",
     "postversion": "git push && git push --tags",
-    "list": "node lib/build-list.js",
+    "buildlist": "node lib/build-list.js",
     "partials": "node lib/html-partials.js",
-    "svg2png": "node lib/convert-svg2png.js"  
+    "svg2png": "node lib/convert-svg2png.js",
+    "icon": "node lib/gen-icon.js",
+    "sprite": "node lib/symbol-sprite.js"
   },
   "author": "weiguo.ni",
   "license": "MIT",
