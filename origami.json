@@ -7,12 +7,6 @@
     "supportStatus": "active",
     "demos": [
         {
-            "name": "sassvg",
-            "template": "demos/src/icons.html",
-            "data": "demos/src/data.json",
-            "description": "Inlined svg code in css"
-        },
-        {
             "name": "svg-fallback-png",
             "template": "demos/src/icons.html",
             "data": "demos/src/data.json",
