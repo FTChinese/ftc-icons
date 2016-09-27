@@ -26,7 +26,7 @@ ul {
 				width: 100px;
 				height: 100px;
 			}
-			
+
 			&:after {
 				display: inline-block;
 				width: 100px;
@@ -41,36 +41,24 @@ ul {
 		span {
 			display: block;
 		}
-	}	
+	}
 }
 
 $icon-list: sassvg-list("svg");
 
-.o-icons__sassvg {
-	@each $icon in $icon-list {
-		$c: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
-		.#{$icon} {
-			&:after {
-				content: '';
-				@include oIconsGetSassvg($icon, $color: $c, $apply-base-styles: false);
-			}			
-		}
-	}	
-}
-
 .o-icons__svg-fallback-png {
-	@each $icon in $icon-list {
+	@each $icon in $o-icons-list {
 		.#{$icon} {
 			&:after {
 				content: '';
 				@include oIconsGetSvg($icon, $apply-base-styles: false);
-			}			
+			}
 		}
-	}		
+	}
 }
 
 .o-icons__svg-symbol {
-	@each $icon in $icon-list {
+	@each $icon in $o-icons-list {
 		.#{$icon} {
 			svg {
 				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
@@ -80,7 +68,7 @@ $icon-list: sassvg-list("svg");
 }
 
 .o-icons__embedded-symbol {
-	@each $icon in $icon-list {
+	@each $icon in $o-icons-list {
 		.#{$icon} {
 			svg {
 				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
@@ -88,4 +76,3 @@ $icon-list: sassvg-list("svg");
 		}
 	}
 }
-
