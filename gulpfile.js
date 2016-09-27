@@ -81,7 +81,7 @@ gulp.task('svg2png', () => {
     .pipe(gulp.dest('static/png'));
 });
 
-gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('sassvg', 'svgstore', 'svg2png')));
+gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('svgstore', 'svg2png')));
 
 // /* demo tasks */
 gulp.task('html', () => {
