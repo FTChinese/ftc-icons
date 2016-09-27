@@ -62,7 +62,7 @@ gulp.task('sassvg', function() {
       }
     }))
     .pipe($.sassvg({
-      outputFolder: 'sassvg',
+      outputFolder: 'src/scss',
       optimizeSvg: true
     }));
 });
@@ -72,16 +72,16 @@ gulp.task('svgstore', () => {
     .pipe($.svgmin())
     .pipe($.svgstore())
     .pipe($.rename('all.svg'))
-    .pipe(gulp.dest('sprite'))
+    .pipe(gulp.dest('static/sprite'))
 });
 
 gulp.task('svg2png', () => {
   return gulp.src('svg/*.svg')
     .pipe($.svg2png())
-    .pipe(gulp.dest('.tmp/png'));
+    .pipe(gulp.dest('static/png'));
 });
 
-gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('sassvg', 'svgstore')));
+gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('sassvg', 'svgstore', 'svg2png')));
 
 // /* demo tasks */
 gulp.task('html', () => {
@@ -189,7 +189,7 @@ gulp.task('serve', gulp.parallel('html', 'styles', () => {
 gulp.task('copy', () => {
   const DEST = path.resolve(__dirname, demosDir, projectName);
   console.log(`Deploying to ${DEST}`);
-  return gulp.src(['.tmp/**/*', 'static*/**/*.{svg,png,ico}'])
+  return gulp.src(['.tmp/**/*', 'static*/**/*.{svg,png}', 'svg*/*.svg'])
     .pipe(gulp.dest(DEST));
 });
 
