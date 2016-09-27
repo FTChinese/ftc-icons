@@ -1,16 +1,15 @@
-## Next
-I plan to move FT and FTC logos to a separate repo. API is subject to change.
-
-Use svg to generate templates instead of vice versa.
-
-From v3.0.1 ftc-icons will use fticons as submodule since it seems they abandoned font icons infavor of svg.
+This repository is based on [fticons](https://github.com/Financial-Times/fticons).
 
 ## Install
-`bower install ftc-icons`
+```
+bower install ftc-icons
+```
 
 If you specify `inludePaths: 'bower_components'` in `node-sass`, just import the `main.scss` file below:
 
-    @import "ftc-icons/main.scss"
+```
+@import "ftc-icons/main.scss"
+```
 
 To view demos, run:
 
@@ -33,76 +32,89 @@ Use invidual svg file as background with png fallback.
 Set styles for `svg` referencing sprite fragment.
 
 
-### Use SVG files directly
+### Use SVG files
 
-Minified SVG icons is under the folder `icons/svg`.
+Minified SVG icons is under the folder `svg`.
 
-### Use PNG files directly
+### Use PNG files
 
-PNG files are generated from SVGs, put into `icons/png`.
+PNG files are generated from SVGs, put into `static/png`.
 
 ### Use SVG sprite
 
-You can use a sprited svg file `assets/sprites/ftc-icons-symbol.svg`. This file combines all the separate svg icons and put each in a `symbol` element, each having an `id` named after the individual svg file's name (without the `.svg` extension). In you HTML makrup, you can insert icons with id fragment:
-
-	<svg>
-		<use xlink:href="sprite/ftc-icons-symbol.svg#brand-ftc" />
-	</svg>
-
-### Preset colors if you are not using svg or png file directly
+You can use a sprited svg file `static/sprites/all.svg`. This file combines all the separate svg icons and put each in a `symbol` element, each having an `id` named after the individual svg file's name (without the `.svg` extension). In you HTML makrup, you can insert icons with id fragment:
 ```
-'brand-color': #ffcc99,
-'social-wechat': #609700,
-'social-weibo': #e6162d,
-'social-linkedin': #0977b6,
-'social-facebook': #3c5a99,
-'social-twitter': #6aa9e0,
-'rss': #FB9E3C,
+<svg>
+	<use xlink:href="sprite/ftc-icons-symbol.svg#brand-ftc" />
+</svg>
 ```
 
 ## Commands
 
-### Batch SVG and PNG generation
-```
-node gen-svg-png.js
-```
-Will generate all svg and png version of icons listed in `icon-list.json`.
+### Gulp
 
+- `gulp svgmin` Get svg files from submodule `fticons`, minify, and put in `./svg` folder.
 
-### SVG sprite
-```
-node gen-sprite.js
-```
-Will combine all svg files into a single one with each svg path inside `symbol` element. Each symbol has an `id` same as the file name.
+- `gulp templates` Get svg files from submodule `fticons`, minify, transform each file into a template to be used for `image-services` to dynamically generate icons of different color on request.
 
-It also accepts an `-i` argument to specify which icons you want to combine into a svg symbol file:
-```
-node gen-sprite.js -i social-wechat social-weibo -o wechat-weibo.svg
-```
-will generate a file containing only the specified icons.
+- `gulp sassvg` Use `gulp-sassvg` to transform svg into scss functions and mixins so that svg contents could be included directly in css.
 
+- `gulp svgstore` Combine svg files into one file, each svg content transformed into a `symbol` element. Folder `./static/sprite`
+
+- `gulp svg2png` Convert svg to png. PNG files in `./static/png`
+
+- `gulp build` Run all above tasks.
+
+### NPM scripts
+You can use `npm run <command>` without depending on gulp.
+
+#### Generate or update icon list
+```
+npm run buildlist
+```
+Collect all svg names into an array and write data to `./icon-list.json`.
+
+#### Generate partials
+```
+npm run partials
+```
+Turn each svg file into a svg symbol element. They can used as partials file to be included in html with an `id` referenced this way:
+
+```
+<svg>
+	<use xlink:href="#o-icons__arrow-up" />
+</svg>
+```
+
+This might bloat up you html file and the same icon could never be cached and reused.
+
+#### Convert svg to png
+```
+npm run svg2png
+```
+
+Same as `gulp svg2png` but you can use the latest version of `svg2png`.
+
+#### Generate a single icon
+```
+npm run icon -- -i=<icon-name> -c=<color>
+```
+Generate the svg and png version of a single icon. Put under `.tmp` folder. `<color>` is the color you normally would use in css. `<icon-name>` is the icon's file name without extension:
+
+```
+npm run icon -- -i=arrow-down -c=#505050
+```
+
+#### Generate a custom svg sprite
+Specify which icons you want to combine into a svg symbol file.
+```
+node run sprite -- -i <icons> -o <output-name>
+```
 `-o, --output` is the target file name. If omitted, the target file will use a name by combining specified icon name with separated by `_`.
 
-In addition each symbol element will have its own individual file geneated under `symbol` folder. If you set this folder in you template's include path, you can include each `<iconname>.svg` inside you HTML. The symbol element has an id of `o-icons__<iconname>` so you can refer to it using fragments.
+Example:
 
-
-### Generate a single icon
-You can generate the SVG and PNG version of a single icon with custom background, foreground, radius
 ```
-node gen-single.js -i=social-wechat -b=#fff -f=#000 -x=50% -y=50%
+node run sprite -- -i arrow-up arrow-down
 ```
-
-- `-i, --input` icon name. Mandatory.
-- `-b, --background` The icon's background color. Optional. If not present, fallback to seting in `icon-list.json`.
-- `-x, --rx` set svg `<rect>` element's `rx` attribute.
-- `-y, --ry` set svg `<rect>` element's `ry` attribute.
-
-Generated file will be put in `.tmp`
-
-## Gulp Commands
-
-`gulp sassvg` will generate sass files named `_sassvg-data.scss` and `_sassvg.scss` under the folder `scss`. You can customize icons' fill color and background color.
-
-`gulp svgsprite` put individual SVG into a `symbol` element and concatenate them into a single SVG file.
-
-`gulp svgpng` produces minified svg and corresponding png files.
+will generate a file named `arrow-up_arrow-down.svg` under `static/sprite`.
