@@ -22,11 +22,6 @@
     "test",
     "tests",
     "demo",
-    "src",
-    ".editorconfig",
-    ".gitattribute",
-    ".npmrc",
-    ".bowerrc"
   ],
   "dependencies": {
     "o-colors": "^3.5.2",
