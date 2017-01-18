@@ -3,7 +3,6 @@ const path = require('path');
 const isThere = require('is-there');
 const co = require('co');
 const mkdirp = require('mkdirp');
-const str = require('string-to-stream');
 const helper = require('./lib/helper');
 
 const del = require('del');
@@ -121,8 +120,8 @@ gulp.task('html', () => {
     }));
 
     demos.forEach(function(demo, i) {
-      str(htmlString[i])
-        .pipe(fs.createWriteStream('.tmp/' + demo.name + '.html'));
+      const writable = fs.createWriteStream(`.tmp/${demo.name}.html`);
+      writable.write(htmlString[i]);
     });
   })
   .then(function(){
