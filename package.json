@@ -54,7 +54,6 @@
     "nunjucks": "^2.5.2",
     "postcss-cssnext": "^2.8.0",
     "promisify-node": "^0.4.0",
-    "string-to-stream": "^1.1.0",
     "svg2png": "^4.0.0",
     "svgo": "^0.7.0"
   }
