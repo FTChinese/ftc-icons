@@ -24,6 +24,6 @@
     "demo"
   ],
   "devDependencies": {
-    "o-colors": "^3.5.2"
+    "o-colors": "^3.6.0"
   }
 }

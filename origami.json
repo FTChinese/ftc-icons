@@ -10,7 +10,7 @@
             "name": "svg-symbol",
             "template": "demos/src/icons.html",
             "data": "demos/src/data.json",
-            "description": "Use svg image as background with fallback to png"
+            "description": "Imbed svg symbol into HTML"
         }
     ]
 }

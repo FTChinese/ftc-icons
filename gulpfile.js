@@ -1,134 +1,83 @@
-const fs = require('fs');
+const pify = require('pify');
 const path = require('path');
-const isThere = require('is-there');
-const co = require('co');
-const mkdirp = require('mkdirp');
-const helper = require('./lib/helper');
+const fs = require('fs-jetpack');
+const loadJsonFile = require('load-json-file');
+const inline = pify(require('inline-source'));
+const nunjucks = require('nunjucks');
+nunjucks.configure(process.cwd(), {
+  noCache: true,
+  watch: false
+});
+const render = pify(nunjucks.render);
+const stats = require('@ftchinese/component-stats');
+const junk = require('junk');
 
 const del = require('del');
 const browserSync = require('browser-sync').create();
 const cssnext = require('postcss-cssnext');
-
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 
-const iconList = require('./icon-list.json');
-
-const demosDir = '../ft-interact/demos';
-const projectName = path.basename(__dirname);
+const svgDir = path.resolve(__dirname, 'fticons/svg');
+const deployDir = path.resolve(__dirname, '../ft-interact');
+const demoDir = `${deployDir}/demos/${path.basename(__dirname)}`;
 
 process.env.NODE_ENV = 'dev';
 
 // change NODE_ENV between tasks.
-gulp.task('prod', function(done) {
-  process.env.NODE_ENV = 'prod';
-  done();
+gulp.task('prod', function() {
+  return Promise.resolve(process.env.NODE_ENV = 'production');
 });
 
-gulp.task('dev', function(done) {
-  process.env.NODE_ENV = 'dev';
-  done();
+gulp.task('dev', function() {
+  return Promise.resolve(process.env.NODE_ENV = 'development');
 });
 
-// minify svg
-gulp.task('svgmin', () => {
-  return gulp.src('fticons/svg/*.svg')
-    .pipe($.svgmin())
-    .pipe(gulp.dest('svg'));
-});
-
-// generate nunjucks templates for image-services.
-gulp.task('templates', () => {
-  return gulp.src('fticons/svg/*.svg')
-    .pipe($.svgmin())
-    .pipe($.cheerio({
-      run: function($, file) {
-        $('path').attr('fill', '{{foreground}}');
-      }
-    }))
-    .pipe(gulp.dest('templates'));
-});
-
-gulp.task('sassvg', function() {
-  return gulp.src('svg/*.svg')
-    .pipe($.cheerio({
-      run: function($, file) {
-        $('rect').remove();
-        $('path').removeAttr('fill')
-      },
-      parserOptions: {
-        xmlMode: true
-      }
-    }))
-    .pipe($.sassvg({
-      outputFolder: 'src/scss',
-      optimizeSvg: true
-    }));
-});
-
-gulp.task('svgstore', () => {
-  return gulp.src('svg/*.svg')
-    .pipe($.svgmin())
-    .pipe($.svgstore())
-    .pipe($.rename('all.svg'))
-    .pipe(gulp.dest('static/sprite'))
-});
-
-gulp.task('svg2png', () => {
-  return gulp.src('svg/*.svg')
-    .pipe($.svg2png())
-    .pipe(gulp.dest('static/png'));
-});
-
-gulp.task('build', gulp.series(gulp.parallel('svgmin', 'templates'), gulp.parallel('svgstore', 'svg2png')));
-
-// /* demo tasks */
-gulp.task('html', () => {
-// determine whether include `/api/resize-iframe.js` listed in `ftc-components`.
-  var embedded = false;
-
-  return co(function *() {
-    const destDir = '.tmp';
-
-    if (!isThere(destDir)) {
-      mkdirp(destDir, (err) => {
-        if (err) console.log(err);
-      });
-    }
-    if (process.env.NODE_ENV === 'prod') {
-      embedded = true;
-    }
-
-    const origami = yield helper.readJson('origami.json');
-
-    const demos = origami.demos;
-
-    const htmlString = yield Promise.all(demos.map(function(demo) {
-
-      const template = demo.template;
-      console.log(`Using template "${template}" for "${demo.name}"`);
-
-      const context = {
-        pageTitle: demo.name,
-        description: demo.description,
-        className: 'o-icons__' + demo.name,
-        icons: iconList,
-        embedded: embedded
-      };
-
-      return helper.render(template, context);
-    }));
-
-    demos.forEach(function(demo, i) {
-      const writable = fs.createWriteStream(`.tmp/${demo.name}.html`);
-      writable.write(htmlString[i]);
+function buildPage(template, context) {
+  return render(template, context)
+    .then(html => {
+      if (process.env.NODE_ENV === 'production') {
+        console.log('Inlining source');
+        return inline(html, {
+          compress: true,
+          rootpath: path.resolve(process.cwd(), '.tmp')
+        });
+      }    
+      return html;      
+    })
+    .catch(err => {
+      throw err;
     });
-  })
-  .then(function(){
+}
+
+gulp.task('html', async function () {
+  const env = {
+    isProduction: process.env.NODE_ENV === 'production'
+  };
+
+  try {
+    const [json, filenames] = await Promise.all([
+      loadJsonFile('origami.json'),
+      fs.listAsync(svgDir)
+    ]);
+
+    const icons = filenames.filter(junk.not).map(name => {
+      return path.basename(name, '.svg');
+    });
+
+    const promisedAction = json.demos.map(demo => {
+      const context = Object.assign(demo, {icons, env});
+      return buildPage(demo.template, context)  
+        .then(html => {
+          return fs.writeAsync(`.tmp/${demo.name}.html`, html);
+        });
+    });
+
+    await promisedAction;
     browserSync.reload('*.html');
-  }, function(err) {
-    console.error(err.stack);
-  });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 gulp.task('styles', function styles() {
@@ -164,8 +113,7 @@ gulp.task('clean', function() {
 gulp.task('serve', gulp.parallel('html', 'styles', () => {
   browserSync.init({
     server: {
-      baseDir: ['.tmp', '.'],
-      index: 'icons.html',
+      baseDir: ['.tmp'],
       directory: true,
       routes: {
         '/bower_components': 'bower_components'
@@ -185,11 +133,20 @@ gulp.task('serve', gulp.parallel('html', 'styles', () => {
 
 }));
 
-gulp.task('copy', () => {
-  const DEST = path.resolve(__dirname, demosDir, projectName);
-  console.log(`Deploying to ${DEST}`);
-  return gulp.src(['.tmp/**/*', 'static*/**/*.{svg,png}', 'svg*/*.svg'])
-    .pipe(gulp.dest(DEST));
+// Produce demo
+gulp.task('stats', () => {
+  return stats({
+      outDir: demoDir
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
-gulp.task('demo', gulp.series('clean', 'prod', gulp.parallel('html', 'styles'), 'copy', 'dev'));
+gulp.task('copy:demo', () => {
+  console.log(`Copy demo to ${demoDir}`);
+  return gulp.src('.tmp/*.html')
+    .pipe(gulp.dest(demoDir));
+});
+
+gulp.task('demo', gulp.series('clean', 'prod', 'styles', 'html', 'stats', 'copy:demo', 'dev'));
