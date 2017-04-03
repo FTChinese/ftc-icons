@@ -7,22 +7,10 @@
     "supportStatus": "active",
     "demos": [
         {
-            "name": "svg-fallback-png",
+            "name": "svg-symbol",
             "template": "demos/src/icons.html",
             "data": "demos/src/data.json",
             "description": "Use svg image as background with fallback to png"
-        },
-        {
-            "name": "embedded-symbol",
-            "template": "demos/src/icons-embedded.html",
-            "data": "demos/src/data.json",
-            "description": "SVG file as image src"
-        },
-        {
-        	"name": "svg-symbol",
-        	"template": "demos/src/icons-symbol.html",
-        	"data": "demos/src/data.json",
-        	"description": "All icons in svg symbol with randomly generated color filled"
         }
     ]
 }
