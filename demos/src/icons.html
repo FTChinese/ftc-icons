@@ -6,14 +6,14 @@
 {% endfor %}  
 </svg>
 
-  <ul>
-  	{% for icon in icons %}
-    <li>
-      <svg>
-        <use xlink:href="#o-icons__{{icon}}"></use>
-      </svg>
-      <span>{{icon}}</span>
-    </li>
-    {% endfor %}
-  </ul>	
+<ul>
+  {% for icon in icons %}
+  <li class="{{icon}}">
+    <svg>
+      <use xlink:href="#o-icons__{{icon}}"></use>
+    </svg>
+    <span>{{icon}}</span>
+  </li>
+  {% endfor %}
+</ul>	
 {% endblock %}

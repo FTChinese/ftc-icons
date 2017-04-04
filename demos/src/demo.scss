@@ -1,4 +1,5 @@
 @import "o-colors/main";
+@import "icon-list.scss";
 
 body {
 	@include oColorsFor(page);
@@ -16,7 +17,6 @@ ul {
 		svg {
 			width: 100px;
 			height: 100px;
-			fill: #000;
 		}
 		span {
 			display: block;
@@ -24,12 +24,10 @@ ul {
 	}
 }
 
-// .o-icons__embedded-symbol {
-// 	@each $icon in $o-icons-list {
-// 		.#{$icon} {
-// 			svg {
-// 				fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
-// 			}
-// 		}
-// 	}
-// }
+@each $icon in $icon-list {
+	.#{$icon} {
+		svg {
+			fill: rgb(random(256) - 1, random(256) - 1, random(256) - 1);
+		}
+	}
+}
