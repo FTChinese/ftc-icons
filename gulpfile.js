@@ -10,13 +10,14 @@ nunjucks.configure(process.cwd(), {
 });
 const render = pify(nunjucks.render);
 const stats = require('@ftchinese/component-stats');
-const junk = require('junk');
 
 const del = require('del');
 const browserSync = require('browser-sync').create();
 const cssnext = require('postcss-cssnext');
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
+
+const filterFiles = require('./lib/filter-files.js');
 
 const svgDir = path.resolve(__dirname, 'fticons/svg');
 const deployDir = path.resolve(__dirname, '../ft-interact');
@@ -61,9 +62,7 @@ gulp.task('html', async function () {
       fs.listAsync(svgDir)
     ]);
 
-    const icons = filenames.filter(junk.not).map(name => {
-      return path.basename(name, '.svg');
-    });
+    const icons = filterFiles(filenames, false);
 
     const promisedAction = json.demos.map(demo => {
       const context = Object.assign(demo, {icons, env});
