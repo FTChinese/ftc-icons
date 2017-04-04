@@ -1,8 +1,7 @@
 {
   "name": "ftc-icons",
-  "version": "3.1.0",
   "description": "FTC icons",
-  "main": "main.scss",
+  "main": "",
   "authors": [
     "weiguo.ni <neefrankie@outlook.com>"
   ],
