@@ -13,7 +13,8 @@
     "icons"
   ],
   "scripts": {
-    "postversion": "git push && git push --tags && ./node_modules/.bin/gulp stats"
+    "postversion": "git push && git push --tags && ./node_modules/.bin/gulp stats",
+    "clean": "rm -rf dist/* .tmp/*"
   },
   "author": "weiguo.ni",
   "license": "MIT",
