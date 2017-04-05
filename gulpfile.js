@@ -34,49 +34,47 @@ gulp.task('dev', function() {
   return Promise.resolve(process.env.NODE_ENV = 'development');
 });
 
-function buildPage(template, context) {
-  return render(template, context)
+function buildPage(data) {
+  const env = {
+    isProduction: process.env.NODE_ENV === 'production'
+  };
+  const context = Object.assign(data, {env});
+  const dest = path.resolve(process.cwd(), `.tmp/${data.name}.html`);
+
+  return render(data.template, context)
     .then(html => {
       if (process.env.NODE_ENV === 'production') {
-        console.log('Inlining source');
+        console.log('Inlining source')
         return inline(html, {
           compress: true,
           rootpath: path.resolve(process.cwd(), '.tmp')
         });
       }    
-      return html;      
+      return Promise.resolve(html);
+    })
+    .then(html => {
+      return fs.writeAsync(dest, html);
     })
     .catch(err => {
       throw err;
     });
 }
 
-gulp.task('html', async function () {
-  const env = {
-    isProduction: process.env.NODE_ENV === 'production'
-  };
-
-  try {
-    const [json, filenames] = await Promise.all([
-      loadJsonFile('origami.json'),
-      fs.listAsync(svgDir)
-    ]);
-
-    const icons = filterFiles(filenames, false);
-
-    const promisedAction = json.demos.map(demo => {
-      const context = Object.assign(demo, {icons, env});
-      return buildPage(demo.template, context)  
-        .then(html => {
-          return fs.writeAsync(`.tmp/${demo.name}.html`, html);
-        });
+gulp.task('html', () => {
+  return Promise.all([loadJsonFile('origami.json'), fs.listAsync(svgDir)])
+    .then(([json, filenames]) => {
+      const icons = filterFiles(filenames, false);
+      return Promise.all(json.demos.map(demo => {
+        return buildPage(Object.assign(demo, {icons}));
+      }));
+    })
+    .then(() => {
+      browserSync.reload('*.html');
+      return Promise.resolve();
+    })
+    .catch(err => {
+      console.log(err);
     });
-
-    await promisedAction;
-    browserSync.reload('*.html');
-  } catch (e) {
-    console.log(e);
-  }
 });
 
 gulp.task('styles', function styles() {
