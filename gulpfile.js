@@ -148,4 +148,4 @@ gulp.task('copy:demo', () => {
     .pipe(gulp.dest(demoDir));
 });
 
-gulp.task('demo', gulp.series('clean', 'prod', 'styles', 'html', 'stats', 'copy:demo', 'dev'));
+gulp.task('demo', gulp.series('clean', 'prod', 'styles', 'html', 'stats', 'copy:demo'));
