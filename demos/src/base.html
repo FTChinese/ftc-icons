@@ -27,7 +27,7 @@
 <body>
 {% block body %}{% endblock%}
 
-{% if embedded %}
+{% if env.isProduction %}
 <script type="text/javascript" src="/api/resize-iframe.js"></script>
 {% endif %}
 </body>
